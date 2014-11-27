@@ -1,0 +1,49 @@
+apply plugin: 'java'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile "commons-codec:commons-codec:1.9"
+    compile "commons-lang:commons-lang:2.6"
+    compile "commons-logging:commons-logging:1.2"
+    compile "org.apache.httpcomponents:httpcore:4.3.2"
+    compile "org.apache.httpcomponents:httpmime:4.3.5"
+    compile "org.apache.httpcomponents:httpclient:4.3.5"
+    compile 'com.fasterxml.jackson.core:jackson-databind:2.2.3'
+    compile 'com.fasterxml.jackson.core:jackson-core:2.2.3'
+    compile 'com.fasterxml.jackson.core:jackson-annotations:2.2.3'
+    compile 'log4j:log4j:1.2.17'
+}
+
+jar {
+    baseName = 'jDeployR'
+    version = '7.3.0'
+}
+
+javadoc {
+    title = "DeployR 7.3.0 Java Client Library"
+    options.overview = "src/main/java/overview.html"
+    exclude "com/revo/deployr/client/core/**/*.java"
+    exclude "com/revo/deployr/client/call/**/*.java"
+    exclude "com/revo/deployr/client/data/impl/**/*.java"
+    exclude "com/revo/deployr/client/managers/impl/**/*.java"
+    exclude "com/revo/deployr/client/auth/impl/**/*.java"
+    exclude "com/revo/deployr/client/response/impl/**/*.java"
+    exclude "com/revo/deployr/client/util/**/*.java"
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '2.0'
+}
+
+task javadocJar(type: Jar) {
+    classifier = 'javadoc'
+    from javadoc
+}
+
+task sourcesJar(type: Jar) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}

@@ -1,0 +1,152 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<html>
+<head>
+</head>
+<body bgcolor="white">
+
+<h3>jDeployR ~ DeployR Java Client Library.</h3>
+
+
+<p>
+    This library provides a simple API for integrating DeployR authenticated, asynchronous and anonymous services into
+    Java applications.
+
+<p><br/>
+    <b>The basic usage pattern for authenticated services, working with R projects is as follows:</b>
+
+<p>
+    <i><b>1.</b> Create a client connection to DeployR:</i>
+
+<p>
+    {@link com.revo.deployr.client.RClient} rClient = RClientFactory.createClient(deployrUrl);
+
+<p>
+    <i><b>2.</b> Login on the connection:</i>
+
+<p>
+    {@link com.revo.deployr.client.RUser} rUser = rClient.login(new RBasicAuthentication("testuser", "secret"));
+
+<p>
+    <i><b>3.</b> Create a project:</i>
+
+<p>
+    {@link com.revo.deployr.client.RProject} rProject = rUser.createProject("Test Project", "Brief description.");
+
+<p>
+    <i><b>4.</b> Execute R code on the project:</i>
+
+<p>
+    {@link com.revo.deployr.client.RProjectExecution} rExecution = rProject.executeCode("x <- c(1:10); plot(x,x);");
+
+<p>
+    <i><b>5.</b> Optionally, save the project:</i>
+
+<p>
+    {@link com.revo.deployr.client.about.RProjectDetails} rProjectDetails = rProject.save();
+
+<p>
+    <i><b>6.</b> Close the project:</i>
+
+<p>
+    rProject.close();
+
+<p>
+    <i><b>7.</b> Logout and release all resources on the connection:</i>
+
+<p>
+    rClient.release();
+
+<p><br/>
+    <b>The basic usage pattern for asynchronous services, working with jobs is as follows:</b>
+
+<p>
+    <i><b>1.</b> Create a client connection to DeployR:</i>
+
+<p>
+    {@link com.revo.deployr.client.RClient} rClient = RClientFactory.createClient(deployrUrl);
+
+<p>
+    <i><b>2.</b> Login on the connection:</i>
+
+<p>
+    {@link com.revo.deployr.client.RUser} rUser = rClient.login(new RBasicAuthentication("testuser", "secret"));
+
+<p>
+    <i><b>3.</b> Submit job for background execution:</i>
+
+<p>
+    {@link com.revo.deployr.client.RJob} rJob = rUser.submitJobCode("Test Job", "Brief description of job.", "x <-
+    c(1:10); plot(x,x);")
+
+<p>
+    <i><b>4.</b> Query the status of job:</i>
+
+<p>
+    {@link com.revo.deployr.client.about.RJobDetails} rJobDetails = rJob.query()
+
+<p>
+    <i><b>5.</b> When job status is completed, retrieve result as a project:</i>
+
+<p>
+    if(rJobDetails.status.equals(RJob.COMPLETED)) {
+
+<p>
+    {@link com.revo.deployr.client.RProject} jProject = rUser.getProject(rJobDetails.project)
+
+<p>
+    }
+
+<p>
+    <i><b>6.</b> Logout and release all resources on the connection:</i>
+
+<p>
+    rClient.release();
+
+<p><br/>
+    <b>The basic usage pattern for anonymous services, executing published R scripts is as follows:</b>
+
+<p>
+    <i><b>1.</b> Create a client connection to DeployR:</i>
+
+<p>
+    {@link com.revo.deployr.client.RClient} rClient = RClientFactory.createClient(deployrUrl);
+
+<p>
+    <i><b>2.</b> Execute a published R Script anonymously:</i>
+
+<p>
+    {@link com.revo.deployr.client.RScriptExecution} rExecution = rClient.executeScript(scriptName, scriptDirectory,
+    scriptAuthor, scriptVersion, scriptExecuteOptions);
+
+<p>
+    <i><b>3.</b> Retrieve any R Script workspace objects on the response:</i>
+
+<p>
+    List<{@link com.revo.deployr.client.data.RData}> workspaceObjects = rExecution.about().workspaceObjects;
+
+<p>
+    <i><b>4.</b> Retrieve any R Script plot results on the response:</i>
+
+<p>
+    List<{@link com.revo.deployr.client.RProjectResult}> results = rExecution.about().results;
+
+<p>
+    <i><b>5.</b> Retrieve any R Script file artifacts on the response:</i>
+
+<p>
+    List<{@link com.revo.deployr.client.RProjectFile}> artifacts = rExecution.about().artifacts;
+
+<p>
+    <i><b>6.</b> Logout and release all resources on the connection:</i>
+
+<p>
+    rClient.release();
+
+<p><br/>
+    Once a client connection has been established it can be used to submit any number of API calls up until the point
+    where the connection is released or timed-out. Each client connection behaves as if all calls on the connection are
+    made within the context of a single HTTP session on the server.
+
+<p><br/>
+</body>
+</html>

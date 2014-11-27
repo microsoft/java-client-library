@@ -1,0 +1,28 @@
+apply plugin: 'java'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile fileTree(dir: '../build/libs', include: ['*.jar'])
+    compile "commons-codec:commons-codec:1.9"
+    compile "commons-lang:commons-lang:2.6"
+    compile "commons-logging:commons-logging:1.2"
+    compile "org.apache.httpcomponents:httpcore:4.3.2"
+    compile "org.apache.httpcomponents:httpmime:4.3.5"
+    compile "org.apache.httpcomponents:httpclient:4.3.5"
+    compile 'com.fasterxml.jackson.core:jackson-databind:2.2.3'
+    compile 'com.fasterxml.jackson.core:jackson-core:2.2.3'
+    compile 'com.fasterxml.jackson.core:jackson-annotations:2.2.3'
+    compile 'log4j:log4j:1.2.17'
+    testCompile("junit:junit:4.10")
+}
+
+test {
+    systemProperty "url.property", "localhost:7300"
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '2.0'
+}

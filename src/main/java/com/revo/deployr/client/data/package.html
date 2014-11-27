@@ -1,0 +1,51 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<html>
+<head>
+</head>
+<body bgcolor="white">
+
+Defines interfaces for R object encodings as DeployR Data (RData).
+
+<p>
+DeployR Data (a.k.a. RData) encode R project objects. The interfaces in this
+package describe those encodings.
+<p>
+The {@link com.revo.deployr.client.factory.RDataFactory} class is provided to simplify
+the creation of RData in client applications.
+<p><br/>
+<b>RData can be sent as inputs to the server on the following calls:</b>
+<p>
+<i>DeployR Authenticated Project API Calls</i>
+<ul>
+<li>RProject.pushObject()</li> 
+<li>RProject.executeScript()</li> 
+</ul>
+<i>DeployR Anonymous R Script API Calls</i>
+<ul>
+<li>RClient.executeScript()</li> 
+</ul>
+<p><br/>
+<b>RData can be returned as outputs from the server on the following calls:</b>
+<p>
+<i>DeployR Authenticated Project API Calls</i>
+<ul>
+<li>RProject.executeCode() see <i>workspaceObjects</i> on {@link com.revo.deployr.client.about.RProjectExecutionDetails}</li> 
+<li>RProject.executeScript() see <i>workspaceObjects</i> {@link com.revo.deployr.client.about.RProjectExecutionDetails}</li> 
+</ul>
+<ul>
+<li>RProject.listObjects() returns List<{@link com.revo.deployr.client.data.RData}></li> 
+<li>RProject.getObject() returns List<{@link com.revo.deployr.client.data.RData}></li> 
+</ul>
+<p>
+<i>DeployR Anonymous R Script API Calls</i>
+<p>
+<ul>
+<li>RClient.executeScript() see <i>workspaceObjects</i> on {@link com.revo.deployr.client.about.RProjectExecutionDetails}</li> 
+</ul>
+<br/>
+
+
+<!-- Put @see and @since tags down here. -->
+
+</body>
+</html>
