@@ -51,7 +51,10 @@ public class REntityUtil {
 
         String id = (String) project.get("project");
         String origin = (String) project.get("origin");
-        boolean islive = (Boolean) project.get("live");
+        boolean islive = false;
+        if (project.get("live") != null) {
+            islive = (Boolean) project.get("live");
+        }
         Date modified = null;
         try {
             modified = new Date((long) project.get("lastmodified"));
@@ -63,7 +66,10 @@ public class REntityUtil {
         projectDetails.name = (String) project.get("name");
         projectDetails.descr = (String) project.get("descr");
         projectDetails.longdescr = (String) project.get("longdescr");
-        projectDetails.shared = (Boolean) project.get("shared");
+        projectDetails.shared = false;
+        if (project.get("shared") != null) {
+            projectDetails.shared = (Boolean) project.get("shared");
+        }
         projectDetails.cookie = (String) project.get("projectcookie");
 
         return projectDetails;
@@ -97,8 +103,14 @@ public class REntityUtil {
         }
         int size = (Integer) repoFile.get("length");
         String restricted = (String) repoFile.get("restricted");
-        boolean shared = (Boolean) repoFile.get("shared");
-        boolean published = (Boolean) repoFile.get("published");
+        boolean shared = false;
+        if (repoFile.get("shared") != null) {
+            shared = (Boolean) repoFile.get("shared");
+        }
+        boolean published = false;
+        if (repoFile.get("published") != null) {
+            published = (Boolean) repoFile.get("published");
+        }
         String access = (String) repoFile.get("access");
 
         List<String> authors = (List<String>) repoFile.get("authors");
@@ -169,9 +181,21 @@ public class REntityUtil {
 
         String project = (String) job.get("project");
 
-        long timeStart = Long.parseLong(String.valueOf(job.get("timeStart")));
-        long timeCode = Long.parseLong(String.valueOf(job.get("timeCode")));
-        long timeTotal = Long.parseLong(String.valueOf(job.get("timeTotal")));
+        long timeStart = 0L;
+        try {
+            timeStart = Long.parseLong(String.valueOf(job.get("timeStart")));
+        } catch (NumberFormatException nfex) {
+        }
+        long timeCode = 0L;
+        try {
+            timeCode = Long.parseLong(String.valueOf(job.get("timeCode")));
+        } catch (NumberFormatException nfex) {
+        }
+        long timeTotal = 0L;
+        try {
+            timeTotal = Long.parseLong(String.valueOf(job.get("timeTotal")));
+        } catch (NumberFormatException nfex) {
+        }
 
         RJobDetails jobDetails =
                 new RJobDetails(id, name, descr, status, statusMsg, schedstart,
@@ -185,15 +209,30 @@ public class REntityUtil {
 
         String execution = (String) executionMap.get("execution");
         String code = (String) executionMap.get("code");
-        long timeStart = Long.parseLong(String.valueOf(executionMap.get("timeStart")));
-        long timeCode = Long.parseLong(String.valueOf(executionMap.get("timeCode")));
-        long timeTotal = Long.parseLong(String.valueOf(executionMap.get("timeTotal")));
+        long timeStart = 0L;
+        try {
+            timeStart = Long.parseLong(String.valueOf(executionMap.get("timeStart")));
+        } catch (NumberFormatException nfex) {
+        }
+        long timeCode = 0L;
+        try {
+            timeCode = Long.parseLong(String.valueOf(executionMap.get("timeCode")));
+        } catch (NumberFormatException nfex) {
+        }
+        long timeTotal = 0L;
+        try {
+            timeTotal = Long.parseLong(String.valueOf(executionMap.get("timeTotal")));
+        } catch (NumberFormatException nfex) {
+        }
         String tag = (String) executionMap.get("tag");
 
         String console = (String) executionMap.get("console");
         List<String> warnings = (List<String>) executionMap.get("warnings");
 
-        boolean interrupted = (Boolean) executionMap.get("interrupted");
+        boolean interrupted = false;
+        if (executionMap.get("interrupted") != null) {
+            interrupted = (Boolean) executionMap.get("interrupted");
+        }
 
         List<Map> results = (List<Map>) executionMap.get("results");
         List<RProjectResult> resultList = new ArrayList<RProjectResult>();
