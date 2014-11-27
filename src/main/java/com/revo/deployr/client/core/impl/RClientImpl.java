@@ -93,7 +93,7 @@ public class RClientImpl implements RClient, RClientExecutor {
     private RLiveContext liveContext;
 
     private ArrayList<Integer> GRID_EXCEPTION_CODES = new ArrayList<Integer>(
-                Arrays.asList(910, 911, 912, 913, 914, 915));
+            Arrays.asList(910, 911, 912, 913, 914, 915, 916, 917, 918, 919));
 
     public RClientImpl(String serverurl)
 		throws RClientException, RSecurityException {
