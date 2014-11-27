@@ -24,8 +24,8 @@ Dependencies
 ============
 
 
-Declaractive JAR Dependencies: Maven Central Repository Artifacts
------------------------------------------------------------------
+Declarative JAR Dependencies: Maven Central Repository Artifacts
+----------------------------------------------------------------
 
 Artifacts for each official release (since 7.3.0) of the DeployR Java client
 library are published to the Maven Central repository.
