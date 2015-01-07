@@ -55,7 +55,7 @@ public class DeployrUtil {
     }
 
     public static String getUniqueFileName(String extension) {
-        return new StringBuilder().append("prefix")
+        return new StringBuilder().append("test-")
                 .append(UUID.randomUUID())
                 .append(".").append(extension).toString();
     }

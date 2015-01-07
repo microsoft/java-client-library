@@ -1,5 +1,5 @@
 /*
- * RUserRepositoryFileCallsTest.java
+ * RUserDefaultRepositoryFileCallsTest.java
  *
  * Copyright (C) 2010-2014 by Revolution Analytics Inc.
  *
@@ -9,10 +9,6 @@
  * MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE. Please refer to the
  * Apache License 2.0 (http://www.apache.org/licenses/LICENSE-2.0) for more details.
  *
- */
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
  */
 package com.revo.deployr.client.api;
 
@@ -32,15 +28,12 @@ import java.util.List;
 
 import static org.junit.Assert.*;
 
-/**
- * @author nriesland
- */
-public class RUserRepositoryFileCallsTest {
+public class RUserDefaultRepositoryFileCallsTest {
 
     RClient rClient = null;
     RUser rUser = null;
 
-    public RUserRepositoryFileCallsTest() {
+    public RUserDefaultRepositoryFileCallsTest() {
     }
 
     @BeforeClass
@@ -169,7 +162,7 @@ public class RUserRepositoryFileCallsTest {
      * Test of listFiles method, of class RUserRepositoryFileCalls.
      */
     @Test
-    public void testUserRepositoryListFiles_0args() {
+    public void testUserRepositoryListFiles() {
 
         // Test variables.
         String text = "this is a line of text";

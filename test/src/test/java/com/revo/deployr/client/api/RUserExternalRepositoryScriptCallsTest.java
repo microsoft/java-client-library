@@ -1,5 +1,5 @@
 /*
- * RUserDefaultRepositoryScriptCallsTest.java
+ * RUserExternalRepositoryScriptCallsTest.java
  *
  * Copyright (C) 2010-2014 by Revolution Analytics Inc.
  *
@@ -17,7 +17,6 @@ import com.revo.deployr.client.RClient;
 import com.revo.deployr.client.RUser;
 import com.revo.deployr.client.RScriptExecution;
 import com.revo.deployr.client.auth.basic.RBasicAuthentication;
-import com.revo.deployr.client.auth.basic.RBasicAuthentication;
 import com.revo.deployr.client.RRepositoryFile;
 import com.revo.deployr.client.factory.RClientFactory;
 import org.junit.*;
@@ -26,11 +25,11 @@ import java.util.List;
 
 import static org.junit.Assert.*;
 
-public class RUserDefaultRepositoryScriptCallsTest {
+public class RUserExternalRepositoryScriptCallsTest {
     RClient rClient = null;
     RUser rUser = null;
 
-    public RUserDefaultRepositoryScriptCallsTest() {
+    public RUserExternalRepositoryScriptCallsTest() {
     }
 
     @BeforeClass
@@ -67,13 +66,13 @@ public class RUserDefaultRepositoryScriptCallsTest {
     }
 
     /**
-     * Test RUserRepositoryScriptCalls.listScripts().
+     * Test RUserRepositoryScriptCalls.listExternalScripts().
      */
     @Test
-    public void testUserRepositoryListScripts() {
+    public void testUserRepositoryListExternalScripts() {
 
         // Test variables.
-        List<RRepositoryFile> listScripts = null;
+        List<RRepositoryFile> listExternalScripts = null;
         int filesFoundOwnedByCaller = 0;
         int filesFoundNotOwnedByCaller = 0;
 
@@ -85,17 +84,17 @@ public class RUserDefaultRepositoryScriptCallsTest {
 
         // Test.
         try {
-            listScripts = rUser.listScripts();
+            listExternalScripts = rUser.listExternalScripts();
         } catch (Exception ex) {
             exception = ex;
-            exceptionMsg = "rUser.listScripts failed: ";
+            exceptionMsg = "rUser.listExternalScripts failed: ";
         }
 
         try {
             // Determine if script authored by other users 
-            // were found on the response. The listScripts()
+            // were found on the response. The listExternalScripts()
             // call should only return scripts authored by the caller.
-            for (RRepositoryFile file : listScripts) {
+            for (RRepositoryFile file : listExternalScripts) {
                 if (file.about().authors.contains("testuser")) {
                     filesFoundOwnedByCaller += 1;
                 } else {
@@ -110,7 +109,7 @@ public class RUserDefaultRepositoryScriptCallsTest {
         // Test cleanup.
         if (exception == null) {
             // Test assertions.
-            assertEquals(filesFoundOwnedByCaller, listScripts.size());
+            assertEquals(filesFoundOwnedByCaller, listExternalScripts.size());
             assertEquals(filesFoundNotOwnedByCaller, 0);
         } else {
             fail(exceptionMsg + exception.getMessage());
@@ -123,15 +122,15 @@ public class RUserDefaultRepositoryScriptCallsTest {
     }
 
     /**
-     * Test RUserRepositoryScriptCalls.listScripts(archived, false, false).
+     * Test RUserRepositoryScriptCalls.listExternalScripts(shared, published).
      */
     @Test
-    public void testUserRepositoryListScriptsArchived() {
+    public void testUserRepositoryListExternalScriptsSharedPublished() {
 
         // Test variables.
         RUser rAdminUser = null;
-        List<RRepositoryFile> listScripts = null;
-        List<RRepositoryFile> listScriptsAll = null;
+        List<RRepositoryFile> listExternalScripts = null;
+        List<RRepositoryFile> listExternalScriptsSharedPublished = null;
         int filesFoundOwnedByCaller = 0;
         int filesFoundNotOwnedByCaller= 0;
 
@@ -175,31 +174,31 @@ public class RUserDefaultRepositoryScriptCallsTest {
 
         if(exception == null) {
             try {
-                // Retrieve list of scripts owned by admin.
-                listScripts = rAdminUser.listScripts();
+                // Retrieve list of external scripts owned by admin.
+                listExternalScripts = rAdminUser.listExternalScripts();
             } catch (Exception ex) {
                 exception = ex;
-                exceptionMsg = "rAdminUser.listScripts failed: ";
+                exceptionMsg = "rAdminUser.listExternalScripts failed: ";
             }
         }
 
         if(exception == null) {
             try {
-                // Retrieve list of scripts owned by admin including
-                // archived scripts. Exclude list of scripts owned by
-                // other users that have been shared or published.
-                listScriptsAll =
-                    rAdminUser.listScripts(true, false, false);
+                // Retrieve list of external scripts owned by admin
+                // plus list of external scripts owned by other users
+                // that have been shared or published.
+                listExternalScriptsSharedPublished =
+                    rAdminUser.listExternalScripts(true, true);
             } catch (Exception ex) {
                 exception = ex;
-                exceptionMsg = "rAdminUser.listScripts(true, false, false) failed: ";
+                exceptionMsg = "rAdminUser.listExternalScripts(true, true) failed: ";
             }
         }
 
         if(exception == null) {
 
             try {
-                for (RRepositoryFile file : listScriptsAll) {
+                for (RRepositoryFile file : listExternalScriptsSharedPublished) {
                     if (file.about().authors.contains("admin")) {
                         filesFoundOwnedByCaller += 1;
                     } else {
@@ -215,114 +214,9 @@ public class RUserDefaultRepositoryScriptCallsTest {
         // Test cleanup.
         if (exception == null) {
             // Test assertions.
-            assertEquals(filesFoundOwnedByCaller, listScriptsAll.size());
-            assertEquals(filesFoundNotOwnedByCaller, 0);
-        } else {
-            fail(exceptionMsg + exception.getMessage());
-        }
-
-        // Test cleanup errors.
-        if (cleanupException != null) {
-            fail(cleanupExceptionMsg + cleanupException.getMessage());
-        }
-    }
-
-    /**
-     * Test RUserRepositoryScriptCalls.listScripts(false, shared, published).
-     */
-    @Test
-    public void testUserRepositoryListScriptsSharedPublished() {
-
-        // Test variables.
-        RUser rAdminUser = null;
-        List<RRepositoryFile> listScripts = null;
-        List<RRepositoryFile> listScriptsAll = null;
-        int filesFoundOwnedByCaller = 0;
-        int filesFoundNotOwnedByCaller= 0;
-
-        // Test error handling.
-        Exception exception = null;
-        String exceptionMsg = "";
-        Exception cleanupException = null;
-        String cleanupExceptionMsg = "";
-
-        // Test.
-        try {
-            rClient.logout(rUser);
-        } catch (Exception ex) {
-            exception = ex;
-            exceptionMsg = "rClient.logout failed: ";
-        }
-
-        if (exception == null) {
-            RBasicAuthentication rAuthentication =
-                new RBasicAuthentication("admin", "changeme");
-            for (int i = 0; i < 5; i++) {
-                try {
-                    Thread.sleep(1000);
-                } catch (Exception ex) {
-                    exception = ex;
-                    exceptionMsg = "Thread.sleep failed: ";
-                }
-                if (exception == null) {
-                    try {
-                        rAdminUser = rClient.login(rAuthentication);
-                    } catch (Exception ex) {
-                        if (i < 5) {
-                            continue;
-                        }
-                        exception = ex;
-                        exceptionMsg = "rClient.login failed: ";
-                    }
-                }
-            }
-        }
-
-        if(exception == null) {
-            try {
-                // Retrieve list of scripts owned by admin.
-                listScripts = rAdminUser.listScripts();
-            } catch (Exception ex) {
-                exception = ex;
-                exceptionMsg = "rAdminUser.listScripts failed: ";
-            }
-        }
-
-        if(exception == null) {
-            try {
-                // Retrieve list of scripts owned by admin excluding
-                // archived scripts plus list of scripts owned by
-                // other users that have been shared or published.
-                listScriptsAll =
-                    rAdminUser.listScripts(false, true, true);
-            } catch (Exception ex) {
-                exception = ex;
-                exceptionMsg = "rAdminUser.listScripts(false, true, true) failed: ";
-            }
-        }
-
-        if(exception == null) {
-
-            try {
-                for (RRepositoryFile file : listScriptsAll) {
-                    if (file.about().authors.contains("admin")) {
-                        filesFoundOwnedByCaller += 1;
-                    } else {
-                        filesFoundNotOwnedByCaller += 1;
-                    }
-                }
-            } catch (Exception ex) {
-                exception = ex;
-                exceptionMsg = "file.about().authors.contains failed: ";
-            }
-        }
-
-        // Test cleanup.
-        if (exception == null) {
-            // Test assertions.
-            assertEquals(filesFoundOwnedByCaller, listScripts.size());
+            assertEquals(filesFoundOwnedByCaller, listExternalScripts.size());
             assertEquals(filesFoundNotOwnedByCaller,
-                listScriptsAll.size() - listScripts.size());
+                listExternalScriptsSharedPublished.size() - listExternalScripts.size());
         } else {
             fail(exceptionMsg + exception.getMessage());
         }
@@ -334,10 +228,10 @@ public class RUserDefaultRepositoryScriptCallsTest {
     }
 
     /**
-     * Test RClient.executeScript using default repository script.
+     * Test RClient.executeScript using external repository script.
      */
     @Test
-    public void testClientRepositoryExecuteScript() {
+    public void testClientExternalRepositoryExecuteScript() {
 
         // Test variables.
         RRepositoryFile script = null;
@@ -351,8 +245,16 @@ public class RUserDefaultRepositoryScriptCallsTest {
 
         // Test.
         try {
+            /*
+             * The Histogram of Autos Sales.R script lives
+             * by default in the following directory within
+             * the external repository:
+             * external/repository/public/testuser which
+             * maps to the following directory value:
+             * external:public:testuser
+             */
             script = rUser.fetchFile("Histogram of Auto Sales.R",
-                                     "root",
+                                     "external:public:testuser",
                                      "testuser",
                                      null);
         } catch (Exception ex) {

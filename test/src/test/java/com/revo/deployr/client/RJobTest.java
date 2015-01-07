@@ -10,10 +10,6 @@
  * Apache License 2.0 (http://www.apache.org/licenses/LICENSE-2.0) for more details.
  *
  */
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.revo.deployr.client;
 
 import com.revo.deployr.DeployrUtil;
@@ -27,9 +23,6 @@ import java.util.HashSet;
 
 import static org.junit.Assert.*;
 
-/**
- * @author nriesland
- */
 public class RJobTest {
 
     RClient rClient = null;

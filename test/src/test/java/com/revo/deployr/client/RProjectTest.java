@@ -10,10 +10,6 @@
  * Apache License 2.0 (http://www.apache.org/licenses/LICENSE-2.0) for more details.
  *
  */
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.revo.deployr.client;
 
 import com.revo.deployr.DeployrUtil;
@@ -33,9 +29,6 @@ import java.util.List;
 
 import static org.junit.Assert.*;
 
-/**
- * @author nriesland
- */
 public class RProjectTest {
 
     RClient rClient = null;
@@ -261,7 +254,7 @@ public class RProjectTest {
      * Test of save method, of class RProject.
      */
     @Test
-    public void testProjectTestSave_RProjectDetails() {
+    public void testProjectTestSaveRProjectDetails() {
 
         // Test variables.
         String newProjectName = "New Project Name";
@@ -330,7 +323,7 @@ public class RProjectTest {
      * Test of save method, of class RProject.
      */
     @Test
-    public void testProjectTestSave_RProjectDetails_ProjectDropOptionsTrue() {
+    public void testProjectTestSaveRProjectDetailsDropOptionsTrue() {
 
         // Test variables.
         int historySize = 0;
@@ -428,7 +421,7 @@ public class RProjectTest {
      * Test of saveAs method, of class RProject.
      */
     @Test
-    public void testProjectTestSaveAs_RProjectDetails() {
+    public void testProjectTestSaveAsRProjectDetails() {
 
         // Test variables.
         String saveAsProjectName = "New Project Name save as";
@@ -500,7 +493,7 @@ public class RProjectTest {
      * Test of saveAs method, of class RProject.
      */
     @Test
-    public void testProjectTestSaveAs_RProjectDetails_ProjectDropOptionsFalse() {
+    public void testProjectTestSaveAsRProjectDetailsDropOptionsFalse() {
 
         // Test variables.
         int historySize = 1;

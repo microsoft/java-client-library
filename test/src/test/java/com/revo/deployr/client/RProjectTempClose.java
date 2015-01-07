@@ -10,10 +10,6 @@
  * Apache License 2.0 (http://www.apache.org/licenses/LICENSE-2.0) for more details.
  *
  */
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.revo.deployr.client;
 
 import com.revo.deployr.DeployrUtil;
@@ -25,9 +21,6 @@ import java.util.List;
 
 import static org.junit.Assert.*;
 
-/**
- * @author nriesland
- */
 public class RProjectTempClose {
 
     RClient rClient = null;
@@ -68,10 +61,11 @@ public class RProjectTempClose {
     }
 
     /**
-     * Test of login method, of class RClient.
+     * Test automatic shutdown of temporary project
+     * following logout.
      */
     @Test
-    public void testLogin_RAuthenticationTempProject() {
+    public void testTemporaryProjectAutoShutdownAfterLogout() {
 
         // Test variables.
         RBasicAuthentication pAuthentication = null;

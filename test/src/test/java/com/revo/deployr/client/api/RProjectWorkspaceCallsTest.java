@@ -10,10 +10,6 @@
  * Apache License 2.0 (http://www.apache.org/licenses/LICENSE-2.0) for more details.
  *
  */
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.revo.deployr.client.api;
 
 import com.revo.deployr.DeployrUtil;
@@ -33,9 +29,6 @@ import java.util.List;
 
 import static org.junit.Assert.*;
 
-/**
- * @author nriesland
- */
 public class RProjectWorkspaceCallsTest {
 
     RClient rClient = null;
@@ -133,7 +126,7 @@ public class RProjectWorkspaceCallsTest {
      * Test of listObjects method, of class RProjectWorkspaceCalls.
      */
     @Test
-    public void testProjectWorkspaceListObjects_ProjectWorkspaceOptions() {
+    public void testProjectWorkspaceListObjectsProjectWorkspaceOptions() {
 
         // Test variables.
         int mtcarsSize = 11;

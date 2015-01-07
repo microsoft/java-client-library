@@ -1,5 +1,5 @@
 /*
- * RUserRepositoryDirectoryCallsTest.java
+ * RUserDefaultRepositoryDirectoryCallsTest.java
  *
  * Copyright (C) 2010-2014 by Revolution Analytics Inc.
  *
@@ -9,10 +9,6 @@
  * MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE. Please refer to the
  * Apache License 2.0 (http://www.apache.org/licenses/LICENSE-2.0) for more details.
  *
- */
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
  */
 package com.revo.deployr.client.api;
 
@@ -33,15 +29,12 @@ import java.util.List;
 
 import static org.junit.Assert.*;
 
-/**
- * @author nriesland
- */
-public class RUserRepositoryDirectoryCallsTest {
+public class RUserDefaultRepositoryDirectoryCallsTest {
 
     RClient rClient = null;
     RUser rUser = null;
 
-    public RUserRepositoryDirectoryCallsTest() {
+    public RUserDefaultRepositoryDirectoryCallsTest() {
     }
 
     @BeforeClass
@@ -85,7 +78,7 @@ public class RUserRepositoryDirectoryCallsTest {
      * Test of listDirectories method, of class RUserRepositoryDirectoryCalls.
      */
     @Test
-    public void testUserRepositoryListDirectories_0args() {
+    public void testUserRepositoryListDirectories() {
 
         // Test variables.
         String expRepoDirectoryName = null;
@@ -167,7 +160,7 @@ public class RUserRepositoryDirectoryCallsTest {
      * Test of listDirectories method, of class RUserRepositoryDirectoryCalls.
      */
     @Test
-    public void testUserRepositoryListDirectories_3args() {
+    public void testUserRepositoryListDirectoriesAndFiles() {
 
         // Test variables.
         RRepositoryDirectory repoDirectory = null;
@@ -298,7 +291,7 @@ public class RUserRepositoryDirectoryCallsTest {
      * Test of copyDirectory method, of class RUserRepositoryDirectoryCalls.
      */
     @Test
-    public void testUserRepositoryCopyDirectory_All() {
+    public void testUserRepositoryCopyDirectoryAll() {
 
         // Test variables.
         String sourceDirectoryName = null;
@@ -422,7 +415,7 @@ public class RUserRepositoryDirectoryCallsTest {
      * Test of copyDirectory method, of class RUserRepositoryDirectoryCalls.
      */
     @Test
-    public void testUserRepositoryCopyDirectory_Some() {
+    public void testUserRepositoryCopyDirectorySome() {
 
         // Test variables.
         String sourceDirectoryName = null;
@@ -546,7 +539,7 @@ public class RUserRepositoryDirectoryCallsTest {
      * Test of moveDirectory method, of class RUserRepositoryDirectoryCalls.
      */
     @Test
-    public void testUserRepositoryMoveDirectory_All() {
+    public void testUserRepositoryMoveDirectoryAll() {
 
         // Test variables.
         String sourceDirectoryName = null;
@@ -672,7 +665,7 @@ public class RUserRepositoryDirectoryCallsTest {
      * Test of moveDirectory method, of class RUserRepositoryDirectoryCalls.
      */
     @Test
-    public void testUserRepositoryMoveDirectory_Some() {
+    public void testUserRepositoryMoveDirectorySome() {
 
         // Test variables.
         String sourceDirectoryName = null;
@@ -925,7 +918,7 @@ public class RUserRepositoryDirectoryCallsTest {
      * Test of archive method, of class RRepositoryDirectory.
      */
     @Test
-    public void testRepositoryDirectoryArchive_All() {
+    public void testRepositoryDirectoryArchiveAll() {
 
         // Test variables.
         String expSourceDirectoryName = null;
@@ -1053,7 +1046,7 @@ public class RUserRepositoryDirectoryCallsTest {
      * Test of archive method, of class RRepositoryDirectory.
      */
     @Test
-    public void testRepositoryDirectoryArchive_Some() {
+    public void testRepositoryDirectoryArchiveSome() {
 
         // Test variables.
         String expSourceDirectoryName = null;
@@ -1188,7 +1181,7 @@ public class RUserRepositoryDirectoryCallsTest {
      * Test of update method, of class RRepositoryDirectory.
      */
     @Test
-    public void testRepositoryDirectoryUpdate_All() {
+    public void testRepositoryDirectoryUpdateAll() {
 
         // Test variables.
         String expSourceDirectoryName = null;
@@ -1289,7 +1282,7 @@ public class RUserRepositoryDirectoryCallsTest {
      * Test of update method, of class RRepositoryDirectory.
      */
     @Test
-    public void testRepositoryDirectoryUpdate_Some() {
+    public void testRepositoryDirectoryUpdateSome() {
 
         // Test variables.
         String expSourceDirectoryName = null;

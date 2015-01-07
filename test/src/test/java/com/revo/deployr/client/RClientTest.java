@@ -10,10 +10,6 @@
  * Apache License 2.0 (http://www.apache.org/licenses/LICENSE-2.0) for more details.
  *
  */
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.revo.deployr.client;
 
 import com.revo.deployr.DeployrUtil;
@@ -25,9 +21,6 @@ import java.util.List;
 
 import static org.junit.Assert.*;
 
-/**
- * @author nriesland
- */
 public class RClientTest {
 
     RClient rClient = null;
@@ -71,7 +64,7 @@ public class RClientTest {
      * Test of login method, of class RClient.
      */
     @Test
-    public void testRClientLogin_RAuthentication() {
+    public void testRClientLoginRAuthentication() {
 
         // Test variables.
         String userName = "testuser";
@@ -141,7 +134,7 @@ public class RClientTest {
      * Test of login method, of class RClient.
      */
     @Test
-    public void testRClientLogin_RAuthentication_disableautosave() throws Exception {
+    public void testRClientLoginRAuthenticationDisableAutosave() throws Exception {
 
         // Test variables.
         RBasicAuthentication pAuthentication = new RBasicAuthentication("testuser", "changeme");

@@ -17,15 +17,15 @@ is running on `localhost`. If your instance of DeployR is running at some
 other IP address then please udpate the `endpoint` property in the
 configuration file as appropriate.
 
-You do not need to install Gradle before running these commands. To run
-the `Connect` example application on a Unix based OS, run the following shell
-script:
+You do not need to install Gradle before running these commands. For
+example, to run the `Connect` example application on a Unix based OS,
+run the following shell script:
 
 ```
-gradlew.bat run -DtestClass=com.revo.deployr.tutorial.connection.Connect
+gradlew run -DtestClass=com.revo.deployr.tutorial.connection.Connect
 ```
 
-To run the `Connnect` example application on a Windows based OS, run the
+To run the `Connect` example application on a Windows based OS, run the
 following batch file:
 
 ```

@@ -10,10 +10,6 @@
  * Apache License 2.0 (http://www.apache.org/licenses/LICENSE-2.0) for more details.
  *
  */
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.revo.deployr.client.api;
 
 import com.revo.deployr.DeployrUtil;
@@ -30,9 +26,6 @@ import java.util.List;
 
 import static org.junit.Assert.*;
 
-/**
- * @author nriesland
- */
 public class RProjectPackageCallsTest {
 
     RClient rClient = null;
@@ -235,7 +228,7 @@ public class RProjectPackageCallsTest {
      * Test of detachPackage method, of class RProjectPackageCalls.
      */
     @Test
-    public void testDetachPackage_String() {
+    public void testDetachPackageString() {
 
         // Test variables.
         String packageName = "ada";
@@ -302,7 +295,7 @@ public class RProjectPackageCallsTest {
      * Test of detachPackage method, of class RProjectPackageCalls.
      */
     @Test
-    public void testDetachPackage_List() {
+    public void testDetachPackageList() {
 
         // Test variables.
         String packageName = "ada";
