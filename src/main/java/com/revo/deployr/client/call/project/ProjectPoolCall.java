@@ -65,6 +65,8 @@ public class ProjectPoolCall extends AbstractCall implements Callable<RCoreResul
                 httpParams.put("adoptdirectory", options.adoptionOptions.adoptDirectory);
                 httpParams.put("adoptpackages", options.adoptionOptions.adoptPackages);
             }
+
+            httpParams.put("cluster", options.gridCluster);
         }
 
         httpParams.put("format", "json");

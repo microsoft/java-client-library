@@ -76,6 +76,8 @@ public class ProjectCreateCall extends AbstractCall implements Callable<RCoreRes
                 httpParams.put("adoptdirectory", options.adoptionOptions.adoptDirectory);
                 httpParams.put("adoptpackages", options.adoptionOptions.adoptPackages);
             }
+
+            httpParams.put("cluster", options.gridCluster);
         }
 
         httpParams.put("format", "json");

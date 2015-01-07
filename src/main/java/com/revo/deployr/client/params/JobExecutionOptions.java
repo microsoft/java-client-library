@@ -47,4 +47,16 @@ public class JobExecutionOptions extends ProjectExecutionOptions {
      */
     public boolean noproject;
 
+    /**
+     * Identifies the DeployR grid cluster where the caller would
+     * like the job (R session) to execute. If there are no slots
+     * available on any of the grid nodes within the cluster indicated
+     * then the server will attempt to execute the job on a slot
+     * on an available grid node that supports MIXED-operations. If no
+     * slot meeting these criteria is found, the job will be queued
+     * until a suitable slot becomes available. This feature is optional
+     * and available on DeployR Enterprise only.
+     */
+    public String gridCluster;
+
 }

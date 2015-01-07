@@ -46,4 +46,16 @@ public class AnonymousProjectExecutionOptions extends ProjectExecutionOptions {
      */
     public boolean recycle;
 
+    /**
+     * Identifies the DeployR grid cluster where the caller would
+     * like the project (R session) to execute. If there are no slots
+     * available on any of the grid nodes within the cluster indicated
+     * then the server will attempt to execute the project on a slot
+     * on an available grid node that supports MIXED-operations. If no
+     * slot meeting these criteria is found, the call will return an
+     * {@link com.revo.deployr.client.RGridException}. This feature is
+     * optional and available on DeployR Enterprise only.
+     */
+    public String gridCluster;
+
 }

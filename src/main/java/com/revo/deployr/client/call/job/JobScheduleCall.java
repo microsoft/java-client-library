@@ -54,6 +54,7 @@ public class JobScheduleCall extends StandardExecutionModelCall
         if (options != null) {
             httpParams.put("priority", options.priority);
             httpParams.put("storenoproject", Boolean.toString(options.noproject));
+            httpParams.put("cluster", options.gridCluster);
         }
     }
 

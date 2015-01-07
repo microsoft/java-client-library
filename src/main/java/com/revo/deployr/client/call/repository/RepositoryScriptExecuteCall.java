@@ -51,6 +51,7 @@ public class RepositoryScriptExecuteCall extends StandardExecutionModelCall
             // HTTP Blackbox Project Support.
             httpParams.put("blackbox", Boolean.toString(options.blackbox));
             httpParams.put("recycle", Boolean.toString(options.recycle));
+            httpParams.put("cluster", options.gridCluster);
         }
     }
 
