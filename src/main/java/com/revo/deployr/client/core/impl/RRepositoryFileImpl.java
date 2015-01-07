@@ -62,7 +62,9 @@ public class RRepositoryFileImpl implements RRepositoryFile {
                     throws RClientException, RSecurityException {
 
         RCall rCall = new RepositoryFileListCall(false, false, false,
-                                                 about.filename, about.directory);
+                                                 about.filename,
+                                                 about.directory,
+                                                 false);
         RCoreResult rResult = liveContext.executor.processCall(rCall);
 
         List<Map> repoFiles = rResult.getRepoFiles();

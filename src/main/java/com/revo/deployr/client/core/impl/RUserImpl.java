@@ -364,13 +364,42 @@ public class RUserImpl implements RUser {
         return listFiles(false, false, false, filename, directory);
     }
 
-    protected List<RRepositoryFile> listFiles(boolean archived,
-                                              boolean shared, boolean published,
-                                              String filename, String directory)
+    public List<RRepositoryFile> listFiles(boolean archived,
+                                          boolean shared, boolean published,
+                                          String filename, String directory)
                 throws RClientException, RSecurityException {
+
+        return listRepoFiles(archived,
+                             shared, published,
+                             filename, directory,
+                             false);
+    }
+
+    public List<RRepositoryFile> listExternalFiles()
+                        throws RClientException, RSecurityException {
+        return listExternalFiles(false, false);
+    }
+
+    public List<RRepositoryFile> listExternalFiles(boolean shared,
+                                                   boolean published)
+                        throws RClientException, RSecurityException {
+
+        return listRepoFiles(false,
+                             shared, published,
+                             null, null,
+                             true);
+    }
+
+    private List<RRepositoryFile> listRepoFiles(boolean archived,
+                                              boolean shared, boolean published,
+                                              String filename, String directory,
+                                              boolean useExternalRepo)
+                throws RClientException, RSecurityException {
+
         RCall rCall = new RepositoryFileListCall(archived,
                                                  shared, published,
-                                                 filename, directory);
+                                                 filename, directory,
+                                                 useExternalRepo);
         RCoreResult rResult = liveContext.executor.processCall(rCall);
 
         List<Map> repoFiles = rResult.getRepoFiles();
@@ -544,7 +573,9 @@ public class RUserImpl implements RUser {
     public List<RRepositoryFile> listScripts()
         throws RClientException, RSecurityException {
 
-        return listScripts(false, false, false, null, null);
+        return listRepoScripts(false, false, false,
+                               null, null,
+                               false);
     }
 
     public List<RRepositoryFile> listScripts(boolean archived,
@@ -552,38 +583,61 @@ public class RUserImpl implements RUser {
                                              boolean published)
                     throws RClientException, RSecurityException {
 
-        return listScripts(archived, shared, published, null, null);
+        return listRepoScripts(archived, shared, published,
+                               null, null,
+                               false);
     }
 
     public List<RRepositoryFile> listScripts(String filename,
                                              String directory)
 	throws RClientException, RSecurityException {
 
-        return listScripts(false, false, false, filename, directory);
+        return listRepoScripts(false, false, false,
+                               filename, directory,
+                               false);
     }
 
-    protected List<RRepositoryFile> listScripts(boolean archived,
-                                                boolean shared,
-                                                boolean published,
-                                                String filename,
-                                                String directory)
+    public List<RRepositoryFile> listExternalScripts()
+        throws RClientException, RSecurityException {
+
+        return listExternalScripts(false, false);
+    }
+
+    public List<RRepositoryFile> listExternalScripts(boolean shared,
+                                                     boolean published)
+                    throws RClientException, RSecurityException {
+
+        return listRepoScripts(false, shared, published,
+                               null, null,
+                               true);
+    }
+
+    private List<RRepositoryFile> listRepoScripts(boolean archived,
+                                                  boolean shared,
+                                                  boolean published,
+                                                  String filename,
+                                                  String directory,
+                                                  boolean useExternalRepo)
                         throws RClientException, RSecurityException {
 
         RCall rCall = new RepositoryScriptListCall(archived,
                                                    shared,
                                                    published,
                                                    filename,
-                                                   directory);
+                                                   directory,
+                                                   useExternalRepo);
         RCoreResult rResult = liveContext.executor.processCall(rCall);
 
         List<Map> repoScripts = rResult.getRepoScripts();
-        log.debug("listScripts: repoScripts=" + repoScripts);
+        log.debug("listRepoScripts: repoScripts=" + repoScripts);
 
         List<RRepositoryFile> scriptList = new ArrayList<RRepositoryFile>();
 
         for(Map repoScriptMap : repoScripts) {
-            RRepositoryFileDetails details = REntityUtil.getRepositoryFileDetails(repoScriptMap);
-            RRepositoryFile script = new RRepositoryFileImpl(details, liveContext);
+            RRepositoryFileDetails details =
+                REntityUtil.getRepositoryFileDetails(repoScriptMap);
+            RRepositoryFile script =
+                new RRepositoryFileImpl(details, liveContext);
             scriptList.add(script);	
         }
 
@@ -591,7 +645,8 @@ public class RUserImpl implements RUser {
         String error = rResult.getError();
         int errorCode = rResult.getErrorCode();
 
-        log.debug("listScripts: repoScripts, success=" + success + " error=" + error + " errorCode=" + errorCode);
+        log.debug("listRepoScripts: repoScripts, success=" + success +
+                        " error=" + error + " errorCode=" + errorCode);
 
         return scriptList;
     }
@@ -606,16 +661,41 @@ public class RUserImpl implements RUser {
         return listDirectories(false, false, false, false);
     }
 
-    public List<RRepositoryDirectory> listDirectories(boolean userfiles,
+   public List<RRepositoryDirectory> listDirectories(boolean userfiles,
                                                       boolean archived,
                                                       boolean shared,
                                                       boolean published)
                             throws RClientException, RSecurityException {
 
+        return listRepoDirectories(userfiles, archived, shared, published, false);
+    }
+
+    public List<RRepositoryDirectory> listExternalDirectories()
+                            throws RClientException, RSecurityException {
+
+        return listExternalDirectories(false, false, false);
+    }
+
+    public List<RRepositoryDirectory> listExternalDirectories(boolean userfiles,
+                                                              boolean shared,
+                                                              boolean published)
+                                throws RClientException, RSecurityException {
+
+        return listRepoDirectories(userfiles, false, shared, published, true);
+    }
+
+    private List<RRepositoryDirectory> listRepoDirectories(boolean userfiles,
+                                                           boolean archived,
+                                                           boolean shared,
+                                                           boolean published,
+                                                           boolean useExternalRepo)
+                            throws RClientException, RSecurityException {
+
         RCall rCall = new RepositoryDirectoryListCall(userfiles,
                                                       archived,
                                                       shared,
-                                                      published);
+                                                      published,
+                                                      useExternalRepo);
         RCoreResult rResult = liveContext.executor.processCall(rCall);
 
         List<Map> repoDirectories = rResult.getRepoDirectories();
@@ -625,16 +705,19 @@ public class RUserImpl implements RUser {
 
         for(Map repoDirectoryMap : repoDirectories) {
 
-            RRepositoryDirectoryDetails details = REntityUtil.getRepositoryDirectoryDetails(repoDirectoryMap, liveContext);
-            RRepositoryDirectory directory = new RRepositoryDirectoryImpl(details, liveContext);
-            directoryList.add(directory);	
+            RRepositoryDirectoryDetails details =
+                REntityUtil.getRepositoryDirectoryDetails(repoDirectoryMap, liveContext);
+            RRepositoryDirectory directory =
+                new RRepositoryDirectoryImpl(details, liveContext);
+            directoryList.add(directory);   
         }
 
         boolean success = rResult.isSuccess();
         String error = rResult.getError();
         int errorCode = rResult.getErrorCode();
 
-        log.debug("listDirectories: repoDirectories, success=" + success + " error=" + error + " errorCode=" + errorCode);
+        log.debug("listRepoDirectories: repoDirectories, success=" + success +
+                            " error=" + error + " errorCode=" + errorCode);
 
         return directoryList;
     }
@@ -647,13 +730,14 @@ public class RUserImpl implements RUser {
 
         Map repoDirectoryMap = rResult.getRepoDirectory();
         log.debug("create: rResult.getRepoDirectory=" + repoDirectoryMap);
-        RRepositoryDirectoryDetails details = REntityUtil.getRepositoryDirectoryDetails(repoDirectoryMap, liveContext);
+        RRepositoryDirectoryDetails details =
+            REntityUtil.getRepositoryDirectoryDetails(repoDirectoryMap, liveContext);
 
         boolean success = rResult.isSuccess();
         String error = rResult.getError();
         int errorCode = rResult.getErrorCode();
 
-        log.debug("create: repoDirectory, success=" + success + " error=" + error + " errorCode=" + errorCode);
+        log.debug("create: repoDirectory, success=" + success +" error=" + error + " errorCode=" + errorCode);
 
         return new RRepositoryDirectoryImpl(details, liveContext);
     }

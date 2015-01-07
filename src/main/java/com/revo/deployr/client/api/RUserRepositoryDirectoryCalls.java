@@ -29,7 +29,7 @@ import java.util.List;
 public interface RUserRepositoryDirectoryCalls {
 
     /**
-     * List repository-managed directories.
+     * List directories in the user's default repository.
      *
      * @throws RClientException   if RClient fails to complete call.
      * @throws RSecurityException if DeployR server security conditions
@@ -39,13 +39,15 @@ public interface RUserRepositoryDirectoryCalls {
             throws RClientException, RSecurityException;
 
     /**
-     * List repository-managed directories.
-     * If the archived parameter is enabled, then files in the user archive
+     * List directories in the user's default repository.
+     * If the userfiles parameter is enabled, then files in the user's
      * directories are included in the response.
-     * If the shared parameter is enabled, then files in the system shared
-     * directory is included in the response.
-     * If the published parameter is enabled, then files in the system
-     * published directory is included in the response.
+     * If the archived parameter is enabled, then files in the user's
+     * archive directories are included in the response.
+     * If the shared parameter is enabled, then files shared by other
+     * users will be included in the response.
+     * If the published parameter is enabled, then files shared by other
+     * users will be included in the response.
      *
      * @throws RClientException   if RClient fails to complete call.
      * @throws RSecurityException if DeployR server security conditions
@@ -58,7 +60,35 @@ public interface RUserRepositoryDirectoryCalls {
             throws RClientException, RSecurityException;
 
     /**
-     * Creates a new repository-managed custom user directory.
+     * List directories in the user's external repository.
+     *
+     * @throws RClientException   if RClient fails to complete call.
+     * @throws RSecurityException if DeployR server security conditions
+     *                            not met on call.
+     */
+    public List<RRepositoryDirectory> listExternalDirectories()
+                            throws RClientException, RSecurityException;
+
+    /**
+     * List directories in the user's external repository.
+     * If the userfiles parameter is enabled, then files in the user's
+     * external directories are included in the response.
+     * If the shared parameter is enabled, then external files shared
+     * by other users will be included in the response.
+     * If the published parameter is enabled, then external files published
+     * by other users will be included in the response.
+     *
+     * @throws RClientException   if RClient fails to complete call.
+     * @throws RSecurityException if DeployR server security conditions
+     *                            not met on call.
+     */
+    public List<RRepositoryDirectory> listExternalDirectories(boolean userfiles,
+                                                              boolean shared,
+                                                              boolean published)
+                                throws RClientException, RSecurityException;
+
+    /**
+     * Creates a new custom user directory in the default repository.
      *
      * @throws RClientException   if RClient fails to complete call.
      * @throws RSecurityException if DeployR server security conditions not met on call.

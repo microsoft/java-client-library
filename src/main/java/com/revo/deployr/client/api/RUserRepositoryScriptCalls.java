@@ -24,7 +24,7 @@ import java.util.List;
 public interface RUserRepositoryScriptCalls {
 
     /**
-     * List scripts in user repository.
+     * List scripts in user' default repository.
      *
      * @return List<RRepositoryFile>
      * @throws RClientException   if RClient fails to complete call.
@@ -34,9 +34,14 @@ public interface RUserRepositoryScriptCalls {
             throws RClientException, RSecurityException;
 
     /**
-     * List scripts including those archived by the caller or those shared or published
-     * by other users in the repository. The list of shared scripts will include any
-     * restricted scripts that the caller can access.
+     * List scripts in the user's default repository.
+     * If the archived parameter is enabled, then archived scripts
+     * by the user will be included in the response.
+     * If the shared parameter is enabled, then scripts shared by other
+     * users will be included in the response. The list of shared scripts
+     * will include any restricted scripts that the caller can access.
+     * If the published parameter is enabled, then scripts published
+     * by other users will be included in the response.
      *
      * @throws RClientException   if RClient fails to complete call.
      * @throws RSecurityException if DeployR server security conditions not met on call.
@@ -47,7 +52,7 @@ public interface RUserRepositoryScriptCalls {
             throws RClientException, RSecurityException;
 
     /**
-     * List versions of named script in user repository-managed directory.
+     * List versions of a named script in the user's default repository.
      *
      * @throws RClientException   if RClient fails to complete call.
      * @throws RSecurityException if DeployR server security conditions not met on call.
@@ -56,4 +61,27 @@ public interface RUserRepositoryScriptCalls {
                                              String directory)
             throws RClientException, RSecurityException;
 
+    /**
+     * List scripts in user' external repository.
+     *
+     * @return List<RRepositoryFile>
+     * @throws RClientException   if RClient fails to complete call.
+     * @throws RSecurityException if DeployR server security conditions not met on call.
+     */
+    public List<RRepositoryFile> listExternalScripts()
+            throws RClientException, RSecurityException;
+
+    /**
+     * List scripts in the user's external repository.
+     * If the shared parameter is enabled, then external scripts shared by
+     * other users will be included in the response.
+     * If the published parameter is enabled, then external scripts published
+     * by other users will be included in the response.
+     *
+     * @throws RClientException   if RClient fails to complete call.
+     * @throws RSecurityException if DeployR server security conditions not met on call.
+     */
+    public List<RRepositoryFile> listExternalScripts(boolean shared,
+                                                     boolean published)
+            throws RClientException, RSecurityException;
 }

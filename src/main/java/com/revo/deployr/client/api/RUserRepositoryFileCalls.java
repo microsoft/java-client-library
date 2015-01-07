@@ -28,7 +28,7 @@ import java.util.List;
 public interface RUserRepositoryFileCalls {
 
     /**
-     * List files in user repository.
+     * List files in the user's default repository.
      *
      * @throws RClientException   if RClient fails to complete call.
      * @throws RSecurityException if DeployR server security conditions not met on call.
@@ -36,9 +36,14 @@ public interface RUserRepositoryFileCalls {
     public List<RRepositoryFile> listFiles() throws RClientException, RSecurityException;
 
     /**
-     * List files including those archived by the caller or those shared or published
-     * by other users in the repository. The list of shared files will include any
-     * restricted files that the caller can access.
+     * List files in the user's default repository.
+     * If the archived parameter is enabled, then archived files
+     * by the user will be included in the response.
+     * If the shared parameter is enabled, then files shared by other
+     * users will be included in the response. The list of shared files
+     * will include any restricted files that the caller can access.
+     * If the published parameter is enabled, then files published
+     * by other users will be included in the response.
      *
      * @throws RClientException   if RClient fails to complete call.
      * @throws RSecurityException if DeployR server security conditions not met on call.
@@ -57,6 +62,29 @@ public interface RUserRepositoryFileCalls {
     public List<RRepositoryFile> listFiles(String filename, String directory)
             throws RClientException, RSecurityException;
 
+   /**
+     * List files in the user's external repository.
+     *
+     * @throws RClientException   if RClient fails to complete call.
+     * @throws RSecurityException if DeployR server security conditions not met on call.
+     */
+    public List<RRepositoryFile> listExternalFiles()
+                        throws RClientException, RSecurityException;
+
+    /**
+     * List files in the user's external repository.
+     * If the shared parameter is enabled, then external files shared by
+     * other users will be included in the response.
+     * If the published parameter is enabled, then external files published
+     * by other users will be included in the response.
+     *
+     * @throws RClientException   if RClient fails to complete call.
+     * @throws RSecurityException if DeployR server security conditions not met on call.
+     */
+    public List<RRepositoryFile> listExternalFiles(boolean shared,
+                                                   boolean published)
+                        throws RClientException, RSecurityException;
+                        
     /**
      * Fetch latest meta-data on repository-managed file.
      *
