@@ -46,6 +46,7 @@ public class RCoreResultImpl implements RCoreResult {
     private List<Map> repoScripts;
     private Map repoDirectory;
     private List<Map> repoDirectories;
+    private List<String> repoShellConsoleOutput;
     private Map job;
     private List<Map> jobs;
 
@@ -114,6 +115,10 @@ public class RCoreResultImpl implements RCoreResult {
 
     public List<Map> getRepoScripts() {
 	return repoScripts;
+    }
+
+    public List<String> getRepoShellConsoleOutput() {
+        return repoShellConsoleOutput;
     }
 
     public Map getJob() {
@@ -336,6 +341,11 @@ public class RCoreResultImpl implements RCoreResult {
                             repoDirectories.addAll(systemDirectories);
                     }
                     log.debug("RCoreResult: repoDirectories=" + repoDirectories);
+
+                    Map shellMap = (Map) repository.get("shell");
+                    if(shellMap != null) {
+                        repoShellConsoleOutput = (List<String>) shellMap.get("console");
+                    }
             }
 
             // Property: Job.

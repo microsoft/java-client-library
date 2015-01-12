@@ -23,6 +23,7 @@ import com.revo.deployr.client.call.user.AboutCall;
 import com.revo.deployr.client.call.user.AutosaveCall;
 import com.revo.deployr.client.call.project.ProjectCreateCall;
 import com.revo.deployr.client.call.repository.RepositoryScriptExecuteCall;
+import com.revo.deployr.client.call.repository.RepositoryShellExecuteCall;
 import com.revo.deployr.client.call.repository.RepositoryScriptInterruptCall;
 import com.revo.deployr.client.RClientException;
 import com.revo.deployr.client.RDataException;
@@ -382,6 +383,35 @@ public class RClientImpl implements RClient, RClientExecutor {
             throw new RClientException("Render url: ex=" + uex.getMessage());
         }
         return renderURL;
+    }
+
+    public List<String> executeShell(String shellName,
+                                     String shellDirectory,
+                                     String shellAuthor,
+                                     String shellVersion,
+                                     String shellArgs)
+            throws RClientException,
+            RSecurityException,
+            RDataException {
+
+        RCall rCall = new RepositoryShellExecuteCall(shellName,
+                                                     shellDirectory,
+                                                     shellAuthor,
+                                                     shellVersion,
+                                                     shellArgs);
+        RCoreResult rResult = processCall(rCall);
+
+        List<String> repoShellConsoleOutput =
+            rResult.getRepoShellConsoleOutput();
+
+        String error = rResult.getError();
+        int errorCode = rResult.getErrorCode();
+        boolean success = rResult.isSuccess();
+
+        log.debug("executeShell: success=" + success +
+                " error=" + error + " errorCode=" + errorCode);
+
+        return repoShellConsoleOutput;
     }
 
     public void interruptScript() throws RClientException, RSecurityException {

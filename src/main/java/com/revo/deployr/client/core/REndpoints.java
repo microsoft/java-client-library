@@ -107,6 +107,8 @@ public interface REndpoints {
     public static final String RREPOSITORYSCRIPTRENDER = "/r/repository/script/render";
     public static final String RREPOSITORYSCRIPTINTERRUPT = "/r/repository/script/interrupt";
 
+    public static final String RREPOSITORYSHELLEXECUTE = "/r/repository/shell/execute";
+
     public static final String RJOBLIST = "/r/job/list";
     public static final String RJOBSUBMIT = "/r/job/submit";
     public static final String RJOBSCHEDULE = "/r/job/schedule";
