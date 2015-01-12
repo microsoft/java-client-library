@@ -271,7 +271,7 @@ public class RUserExternalRepositoryScriptCallsTest {
                                              (String) null);
             } catch(Exception ex) {
                 exception = ex;
-                exceptionMsg = "rUser.fetchFile failed: ";
+                exceptionMsg = "rClient.executeScript failed: ";
             }
 
         }
