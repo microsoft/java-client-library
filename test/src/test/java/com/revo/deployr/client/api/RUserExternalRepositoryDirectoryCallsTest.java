@@ -14,6 +14,7 @@ package com.revo.deployr.client.api;
 
 import com.revo.deployr.DeployrUtil;
 import com.revo.deployr.client.RClient;
+import com.revo.deployr.client.RClientException;
 import com.revo.deployr.client.RRepositoryFile;
 import com.revo.deployr.client.RRepositoryDirectory;
 import com.revo.deployr.client.RUser;
@@ -352,6 +353,162 @@ public class RUserExternalRepositoryDirectoryCallsTest {
             assertEquals(totalUserFiles, 0);
             assertEquals(userFilesNotOwnedByCaller, 0);
             assertEquals(systemFilesOwnedByCaller, 0);
+        } else {
+            fail(exceptionMsg + exception.getMessage());
+        }
+
+        // Test cleanup errors.
+        if (cleanupException != null) {
+            fail(cleanupExceptionMsg + cleanupException.getMessage());
+        }
+    }
+
+    /**
+     * Test RUserRepositoryFileCalls.listFiles(categoryFilter, directoryFilter).
+     */
+    @Test
+    public void testUserRepositoryListExternalDirectoriesGoodFilters() {
+
+        // Test variables.
+        List<RRepositoryDirectory> listDirectories = null;
+        List<RRepositoryFile> listFilesExampleDirectory = null;
+        List<RRepositoryFile> listFilesExampleScripts = null;
+        List<RRepositoryFile> listFilesExampleBinary = null;
+        String exampleFraudScoreDirectory = "external:root:example-fraud-score";
+        int fraudExampleTotalFileCount = 2;
+        int fraudExampleScriptFileCount = 1;
+        boolean fraudExampleScriptsAreScripts = false;
+        int fraudExampleBinaryFileCount = 1;
+        boolean fraudExampleBinaryAreBinary = false;
+
+        // Test error handling.
+        Exception exception = null;
+        String exceptionMsg = "";
+        Exception cleanupException = null;
+        String cleanupExceptionMsg = "";
+
+        // Test.
+
+        try {
+            listDirectories =
+                rUser.listExternalDirectories((RRepositoryFile.Category) null,
+                                        exampleFraudScoreDirectory);
+            for(RRepositoryDirectory dir : listDirectories) {
+                if(dir.about().name.equals(exampleFraudScoreDirectory)) {
+                    listFilesExampleDirectory = dir.about().files;
+                }
+            }
+        } catch (Exception ex) {
+            exception = ex;
+            exceptionMsg = "rUser.listExternalDirectories(null, directory) failed: ";
+        }
+
+        if(exception == null) {
+
+            try {
+
+                listDirectories =
+                    rUser.listExternalDirectories(RRepositoryFile.Category.RSCRIPT,
+                                            exampleFraudScoreDirectory);
+                for(RRepositoryDirectory dir : listDirectories) {
+                    if(dir.about().name.equals(exampleFraudScoreDirectory)) {
+                        listFilesExampleScripts = dir.about().files;
+                        break;
+                    }
+                }
+
+                for(RRepositoryFile scriptFile : listFilesExampleScripts) {
+                    if(scriptFile.about().category !=
+                                        RRepositoryFile.Category.RSCRIPT) {
+                        fraudExampleScriptsAreScripts = false;
+                        break;
+                    } else {
+                        fraudExampleScriptsAreScripts = true;
+                    }
+                }
+            } catch (Exception ex) {
+                exception = ex;
+                exceptionMsg = "rUser.listExternalDirectories(RSCRIPT, directory) failed: ";
+            }
+        }
+
+        if(exception == null) {
+
+            try {
+
+                listDirectories =
+                    rUser.listExternalDirectories(RRepositoryFile.Category.RBINARY,
+                                            exampleFraudScoreDirectory);
+                for(RRepositoryDirectory dir : listDirectories) {
+                    if(dir.about().name.equals(exampleFraudScoreDirectory)) {
+                        listFilesExampleBinary = dir.about().files;
+                        break;
+                    }
+                }
+
+                for(RRepositoryFile binFile : listFilesExampleBinary) {
+                    if(binFile.about().category !=
+                                        RRepositoryFile.Category.RBINARY) {
+                        fraudExampleBinaryAreBinary = false;
+                        break;
+                    } else {
+                        fraudExampleBinaryAreBinary = true;
+                    }
+                }
+            } catch (Exception ex) {
+                exception = ex;
+                exceptionMsg = "rUser.listExternalDirectories(RBINARY, directory) failed: ";
+            }
+        }
+
+        if (exception == null) {
+            // Test assertions.
+            assertEquals(fraudExampleTotalFileCount, listFilesExampleDirectory.size());
+            assertEquals(fraudExampleScriptFileCount, listFilesExampleScripts.size());
+            assertTrue(fraudExampleScriptsAreScripts);
+            assertEquals(fraudExampleBinaryFileCount, listFilesExampleBinary.size());
+            assertTrue(fraudExampleBinaryAreBinary);
+        } else {
+            fail(exceptionMsg + exception.getMessage());
+        }
+
+        // Test cleanup errors.
+        if (cleanupException != null) {
+            fail(cleanupExceptionMsg + cleanupException.getMessage());
+        }
+    }
+
+    /**
+     * Test RUserRepositoryDirectoryCalls.listDirectories(categoryFilter, directoryFilter).
+     */
+    @Test
+    public void testUserRepositoryListExternalDirectoriesBadFilters() {
+
+        // Test variables.
+        List<RRepositoryDirectory> listDirectories = null;
+        RClientException clientEx = null;
+
+        // Test error handling.
+        Exception exception = null;
+        String exceptionMsg = "";
+        Exception cleanupException = null;
+        String cleanupExceptionMsg = "";
+
+        // Test.
+        try {
+            listDirectories =
+                rUser.listExternalDirectories((RRepositoryFile.Category) null,
+                                        "external:public:dir-not-found");
+        } catch (RClientException cex) {
+            clientEx = cex;
+        } catch (Exception ex) {
+            exception = ex;
+            exceptionMsg = "rUser.listExternalDirectories(null, dir-not-found) failed: ";
+        }
+
+        if (exception == null) {
+            // Test assertions.
+            assertNotNull(clientEx);
         } else {
             fail(exceptionMsg + exception.getMessage());
         }

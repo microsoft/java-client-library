@@ -14,6 +14,7 @@ package com.revo.deployr.client.api;
 
 import com.revo.deployr.DeployrUtil;
 import com.revo.deployr.client.RClient;
+import com.revo.deployr.client.RClientException;
 import com.revo.deployr.client.RRepositoryFile;
 import com.revo.deployr.client.RUser;
 import com.revo.deployr.client.auth.basic.RBasicAuthentication;
@@ -253,6 +254,141 @@ public class RUserDefaultRepositoryFileCallsTest {
             assertEquals(expRepoFileName, actualRepoFileName);
             assertEquals(expRepoFileDesc, actualRepoFileDesc);
             assertEquals(DeployrUtil.encodeString(text), DeployrUtil.encodeString(urlData));
+        } else {
+            fail(exceptionMsg + exception.getMessage());
+        }
+
+        // Test cleanup errors.
+        if (cleanupException != null) {
+            fail(cleanupExceptionMsg + cleanupException.getMessage());
+        }
+    }
+
+    /**
+     * Test RUserRepositoryFileCalls.listFiles(categoryFilter, directoryFilter).
+     */
+    @Test
+    public void testUserRepositoryListFilesGoodFilters() {
+
+        // Test variables.
+        List<RRepositoryFile> listFilesExampleDirectory = null;
+        List<RRepositoryFile> listFilesExampleScripts = null;
+        List<RRepositoryFile> listFilesExampleBinary = null;
+        String exampleFraudScoreDirectory = "example-fraud-score";
+        int fraudExampleTotalFileCount = 2;
+        int fraudExampleScriptFileCount = 1;
+        boolean fraudExampleScriptsAreScripts = false;
+        int fraudExampleBinaryFileCount = 1;
+        boolean fraudExampleBinaryAreBinary = false;
+
+        // Test error handling.
+        Exception exception = null;
+        String exceptionMsg = "";
+        Exception cleanupException = null;
+        String cleanupExceptionMsg = "";
+
+        // Test.
+        try {
+            listFilesExampleDirectory =
+                rUser.listFiles((RRepositoryFile.Category) null,
+                                        exampleFraudScoreDirectory);
+        } catch (Exception ex) {
+            exception = ex;
+            exceptionMsg = "rUser.listFiles(null, directory) failed: ";
+        }
+
+        if(exception == null) {
+
+            try {
+                listFilesExampleScripts =
+                    rUser.listFiles(RRepositoryFile.Category.RSCRIPT,
+                                        exampleFraudScoreDirectory);
+
+                for(RRepositoryFile scriptFile : listFilesExampleScripts) {
+                    if(scriptFile.about().category !=
+                                        RRepositoryFile.Category.RSCRIPT) {
+                        fraudExampleScriptsAreScripts = false;
+                        break;
+                    } else {
+                        fraudExampleScriptsAreScripts = true;
+                    }
+                }
+            } catch (Exception ex) {
+                exception = ex;
+                exceptionMsg = "rUser.listFiles(RSCRIPT, directory) failed: ";
+            }
+        }
+
+        if(exception == null) {
+
+            try {
+                listFilesExampleBinary =
+                    rUser.listFiles(RRepositoryFile.Category.RBINARY,
+                                        exampleFraudScoreDirectory);
+
+                for(RRepositoryFile binFile : listFilesExampleBinary) {
+                    if(binFile.about().category !=
+                                        RRepositoryFile.Category.RBINARY) {
+                        fraudExampleBinaryAreBinary = false;
+                        break;
+                    } else {
+                        fraudExampleBinaryAreBinary = true;
+                    }
+                }
+            } catch (Exception ex) {
+                exception = ex;
+                exceptionMsg = "rUser.listFiles(RSCRIPT, directory) failed: ";
+            }
+        }
+
+        if (exception == null) {
+            // Test assertions.
+            assertEquals(fraudExampleTotalFileCount, listFilesExampleDirectory.size());
+            assertEquals(fraudExampleScriptFileCount, listFilesExampleScripts.size());
+            assertTrue(fraudExampleScriptsAreScripts);
+            assertEquals(fraudExampleBinaryFileCount, listFilesExampleBinary.size());
+            assertTrue(fraudExampleBinaryAreBinary);
+        } else {
+            fail(exceptionMsg + exception.getMessage());
+        }
+
+        // Test cleanup errors.
+        if (cleanupException != null) {
+            fail(cleanupExceptionMsg + cleanupException.getMessage());
+        }
+    }
+
+    /**
+     * Test RUserRepositoryFileCalls.listFiles(categoryFilter, directoryFilter).
+     */
+    @Test
+    public void testUserRepositoryListFilesBadFilters() {
+
+        // Test variables.
+        List<RRepositoryFile> listFiles = null;
+        RClientException clientEx = null;
+
+        // Test error handling.
+        Exception exception = null;
+        String exceptionMsg = "";
+        Exception cleanupException = null;
+        String cleanupExceptionMsg = "";
+
+        // Test.
+        try {
+            listFiles =
+                rUser.listFiles((RRepositoryFile.Category) null,
+                                        "dir-not-found");
+        } catch (RClientException cex) {
+            clientEx = cex;
+        } catch (Exception ex) {
+            exception = ex;
+            exceptionMsg = "rUser.listFiles(null, dir-not-found) failed: ";
+        }
+
+        if (exception == null) {
+            // Test assertions.
+            assertNotNull(clientEx);
         } else {
             fail(exceptionMsg + exception.getMessage());
         }
