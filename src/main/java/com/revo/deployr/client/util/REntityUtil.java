@@ -87,7 +87,11 @@ public class REntityUtil {
         String urlString = (String) repoFile.get("url");
 
         String tags = (String) repoFile.get("tags");
-        String category = (String) repoFile.get("category");
+        RRepositoryFile.Category category = null;
+        String categoryName = (String) repoFile.get("category");
+        if(categoryName != null) {
+            category = RRepositoryFile.Category.fromString(categoryName);
+        }
         String md5 = (String) repoFile.get("md5");
         Long lastModified = (Long) repoFile.get("lastModified");
         Date lastModifiedDate = null;

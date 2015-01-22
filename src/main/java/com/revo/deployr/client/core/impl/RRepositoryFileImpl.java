@@ -64,7 +64,7 @@ public class RRepositoryFileImpl implements RRepositoryFile {
         RCall rCall = new RepositoryFileListCall(false, false, false,
                                                  about.filename,
                                                  about.directory,
-                                                 false);
+                                                 false, null);
         RCoreResult rResult = liveContext.executor.processCall(rCall);
 
         List<Map> repoFiles = rResult.getRepoFiles();

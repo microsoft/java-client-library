@@ -358,6 +358,16 @@ public class RUserImpl implements RUser {
         return listFiles(archived, shared, published, null, null);
     }
 
+    public List<RRepositoryFile> listFiles(RRepositoryFile.Category categoryFilter,
+                                           String directoryFilter)
+            throws RClientException, RSecurityException {
+
+        return listRepoFiles(false, false, false,
+                             null, directoryFilter,
+                             false,
+                             categoryFilter);
+    }
+
     public List<RRepositoryFile> listFiles(String filename,
                                            String directory)
                 throws RClientException, RSecurityException {
@@ -372,7 +382,7 @@ public class RUserImpl implements RUser {
         return listRepoFiles(archived,
                              shared, published,
                              filename, directory,
-                             false);
+                             false, null);
     }
 
     public List<RRepositoryFile> listExternalFiles()
@@ -387,19 +397,31 @@ public class RUserImpl implements RUser {
         return listRepoFiles(false,
                              shared, published,
                              null, null,
-                             true);
+                             true, null);
+    }
+
+    public List<RRepositoryFile> listExternalFiles(RRepositoryFile.Category categoryFilter,
+                                           String directoryFilter)
+            throws RClientException, RSecurityException {
+
+        return listRepoFiles(false, false, false,
+                             null, directoryFilter,
+                             true,
+                             categoryFilter);
     }
 
     private List<RRepositoryFile> listRepoFiles(boolean archived,
                                               boolean shared, boolean published,
                                               String filename, String directory,
-                                              boolean useExternalRepo)
+                                              boolean useExternalRepo,
+                                              RRepositoryFile.Category categoryFilter)
                 throws RClientException, RSecurityException {
 
         RCall rCall = new RepositoryFileListCall(archived,
                                                  shared, published,
                                                  filename, directory,
-                                                 useExternalRepo);
+                                                 useExternalRepo,
+             categoryFilter != null ? categoryFilter.toString() : null);
         RCoreResult rResult = liveContext.executor.processCall(rCall);
 
         List<Map> repoFiles = rResult.getRepoFiles();
@@ -667,7 +689,20 @@ public class RUserImpl implements RUser {
                                                       boolean published)
                             throws RClientException, RSecurityException {
 
-        return listRepoDirectories(userfiles, archived, shared, published, false);
+        return listRepoDirectories(userfiles,
+                                   archived, shared, published,
+                                   false,
+                                   null, null);
+    }
+
+    public List<RRepositoryDirectory> listDirectories(RRepositoryFile.Category categoryFilter,
+                                           String directoryFilter)
+            throws RClientException, RSecurityException {
+
+        return listRepoDirectories(false,
+                                   false, false, false,
+                                   false,
+                                   directoryFilter, categoryFilter);
     }
 
     public List<RRepositoryDirectory> listExternalDirectories()
@@ -681,21 +716,38 @@ public class RUserImpl implements RUser {
                                                               boolean published)
                                 throws RClientException, RSecurityException {
 
-        return listRepoDirectories(userfiles, false, shared, published, true);
+        return listRepoDirectories(userfiles,
+                                   false, shared, published,
+                                   true,
+                                   null, null);
+    }
+
+    public List<RRepositoryDirectory> listExternalDirectories(RRepositoryFile.Category categoryFilter,
+                                           String directoryFilter)
+            throws RClientException, RSecurityException {
+
+        return listRepoDirectories(false,
+                                   false, false, false,
+                                   true,
+                                   directoryFilter, categoryFilter);
     }
 
     private List<RRepositoryDirectory> listRepoDirectories(boolean userfiles,
                                                            boolean archived,
                                                            boolean shared,
                                                            boolean published,
-                                                           boolean useExternalRepo)
+                                                           boolean useExternalRepo,
+                                                           String directoryFilter,
+                                                           RRepositoryFile.Category categoryFilter)
                             throws RClientException, RSecurityException {
 
         RCall rCall = new RepositoryDirectoryListCall(userfiles,
                                                       archived,
                                                       shared,
                                                       published,
-                                                      useExternalRepo);
+                                                      useExternalRepo,
+                                                      directoryFilter,
+            categoryFilter !=  null ? categoryFilter.toString() : null);
         RCoreResult rResult = liveContext.executor.processCall(rCall);
 
         List<Map> repoDirectories = rResult.getRepoDirectories();

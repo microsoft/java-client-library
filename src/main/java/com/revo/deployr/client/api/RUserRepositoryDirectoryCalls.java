@@ -60,6 +60,24 @@ public interface RUserRepositoryDirectoryCalls {
             throws RClientException, RSecurityException;
 
     /**
+     * List directories in the user's default repository using filters to
+     * constrain the files in the response markup.
+     * If categoryFilter is specified only files matching the Category
+     * indicated will be included in the response.
+     * If directoryFilter is specified then only files found in the
+     * directory indicated will be included in the response.
+     * If both categoryFilter and directoryFilter are specified then
+     * only files matching the Category within the directory indicated
+     * will be included in the response.
+     *
+     * @throws RClientException   if RClient fails to complete call.
+     * @throws RSecurityException if DeployR server security conditions not met on call.
+     */
+    public List<RRepositoryDirectory> listDirectories(RRepositoryFile.Category categoryFilter,
+                                           String directoryFilter)
+            throws RClientException, RSecurityException;
+
+    /**
      * List directories in the user's external repository.
      *
      * @throws RClientException   if RClient fails to complete call.
@@ -86,6 +104,24 @@ public interface RUserRepositoryDirectoryCalls {
                                                               boolean shared,
                                                               boolean published)
                                 throws RClientException, RSecurityException;
+
+    /**
+     * List directories in the user's external repository using filters to
+     * constrain the files in the response markup.
+     * If categoryFilter is specified only files matching the Category
+     * indicated will be included in the response.
+     * If directoryFilter is specified then only files found in the
+     * external directory indicated will be included in the response.
+     * If both categoryFilter and directoryFilter are specified then
+     * only files matching the Category within the external directory
+     * indicated will be included in the response.
+     *
+     * @throws RClientException   if RClient fails to complete call.
+     * @throws RSecurityException if DeployR server security conditions not met on call.
+     */
+    public List<RRepositoryDirectory> listExternalDirectories(RRepositoryFile.Category categoryFilter,
+                                           String directoryFilter)
+            throws RClientException, RSecurityException;
 
     /**
      * Creates a new custom user directory in the default repository.

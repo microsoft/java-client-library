@@ -12,6 +12,8 @@
  */
 package com.revo.deployr.client.about;
 
+import com.revo.deployr.client.RRepositoryFile;
+
 import java.net.URL;
 import java.util.Date;
 import java.util.List;
@@ -27,7 +29,7 @@ public class RRepositoryFileDetails {
                                   int size, URL url, String access,
                                   String restricted, boolean shared, boolean published,
                                   List<String> authors, String inputs, String outputs,
-                                  String tags, String category,
+                                  String tags, RRepositoryFile.Category category,
                                   String md5, Date lastModified) {
         this.filename = filename;
         this.directory = directory;
@@ -137,7 +139,7 @@ public class RRepositoryFileDetails {
     /**
      * Repository file category.
      */
-    public final String category;
+    public final RRepositoryFile.Category category;
 
     /**
      * Repository file md5 checksum.

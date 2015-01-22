@@ -33,12 +33,16 @@ public class RepositoryDirectoryListCall extends AbstractCall
                                        boolean archived,
                                        boolean shared,
                                        boolean published,
-                                       boolean useExternalRepo) {
+                                       boolean useExternalRepo,
+                                       String directoryFilter,
+                                       String categoryFilter) {
         httpParams.put("userfiles", Boolean.toString(userfiles));
         httpParams.put("archived", Boolean.toString(archived));
         httpParams.put("shared", Boolean.toString(shared));
         httpParams.put("published", Boolean.toString(published));
         httpParams.put("external", Boolean.toString(useExternalRepo));
+        httpParams.put("directory", directoryFilter);
+        httpParams.put("categoryFilter", categoryFilter);
         httpParams.put("format", "json");
     }
 

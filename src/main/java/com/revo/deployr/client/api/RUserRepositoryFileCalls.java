@@ -54,12 +54,31 @@ public interface RUserRepositoryFileCalls {
             throws RClientException, RSecurityException;
 
     /**
-     * List versions of named file in user repository-managed directory.
+     * List versions of named file in user's default repository.
      *
      * @throws RClientException   if RClient fails to complete call.
      * @throws RSecurityException if DeployR server security conditions not met on call.
      */
-    public List<RRepositoryFile> listFiles(String filename, String directory)
+    public List<RRepositoryFile> listFiles(String filename,
+                                           String directory)
+            throws RClientException, RSecurityException;
+
+    /**
+     * List files in the user's default repository using filters to
+     * constrain the files in the response markup.
+     * If categoryFilter is specified only files matching the Category
+     * indicated will be included in the response.
+     * If directoryFilter is specified then only files found in the
+     * directory indicated will be included in the response.
+     * If both categoryFilter and directoryFilter are specified then
+     * only files matching the Category within the directory indicated
+     * will be included in the response.
+     *
+     * @throws RClientException   if RClient fails to complete call.
+     * @throws RSecurityException if DeployR server security conditions not met on call.
+     */
+    public List<RRepositoryFile> listFiles(RRepositoryFile.Category categoryFilter,
+                                           String directoryFilter)
             throws RClientException, RSecurityException;
 
    /**
@@ -84,6 +103,24 @@ public interface RUserRepositoryFileCalls {
     public List<RRepositoryFile> listExternalFiles(boolean shared,
                                                    boolean published)
                         throws RClientException, RSecurityException;
+
+    /**
+     * List files in the user's external repository using filters to
+     * constrain the files in the response markup.
+     * If categoryFilter is specified only files matching the Category
+     * indicated will be included in the response.
+     * If directoryFilter is specified then only files found in the
+     * external directory indicated will be included in the response.
+     * If both categoryFilter and directoryFilter are specified then
+     * only files matching the Category within the external directory
+     * indicated will be included in the response.
+     *
+     * @throws RClientException   if RClient fails to complete call.
+     * @throws RSecurityException if DeployR server security conditions not met on call.
+     */
+    public List<RRepositoryFile> listExternalFiles(RRepositoryFile.Category categoryFilter,
+                                           String directoryFilter)
+            throws RClientException, RSecurityException;
                         
     /**
      * Fetch latest meta-data on repository-managed file.

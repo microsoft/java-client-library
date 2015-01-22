@@ -106,5 +106,40 @@ public interface RRepositoryFile {
      */
     public void delete() throws RClientException, RSecurityException;
 
+    /**
+     * Categories of repository-managed file.
+     */
+    public enum Category {
+
+        DATAFILE("data"),
+        GRAPHICSPLOT("plot"),
+        OTHER("file"),
+        PDFFILE("pdf"),
+        RBINARY("R"),
+        RSCRIPT("script"),
+        SHELLSCRIPT("shell"),
+        TEXTFILE("text");
+
+        private Category(String name) {
+            this.name = name;
+        }
+
+        private final String name;
+        
+        public String toString() {
+            return name;
+        }
+
+        public static Category fromString(String name) {
+            Category match = Category.OTHER;
+            for(Category c : Category.values()) {
+                if(c.toString().equalsIgnoreCase(name)) {
+                    match = c;
+                    break;
+                }
+            }
+            return match;
+        }
+    }
 
 }

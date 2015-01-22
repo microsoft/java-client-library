@@ -31,13 +31,15 @@ public class RepositoryFileListCall extends AbstractCall
 
     public RepositoryFileListCall(boolean archived, boolean shared, boolean published,
                                   String filename, String directory,
-                                  boolean useExternalRepo) {
+                                  boolean useExternalRepo,
+                                  String categoryFilter) {
         httpParams.put("filename", filename);
         httpParams.put("directory", directory);
         httpParams.put("archived", Boolean.toString(archived));
         httpParams.put("shared", Boolean.toString(shared));
         httpParams.put("published", Boolean.toString(published));
         httpParams.put("external", Boolean.toString(useExternalRepo));
+        httpParams.put("categoryFilter", categoryFilter);
         httpParams.put("format", "json");
     }
 
