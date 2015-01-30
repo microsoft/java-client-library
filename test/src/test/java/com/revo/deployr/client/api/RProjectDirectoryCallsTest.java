@@ -357,8 +357,8 @@ public class RProjectDirectoryCallsTest {
         RProjectFile actualProjectFile = null;
         URL url = null;
         String urlData = "";
-        int actualSize = 0;
-        int expSize = 0;
+        long actualSize = 0;
+        long expSize = 0;
 
         // Test error handling.
         Exception exception = null;

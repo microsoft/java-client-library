@@ -19,7 +19,7 @@ import java.net.URL;
  */
 public class RProjectFileDetails {
 
-    public RProjectFileDetails(String filename, String descr, String type, int size, URL url) {
+    public RProjectFileDetails(String filename, String descr, String type, long size, URL url) {
         this.filename = filename;
         this.descr = descr;
         this.type = type;
@@ -44,6 +44,6 @@ public class RProjectFileDetails {
     /**
      * Project directory file size.
      */
-    public final int size;
+    public final long size;
 
 }

@@ -105,7 +105,13 @@ public class REntityUtil {
             url = new URL(urlString);
         } catch (Exception ex) {
         }
-        int size = (Integer) repoFile.get("length");
+        long size = 0L;
+        Object sizeObj = repoFile.get("length");
+        if(sizeObj instanceof Long)
+            size = (Long) sizeObj;
+        else
+        if(sizeObj instanceof Integer)
+            size = ((Integer) sizeObj).longValue();
         String restricted = (String) repoFile.get("restricted");
         boolean shared = false;
         if (repoFile.get("shared") != null) {
@@ -289,7 +295,13 @@ public class REntityUtil {
         String filename = (String) fileMap.get("filename");
         String descr = (String) fileMap.get("descr");
         String type = (String) fileMap.get("type");
-        int size = (Integer) fileMap.get("length");
+        long size = 0L;
+        Object sizeObj = fileMap.get("length");
+        if(sizeObj instanceof Long)
+            size = (Long) sizeObj;
+        else
+        if(sizeObj instanceof Integer)
+            size = ((Integer) sizeObj).longValue();
         String urlString = (String) fileMap.get("url");
         URL url = null;
         try {
@@ -308,7 +320,13 @@ public class REntityUtil {
         String execution = (String) resultMap.get("execution");
         String filename = (String) resultMap.get("filename");
         String type = (String) resultMap.get("type");
-        int size = (Integer) resultMap.get("length");
+        long size = 0L;
+        Object sizeObj = resultMap.get("length");
+        if(sizeObj instanceof Long)
+            size = (Long) sizeObj;
+        else
+        if(sizeObj instanceof Integer)
+            size = ((Integer) sizeObj).longValue();
         String urlString = (String) resultMap.get("url");
         URL url = null;
         try {

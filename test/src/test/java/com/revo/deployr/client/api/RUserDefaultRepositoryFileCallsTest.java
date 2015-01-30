@@ -763,8 +763,8 @@ public class RUserDefaultRepositoryFileCallsTest {
         URL repoURL = null;
         URL repoTransURL = null;
         RRepositoryFile repoTransFile = null;
-        int repoFileSize = 0;
-        int repoTransFileSize = 0;
+        long repoFileSize = 0;
+        long repoTransFileSize = 0;
 
         // Test error handling.
         Exception exception = null;

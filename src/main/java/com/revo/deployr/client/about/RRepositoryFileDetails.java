@@ -26,7 +26,7 @@ public class RRepositoryFileDetails {
     public RRepositoryFileDetails(String filename, String directory,
                                   String author, String version,
                                   String latestby, String descr, String type,
-                                  int size, URL url, String access,
+                                  long size, URL url, String access,
                                   String restricted, boolean shared, boolean published,
                                   List<String> authors, String inputs, String outputs,
                                   String tags, RRepositoryFile.Category category,
@@ -90,7 +90,7 @@ public class RRepositoryFileDetails {
     /**
      * Repository file size.
      */
-    public final int size;
+    public final long size;
 
     /**
      * Repository file access level display-friendly description:
