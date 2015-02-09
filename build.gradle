@@ -1,5 +1,8 @@
 apply plugin: 'java'
 
+sourceCompatibility = "1.6"
+targetCompatibility = "1.6"
+
 repositories {
     mavenCentral()
 }
@@ -19,11 +22,11 @@ dependencies {
 
 jar {
     baseName = 'jDeployR'
-    version = '7.3.0'
+    version = '7.4.0'
 }
 
 javadoc {
-    title = "DeployR 7.3.0 Java Client Library"
+    title = "DeployR Java Client Library"
     options.overview = "src/main/java/overview.html"
     exclude "com/revo/deployr/client/core/**/*.java"
     exclude "com/revo/deployr/client/call/**/*.java"

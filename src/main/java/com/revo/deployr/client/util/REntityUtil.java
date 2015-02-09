@@ -57,7 +57,7 @@ public class REntityUtil {
         }
         Date modified = null;
         try {
-            modified = new Date((long) project.get("lastmodified"));
+            modified = new Date((Long) project.get("lastmodified"));
         } catch (Exception lex) {
         }
         List<String> authors = (List<String>) project.get("authors");
