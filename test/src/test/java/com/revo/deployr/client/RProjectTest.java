@@ -16,6 +16,7 @@ import com.revo.deployr.DeployrUtil;
 import com.revo.deployr.client.about.RProjectDetails;
 import com.revo.deployr.client.auth.basic.RBasicAuthentication;
 import com.revo.deployr.client.factory.RClientFactory;
+import com.revo.deployr.client.params.ProjectExecutionOptions;
 import com.revo.deployr.client.params.ProjectDropOptions;
 import org.junit.*;
 
@@ -407,6 +408,68 @@ public class RProjectTest {
             assertEquals(projectDesc, savedProjectDetails.descr);
             assertTrue(savedProjectDetails.shared);
             assertEquals(listProjectExecution.size(), 0);
+        } else {
+            fail(exceptionMsg + exception.getMessage());
+        }
+
+        // Test cleanup errors.
+        if (cleanupException != null) {
+            fail(cleanupExceptionMsg + cleanupException.getMessage());
+        }
+    }
+
+    /**
+     * Test of phantom property of class ProjectExecutionOptions.
+     */
+    @Test
+    public void testProjectPhantomExecution() {
+
+        // Test variables.
+        String code = "x<-1";
+        RProject rTempProject = null;
+        RProjectExecution codeResult = null;
+        List<RProjectExecution> projectHistoryList = null;
+
+        // Test error handling.
+        Exception exception = null;
+        String exceptionMsg = "";
+        Exception cleanupException = null;
+        String cleanupExceptionMsg = "";
+
+        // Test.
+        rTempProject = DeployrUtil.createTemporaryProject(rUser);
+        try {
+            ProjectExecutionOptions options =
+                new ProjectExecutionOptions();
+            options.phantom = true;
+            codeResult = rTempProject.executeCode(code, options);
+        } catch (Exception ex) {
+            exception = ex;
+            exceptionMsg = "rTempProject.executeCode failed: ";
+        }
+
+        if (exception == null) {
+            try {
+                projectHistoryList = rTempProject.getHistory();
+            } catch (Exception ex) {
+                exception = ex;
+                exceptionMsg = "rTempProject.getHistory failed: ";
+            }
+        }
+
+        // Test cleanup.
+        try {
+            if (rTempProject != null) {
+                rTempProject.close();
+            }
+        } catch (Exception ex) {
+            cleanupException = ex;
+            cleanupExceptionMsg = "rTempProject.close failed: ";
+        }
+
+        // Test asserts.
+        if (exception == null) {
+            assertEquals(projectHistoryList.size(), 0);
         } else {
             fail(exceptionMsg + exception.getMessage());
         }
