@@ -87,6 +87,8 @@ public abstract class StandardExecutionModelCall extends AbstractCall {
             httpParams.put("graphicswidth", Integer.toString(options.graphicsWidth));
             httpParams.put("graphicsheight", Integer.toString(options.graphicsHeight));
 
+            httpParams.put("phantom", Boolean.toString(options.phantom));
+
         }
         httpParams.put("format", "json");
     }

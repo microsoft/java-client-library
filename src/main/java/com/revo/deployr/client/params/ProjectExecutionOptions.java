@@ -191,4 +191,10 @@ public class ProjectExecutionOptions {
      */
     public String tag;
 
+    /**
+     * When enabled meta-data about the execution is not
+     * recorded in the DeployR database and the execution
+     * does not appear in the RProject execution history.
+     */
+    public boolean phantom;
 }
