@@ -29,7 +29,7 @@ import java.util.logging.Logger;
 public class DeployrUtil {
 
     public static final String SAMPLE_CODE = "demo(graphics); png('sampleArtifact.png'); plot(rnorm(10));";
-    public static final String DEFAULT_PORT = "7300";
+    public static final String DEFAULT_PORT = "7400";
     // Prefix used to denote file or object created for the
     // purpose of later loading from repository on preloadfile*
     // or on preloadobject* parameters.

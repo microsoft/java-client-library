@@ -1,9 +1,12 @@
 apply plugin: 'java'
 apply plugin: 'application'
 
+sourceCompatibility = "1.6"
+targetCompatibility = "1.6"
+
 mainClassName = 'com.revo.deployr.example.SimpleConsole'
 
-applicationDefaultJvmArgs = ["-Dendpoint=http://localhost:7300/deployr",
+applicationDefaultJvmArgs = ["-Dendpoint=http://localhost:7400/deployr",
                              "-Dusername=testuser",
                              "-Dpassword=changeme"]
 
@@ -27,7 +30,7 @@ dependencies {
 
 jar {
     baseName = 'deployr-example'
-    version = '7.3.0'
+    version = '7.4.0'
 }
 
 task wrapper(type: Wrapper) {

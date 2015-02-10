@@ -1,5 +1,8 @@
 apply plugin: 'java'
 
+sourceCompatibility = "1.6"
+targetCompatibility = "1.6"
+
 repositories {
     mavenCentral()
 }
@@ -20,7 +23,7 @@ dependencies {
 }
 
 test {
-    systemProperty "url.property", "localhost:7300"
+    systemProperty "url.property", "localhost:7400"
 }
 
 task wrapper(type: Wrapper) {
