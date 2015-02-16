@@ -86,8 +86,8 @@ public class RUserExternalRepositoryShellCallsTest {
         // Test.
         try {
             /*
-             * The echo.sh shell script lives by default in the
-             * following directory on disk within the external
+             * The echo.[sh,bat] shell script lives by default in
+             * the following directory on disk within the external
              * repository:
              * external/repository/public/admin which
              * maps to the following directory value:
@@ -105,6 +105,9 @@ public class RUserExternalRepositoryShellCallsTest {
         if(exception == null) {
 
             try {
+                /*
+                 * Test DeployR Linux/OSX Server.
+                 */
                 consoleOutput =
                     rClient.executeShell(shell.about().filename,
                                          shell.about().directory,
@@ -112,8 +115,21 @@ public class RUserExternalRepositoryShellCallsTest {
                                          null,
                                          "Hello World!");
             } catch(Exception ex) {
-                exception = ex;
-                exceptionMsg = "rClient.executeShell failed: ";
+                try {
+                    /*
+                     * Test DeployR Windows Server.
+                     */
+                    consoleOutput =
+                    rClient.executeShell("echo.bat",
+                                         shell.about().directory,
+                                         shell.about().author,
+                                         null,
+                                         "Hello World!");
+
+                } catch(Exception batex) {
+                    exception = ex;
+                    exceptionMsg = "rClient.executeShell failed: ";
+                }
             }
 
         }
