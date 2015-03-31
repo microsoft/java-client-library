@@ -841,7 +841,7 @@ public class RProjectImpl implements RProject {
 
         Map repoFileMap = rResult.getRepoFile();
         log.debug("storeObject: rResult.getRepoFile=" + repoFileMap);
-        RRepositoryFileDetails details = REntityUtil.getRepositoryFileDetails(repoFileMap);
+        RRepositoryFileDetails details = REntityUtil.getRepositoryFileDetails(repoFileMap, liveContext);
 
         RRepositoryFile repoFile = new RRepositoryFileImpl(details, liveContext);
 

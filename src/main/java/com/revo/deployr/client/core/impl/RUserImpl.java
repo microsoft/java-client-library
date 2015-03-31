@@ -431,7 +431,7 @@ public class RUserImpl implements RUser {
 
         for(Map repoFileMap : repoFiles) {
 
-            RRepositoryFileDetails details = REntityUtil.getRepositoryFileDetails(repoFileMap);
+            RRepositoryFileDetails details = REntityUtil.getRepositoryFileDetails(repoFileMap, liveContext);
             RRepositoryFile file = new RRepositoryFileImpl(details, liveContext);
             fileList.add(file);	
         }
@@ -456,7 +456,7 @@ public class RUserImpl implements RUser {
 
         Map repoFileMap = rResult.getRepoFile();
         log.debug("fetchFile: rResult.getRepoFile=" + repoFileMap);
-        RRepositoryFileDetails details = REntityUtil.getRepositoryFileDetails(repoFileMap);
+        RRepositoryFileDetails details = REntityUtil.getRepositoryFileDetails(repoFileMap, liveContext);
         RRepositoryFile repoFile = new RRepositoryFileImpl(details, liveContext);
 
         boolean success = rResult.isSuccess();
@@ -477,7 +477,7 @@ public class RUserImpl implements RUser {
 
         Map repoFileMap = rResult.getRepoFile();
         log.debug("uploadFile: rResult.getRepoFile=" + repoFileMap);
-        RRepositoryFileDetails details = REntityUtil.getRepositoryFileDetails(repoFileMap);
+        RRepositoryFileDetails details = REntityUtil.getRepositoryFileDetails(repoFileMap, liveContext);
         RRepositoryFile repoFile = new RRepositoryFileImpl(details, liveContext);
 
         boolean success = rResult.isSuccess();
@@ -497,7 +497,7 @@ public class RUserImpl implements RUser {
 
         Map repoFileMap = rResult.getRepoFile();
         log.debug("writeFile: rResult.getRepoFile=" + repoFileMap);
-        RRepositoryFileDetails details = REntityUtil.getRepositoryFileDetails(repoFileMap);
+        RRepositoryFileDetails details = REntityUtil.getRepositoryFileDetails(repoFileMap, liveContext);
 
         RRepositoryFile repoFile = new RRepositoryFileImpl(details, liveContext);
 
@@ -518,7 +518,7 @@ public class RUserImpl implements RUser {
 
         Map repoFileMap = rResult.getRepoFile();
         log.debug("transferFile: rResult.getRepoFile=" + repoFileMap);
-        RRepositoryFileDetails details = REntityUtil.getRepositoryFileDetails(repoFileMap);
+        RRepositoryFileDetails details = REntityUtil.getRepositoryFileDetails(repoFileMap, liveContext);
 
         RRepositoryFile repoFile = new RRepositoryFileImpl(details, liveContext);
 
@@ -657,7 +657,7 @@ public class RUserImpl implements RUser {
 
         for(Map repoScriptMap : repoScripts) {
             RRepositoryFileDetails details =
-                REntityUtil.getRepositoryFileDetails(repoScriptMap);
+                REntityUtil.getRepositoryFileDetails(repoScriptMap, liveContext);
             RRepositoryFile script =
                 new RRepositoryFileImpl(details, liveContext);
             scriptList.add(script);	

@@ -75,7 +75,7 @@ public class RRepositoryFileImpl implements RRepositoryFile {
 
         for(Map repoFileMap : repoFiles) {
 
-            RRepositoryFileDetails details = REntityUtil.getRepositoryFileDetails(repoFileMap);
+            RRepositoryFileDetails details = REntityUtil.getRepositoryFileDetails(repoFileMap, liveContext);
             RRepositoryFile file = new RRepositoryFileImpl(details, liveContext);
             versionList.add(file);	
         }
@@ -101,7 +101,7 @@ public class RRepositoryFileImpl implements RRepositoryFile {
 
         Map repoFileMap = rResult.getRepoFile();
         log.debug("grant: rResult.getRepoFile=" + repoFileMap);
-        RRepositoryFileDetails details = REntityUtil.getRepositoryFileDetails(repoFileMap);
+        RRepositoryFileDetails details = REntityUtil.getRepositoryFileDetails(repoFileMap, liveContext);
 
         RRepositoryFile repoFile = new RRepositoryFileImpl(details, liveContext);
 
@@ -122,7 +122,7 @@ public class RRepositoryFileImpl implements RRepositoryFile {
 
         Map repoFileMap = rResult.getRepoFile();
         log.debug("revert: rResult.getRepoFile=" + repoFileMap);
-        RRepositoryFileDetails details = REntityUtil.getRepositoryFileDetails(repoFileMap);
+        RRepositoryFileDetails details = REntityUtil.getRepositoryFileDetails(repoFileMap, liveContext);
 
         RRepositoryFile repoFile = new RRepositoryFileImpl(details, liveContext);
 
@@ -148,7 +148,7 @@ public class RRepositoryFileImpl implements RRepositoryFile {
 
         Map repoFileMap = rResult.getRepoFile();
         log.debug("update: rResult.getRepoFile=" + repoFileMap);
-        RRepositoryFileDetails details = REntityUtil.getRepositoryFileDetails(repoFileMap);
+        RRepositoryFileDetails details = REntityUtil.getRepositoryFileDetails(repoFileMap, liveContext);
 
         RRepositoryFile repoFile = new RRepositoryFileImpl(details, liveContext);
 

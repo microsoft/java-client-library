@@ -96,7 +96,7 @@ public class RProjectFileImpl implements RProjectFile {
 
 	Map repoFileMap = rResult.getRepoFile();
 	log.debug("uploadFile: rResult.getRepoFile=" + repoFileMap);
-	RRepositoryFileDetails details = REntityUtil.getRepositoryFileDetails(repoFileMap);
+	RRepositoryFileDetails details = REntityUtil.getRepositoryFileDetails(repoFileMap, liveContext);
 
 	RRepositoryFile repoFile = new RRepositoryFileImpl(details, liveContext);
 
