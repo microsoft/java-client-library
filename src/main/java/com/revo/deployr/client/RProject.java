@@ -20,7 +20,7 @@ import com.revo.deployr.client.api.RProjectWorkspaceCalls;
 import com.revo.deployr.client.params.ProjectCloseOptions;
 import com.revo.deployr.client.params.ProjectDropOptions;
 
-import java.net.URL;
+import java.io.InputStream;
 
 /**
  * Represents a DeployR managed project.
@@ -183,6 +183,6 @@ public interface RProject extends
      * @throws RClientException   if RClient fails to complete call.
      * @throws RSecurityException if DeployR server security conditions not met on call.
      */
-    public URL export() throws RClientException, RSecurityException;
+    public InputStream export() throws RClientException, RSecurityException;
 
 }

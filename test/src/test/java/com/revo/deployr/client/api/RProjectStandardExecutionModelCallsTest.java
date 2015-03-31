@@ -60,16 +60,16 @@ public class RProjectStandardExecutionModelCallsTest {
     @Before
     public void setUp() {
         try {
-
-            url = System.getProperty("url.property");
+            String url = System.getProperty("connection.protocol") +
+                            System.getProperty("connection.endpoint");
             if (url == null) {
-                url = "localhost:" + DeployrUtil.DEFAULT_PORT;
+                fail("setUp: connection.[protocol|endpoint] null.");
             }
-            rClient = RClientFactory.createClient("http://" + url + "/deployr");
+            boolean allowSelfSigned = 
+                Boolean.valueOf(System.getProperty("allow.SelfSignedSSLCert"));
+            rClient =RClientFactory.createClient(url, allowSelfSigned);
             RBasicAuthentication rAuthentication = new RBasicAuthentication("testuser", "changeme");
-
             rUser = rClient.login(rAuthentication);
-
         } catch (Exception ex) {
             if (rClient != null) {
                 rClient.release();
@@ -332,7 +332,7 @@ public class RProjectStandardExecutionModelCallsTest {
         try {
             temporaryProject = rUser.createProject();
             repositoryFile = DeployrUtil.createTemporaryRScript(rUser, true);
-            projectExecution = temporaryProject.executeExternal(repositoryFile.download().toString(),
+            projectExecution = temporaryProject.executeExternal(repositoryFile.about().url.toString(),
                     executionOptions);
             console = projectExecution.about().console;
             routputs = projectExecution.about().workspaceObjects;

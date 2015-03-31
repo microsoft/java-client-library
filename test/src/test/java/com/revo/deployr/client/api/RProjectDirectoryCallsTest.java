@@ -21,6 +21,7 @@ import com.revo.deployr.client.params.RepoUploadOptions;
 import org.junit.*;
 
 import java.io.File;
+import java.io.InputStream;
 import java.io.FileInputStream;
 import java.net.URL;
 import java.util.ArrayList;
@@ -47,13 +48,18 @@ public class RProjectDirectoryCallsTest {
 
     @Before
     public void setUp() {
+
         try {
-            String url = System.getProperty("url.property");
+            String url = System.getProperty("connection.protocol") +
+                            System.getProperty("connection.endpoint");
             if (url == null) {
-                url = "localhost:" + DeployrUtil.DEFAULT_PORT;
+                fail("setUp: connection.[protocol|endpoint] null.");
             }
-            rClient = RClientFactory.createClient("http://" + url + "/deployr");
-            RBasicAuthentication rAuthentication = new RBasicAuthentication("testuser", "changeme");
+            boolean allowSelfSigned = 
+                Boolean.valueOf(System.getProperty("allow.SelfSignedSSLCert"));
+            rClient =RClientFactory.createClient(url, allowSelfSigned);
+            RBasicAuthentication rAuthentication =
+                new RBasicAuthentication("testuser", "changeme");
             rUser = rClient.login(rAuthentication);
             rProject = DeployrUtil.createTemporaryProject(rUser);
             assert (rProject != null);
@@ -129,7 +135,7 @@ public class RProjectDirectoryCallsTest {
         String expProjectFileName = "";
         String expProjectFileDesc = "";
         String urlData = "";
-        URL url = null;
+        InputStream downStream = null;
         File file = null;
 
         // Test error handling.
@@ -155,7 +161,6 @@ public class RProjectDirectoryCallsTest {
             try {
                 actualProjectFileName = actualProjectFile.about().filename;
                 actualProjectFileDesc = actualProjectFile.about().descr;
-                url = actualProjectFile.download();
             } catch (Exception ex) {
                 exception = ex;
                 exceptionMsg = "actualProjectFile.about failed: ";
@@ -164,15 +169,15 @@ public class RProjectDirectoryCallsTest {
 
         if (exception == null) {
             try {
-                url = actualProjectFile.download();
+                downStream = actualProjectFile.download();
             } catch (Exception ex) {
                 exception = ex;
-                exceptionMsg = "actualProjectFile.about failed: ";
+                exceptionMsg = "actualProjectFile.download failed: ";
             }
         }
 
         if (exception == null) {
-            urlData = DeployrUtil.getDataFromURL(url);
+            urlData = DeployrUtil.getDataFromStream(downStream);
         }
 
         if (exception == null) {
@@ -204,6 +209,8 @@ public class RProjectDirectoryCallsTest {
         File file = null;
         RProjectFile upLoadFile = null;
         URL urlUpLoadFile = null;
+        InputStream uploadStream = null;
+        InputStream downloadStream = null;
         String urlUploadData = "";
         URL urlTransferFile = null;
         String urlTransferData = "";
@@ -230,7 +237,8 @@ public class RProjectDirectoryCallsTest {
 
         if (exception == null) {
             try {
-                urlUpLoadFile = upLoadFile.download();
+                urlUpLoadFile = upLoadFile.about().url;
+                uploadStream = upLoadFile.download();
             } catch (Exception ex) {
                 exception = ex;
                 exceptionMsg = "upLoadFile.about failed: ";
@@ -250,7 +258,7 @@ public class RProjectDirectoryCallsTest {
             try {
                 actualProjectFileName = actualProjectFile.about().filename;
                 actualProjectFileDesc = actualProjectFile.about().descr;
-                urlTransferFile = actualProjectFile.download();
+                downloadStream = actualProjectFile.download();
             } catch (Exception ex) {
                 exception = ex;
                 exceptionMsg = "actualProjectFile.about failed: ";
@@ -258,14 +266,15 @@ public class RProjectDirectoryCallsTest {
         }
 
         if (exception == null) {
-            urlUploadData = DeployrUtil.getDataFromURL(urlUpLoadFile);
-            urlTransferData = DeployrUtil.getDataFromURL(urlTransferFile);
+            urlUploadData = DeployrUtil.getDataFromStream(uploadStream);
+            urlTransferData = DeployrUtil.getDataFromStream(downloadStream);
         }
 
         if (exception == null) {
             assertEquals(expProjectFileName, actualProjectFileName);
             assertEquals(expProjectFileDesc, actualProjectFileDesc);
-            assertEquals(DeployrUtil.encodeString(urlUploadData), DeployrUtil.encodeString(urlTransferData));
+            assertEquals(DeployrUtil.encodeString(urlUploadData),
+                        DeployrUtil.encodeString(urlTransferData));
         } else {
             fail(exceptionMsg + exception.getMessage());
         }
@@ -286,7 +295,7 @@ public class RProjectDirectoryCallsTest {
         String expProjectFileDesc = "";
         DirectoryUploadOptions options = null;
         RProjectFile actualProjectFile = null;
-        URL url = null;
+        InputStream downStream = null;
         String urlData = "";
 
         // Test error handling.
@@ -319,7 +328,7 @@ public class RProjectDirectoryCallsTest {
 
         if (exception == null) {
             try {
-                url = actualProjectFile.download();
+                downStream = actualProjectFile.download();
             } catch (Exception ex) {
                 exception = ex;
                 exceptionMsg = "actualProjectFile.download failed: ";
@@ -327,14 +336,15 @@ public class RProjectDirectoryCallsTest {
         }
 
         if (exception == null) {
-            urlData = DeployrUtil.getDataFromURL(url);
+            urlData = DeployrUtil.getDataFromStream(downStream);
         }
 
         if (exception == null) {
             // Test asserts.
             assertEquals(expProjectFileName, actualProjectFileName);
             assertEquals(expProjectFileDesc, actualProjectFileDesc);
-            assertEquals(DeployrUtil.encodeString(expContents), DeployrUtil.encodeString(urlData));
+            assertEquals(DeployrUtil.encodeString(expContents),
+                                DeployrUtil.encodeString(urlData));
         } else {
             fail(exceptionMsg + exception.getMessage());
         }
@@ -355,7 +365,7 @@ public class RProjectDirectoryCallsTest {
         RepoUploadOptions uploadOptions = null;
         RRepositoryFile repoFile = null;
         RProjectFile actualProjectFile = null;
-        URL url = null;
+        InputStream downStream = null;
         String urlData = "";
         long actualSize = 0;
         long expSize = 0;
@@ -395,7 +405,7 @@ public class RProjectDirectoryCallsTest {
             try {
                 actualProjectFileName = actualProjectFile.about().filename;
                 actualProjectFileDesc = actualProjectFile.about().descr;
-                url = actualProjectFile.download();
+                downStream = actualProjectFile.download();
                 actualSize = actualProjectFile.about().size;
             } catch (Exception ex) {
                 exception = ex;
@@ -404,7 +414,7 @@ public class RProjectDirectoryCallsTest {
         }
 
         if (exception == null) {
-            urlData = DeployrUtil.getDataFromURL(url);
+            urlData = DeployrUtil.getDataFromStream(downStream);
         }
 
         // Test cleanup.
@@ -448,7 +458,7 @@ public class RProjectDirectoryCallsTest {
         String expProjectFileDesc = "";
         RProjectFile actualProjectFile = null;
         DirectoryUploadOptions options = null;
-        URL url = null;
+        InputStream downStream = null;
         String urlData = "";
 
         // Test error handling.
@@ -482,7 +492,7 @@ public class RProjectDirectoryCallsTest {
 
         if (exception == null) {
             try {
-                url = rProject.downloadFiles();
+                downStream = rProject.downloadFiles();
             } catch (Exception ex) {
                 exception = ex;
                 exceptionMsg = "rProject.downloadFiles failed: ";
@@ -490,7 +500,7 @@ public class RProjectDirectoryCallsTest {
         }
 
         if (exception == null) {
-            urlData = DeployrUtil.getDataFromURL(url);
+            urlData = DeployrUtil.getDataFromStream(downStream);
         }
 
         if (exception == null) {
@@ -514,7 +524,7 @@ public class RProjectDirectoryCallsTest {
         DirectoryUploadOptions options = null;
         String expectedResults = "PK";
         String text = "this is a line";
-        URL url = null;
+        InputStream downStream = null;
         String urlData = "";
         RProjectFile projectFile = null;
 
@@ -556,7 +566,7 @@ public class RProjectDirectoryCallsTest {
 
         if (exception == null) {
             try {
-                url = rProject.downloadFiles(listFiles);
+                downStream = rProject.downloadFiles(listFiles);
             } catch (Exception ex) {
                 exception = ex;
                 exceptionMsg = "rProject.downloadFiles failed: ";
@@ -564,7 +574,7 @@ public class RProjectDirectoryCallsTest {
         }
 
         if (exception == null) {
-            urlData = DeployrUtil.getDataFromURL(url);
+            urlData = DeployrUtil.getDataFromStream(downStream);
         }
 
         if (exception == null) {

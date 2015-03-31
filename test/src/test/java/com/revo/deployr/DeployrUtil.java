@@ -91,6 +91,23 @@ public class DeployrUtil {
         return null;
     }
 
+    public static String getDataFromStream(InputStream is) {
+        try {
+            BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+            StringBuffer buff = new StringBuffer("");
+            String line;
+            while ((line = reader.readLine()) != null) {
+                buff.append(line);
+            }
+            reader.close();
+            is.close();
+            return buff.toString();
+        } catch (IOException ex) {
+            Logger.getLogger(DeployrUtil.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+
     public static RProject createPersistentProject(RUser rUser, String projectName, String projectDesc) {
         RProject rProject = null;
 

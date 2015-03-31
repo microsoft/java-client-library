@@ -17,6 +17,10 @@ import com.revo.deployr.client.RGridException;
 import com.revo.deployr.client.RSecurityException;
 import com.revo.deployr.client.call.RCall;
 
+import org.apache.http.client.utils.URIBuilder;
+
+import java.io.InputStream;
+
 public interface RClientExecutor {
 
     public RCoreResult processCall(RCall call)
@@ -27,5 +31,8 @@ public interface RClientExecutor {
             throws RClientException,
             RSecurityException,
             RGridException;
+
+    public InputStream download(URIBuilder builder)
+            throws RClientException;
 
 }

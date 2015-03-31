@@ -49,14 +49,16 @@ public class RProjectWorkspaceCallsTest {
     @Before
     public void setUp() {
         try {
-            String url = System.getProperty("url.property");
+            String url = System.getProperty("connection.protocol") +
+                            System.getProperty("connection.endpoint");
             if (url == null) {
-                url = "localhost:" + DeployrUtil.DEFAULT_PORT;
+                fail("setUp: connection.[protocol|endpoint] null.");
             }
-            rClient = RClientFactory.createClient("http://" + url + "/deployr");
+            boolean allowSelfSigned = 
+                Boolean.valueOf(System.getProperty("allow.SelfSignedSSLCert"));
+            rClient =RClientFactory.createClient(url, allowSelfSigned);
             RBasicAuthentication rAuthentication = new RBasicAuthentication("testuser", "changeme");
             rUser = rClient.login(rAuthentication);
-
             // create Temp project with x and y numerics
             rProject = DeployrUtil.createTemporaryProject(rUser);
             assert (rProject != null);
@@ -301,7 +303,7 @@ public class RProjectWorkspaceCallsTest {
 
         if (exception == null) {
             try {
-                url = projectFile.download();
+                url = projectFile.about().url;
             } catch (Exception ex) {
                 exception = ex;
                 exceptionMsg = "projectFile.about failed: ";
@@ -439,7 +441,7 @@ public class RProjectWorkspaceCallsTest {
 
         if (exception == null) {
             try {
-                url = repoFile.download();
+                url = repoFile.about().url;
             } catch (Exception ex) {
                 exception = ex;
                 exceptionMsg = "repoFile.about failed: ";

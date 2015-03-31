@@ -20,7 +20,7 @@ import com.revo.deployr.client.params.DirectoryUploadOptions;
 import com.revo.deployr.client.params.RepoUploadOptions;
 import org.junit.*;
 
-import java.net.URL;
+import java.io.InputStream;
 import java.util.List;
 
 import static org.junit.Assert.*;
@@ -50,11 +50,14 @@ public class RProjectFileTest {
     @Before
     public void setUp() {
         try {
-            connectUrl = System.getProperty("url.property");
-            if (connectUrl == null) {
-                connectUrl = "localhost:" + DeployrUtil.DEFAULT_PORT;
+            String url = System.getProperty("connection.protocol") +
+                            System.getProperty("connection.endpoint");
+            if (url == null) {
+                fail("setUp: connection.[protocol|endpoint] null.");
             }
-            rClient = RClientFactory.createClient("http://" + connectUrl + "/deployr");
+            boolean allowSelfSigned = 
+                Boolean.valueOf(System.getProperty("allow.SelfSignedSSLCert"));
+            rClient =RClientFactory.createClient(url, allowSelfSigned);
             RBasicAuthentication rAuthentication = new RBasicAuthentication("testuser", "changeme");
 
             rUser = rClient.login(rAuthentication);
@@ -110,7 +113,7 @@ public class RProjectFileTest {
         RProjectFileDetails fileDetails = null;
         String expFileName = fileName;
         String expDescr = fileDesc;
-        URL resultURL = null;
+        InputStream resultStream = null;
         String urlData;
 
         // Test.
@@ -120,7 +123,7 @@ public class RProjectFileTest {
             fail("rProjectFile.about failed: " + ex.getMessage());
         }
         try {
-            resultURL = rProjectFile.download();
+            resultStream = rProjectFile.download();
         } catch (Exception ex) {
             fail("rProjectFile.download failed: " + ex.getMessage());
         }
@@ -129,12 +132,13 @@ public class RProjectFileTest {
         assertEquals(expFileName, fileDetails.filename);
         assertEquals(expDescr, fileDetails.descr);
 
-        assertNotNull(resultURL);
+        assertNotNull(resultStream);
 
-        urlData = DeployrUtil.getDataFromURL(resultURL);
+        urlData = DeployrUtil.getDataFromStream(resultStream);
 
         assertNotNull(urlData);
-        assertEquals(DeployrUtil.encodeString(fileContents), DeployrUtil.encodeString(urlData));
+        assertEquals(DeployrUtil.encodeString(fileContents),
+                            DeployrUtil.encodeString(urlData));
     }
 
     /**
@@ -209,7 +213,7 @@ public class RProjectFileTest {
         String actualFileName = null;
         String actualDesc = null;
         String actualAuthor = null;
-        URL url = null;
+        InputStream repoStream = null;
 
         // Test error handling.
         Exception exception = null;
@@ -230,13 +234,13 @@ public class RProjectFileTest {
             actualFileName = repoFile.about().filename;
             actualDesc = repoFile.about().descr;
             actualAuthor = repoFile.about().author;
-            url = repoFile.download();
+            repoStream = repoFile.download();
         } catch (Exception ex) {
             exception = ex;
             exceptionMsg = "rProjectFile.store failed: ";
         }
 
-        urlData = DeployrUtil.getDataFromURL(url);
+        urlData = DeployrUtil.getDataFromStream(repoStream);
 
         // Test cleanup.
         try {
@@ -314,18 +318,18 @@ public class RProjectFileTest {
 
         // Test variables.
         String urlData = null;
-        URL url = null;
+        InputStream fileStream = null;
 
         //Test.
         try {
-            url = rProjectFile.download();
+            fileStream = rProjectFile.download();
         } catch (Exception ex) {
             fail("rProjectFile.download failed: " + ex.getMessage());
         }
 
         // Test asserts.
-        assertNotNull(url);
-        urlData = DeployrUtil.getDataFromURL(url);
+        assertNotNull(fileStream);
+        urlData = DeployrUtil.getDataFromStream(fileStream);
         assertNotNull(urlData);
         assertEquals(DeployrUtil.encodeString(fileContents), DeployrUtil.encodeString(urlData));
     }

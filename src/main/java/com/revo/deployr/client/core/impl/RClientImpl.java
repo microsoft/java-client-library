@@ -70,9 +70,20 @@ import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager;
 import org.apache.http.client.params.CookiePolicy;
 import org.apache.http.client.params.ClientPNames;
 import org.apache.http.client.utils.URIBuilder;
+import javax.net.ssl.SSLContext;
+import org.apache.http.conn.ssl.*;
+import org.apache.http.config.*;
+import org.apache.http.conn.socket.*;
+import org.apache.http.impl.client.HttpClients;
+import java.security.cert.X509Certificate;
+import java.security.*;
+
+import org.apache.http.HttpResponse;
+import org.apache.http.client.methods.HttpGet;
 
 import java.util.*;
 import java.net.*;
+import java.io.*;
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.Callable;
@@ -91,6 +102,7 @@ public class RClientImpl implements RClient, RClientExecutor {
     private ExecutorService eService;
     private String serverurl;
     private String httpcookie;
+    private SSLSocketFactory sslSocketFactory;
     private RLiveContext liveContext;
 
     private ArrayList<Integer> GRID_EXCEPTION_CODES = new ArrayList<Integer>(
@@ -99,13 +111,24 @@ public class RClientImpl implements RClient, RClientExecutor {
     public RClientImpl(String serverurl)
 		throws RClientException, RSecurityException {
 
-        this(serverurl, 200);
+        this(serverurl, 200, false);
     } 
 
     public RClientImpl(String serverurl, int concurrentCallLimit)
 			throws RClientException, RSecurityException {
 
-        log.debug("Creating client connection: serverurl=" + serverurl + " concurrentCallLimit=" + concurrentCallLimit);
+        this(serverurl, concurrentCallLimit, false);
+    }
+
+    public RClientImpl(String serverurl,
+                       int concurrentCallLimit,
+                       boolean allowSelfSignedSSLCert)
+            throws RClientException, RSecurityException {
+
+
+        log.debug("Creating client connection: serverurl=" + serverurl +
+            ", concurrentCallLimit=" + concurrentCallLimit +
+            ", allowSelfSignedSSLCert=" + allowSelfSignedSSLCert);
 
         this.serverurl = serverurl;
 
@@ -114,20 +137,52 @@ public class RClientImpl implements RClient, RClientExecutor {
         // Set Infinite Connection and Socket Timeouts.
         HttpConnectionParams.setConnectionTimeout(httpParams, 0);
         HttpConnectionParams.setSoTimeout(httpParams, 0);
-        ConnManagerParams.setMaxTotalConnections(httpParams, concurrentCallLimit);
-        ConnManagerParams.setMaxConnectionsPerRoute(httpParams, new ConnPerRouteBean(concurrentCallLimit));
+        ConnManagerParams.setMaxTotalConnections(httpParams,
+                                                concurrentCallLimit);
+        ConnManagerParams.setMaxConnectionsPerRoute(httpParams,
+                            new ConnPerRouteBean(concurrentCallLimit));
         HttpProtocolParams.setVersion(httpParams, HttpVersion.HTTP_1_1);
 
         // Create and initialize scheme registry 
         SchemeRegistry schemeRegistry = new SchemeRegistry();
         schemeRegistry.register(
-                new Scheme("http", PlainSocketFactory.getSocketFactory(), 80));
+            new Scheme("http", PlainSocketFactory.getSocketFactory(), 80));
+
+        if(allowSelfSignedSSLCert) {
+            /*
+             * Register scheme for "https" that bypasses
+             * SSL cert trusted-origin verification check
+             * which makes it possible to connect to a
+             * DeployR server using a self-signed certificate.
+             *
+             * Recommended for prototyping and testing only,
+             * not recommended for production environments.
+             */
+            TrustStrategy blindTrust = new TrustStrategy() {
+                @Override
+                public boolean isTrusted(X509Certificate[] certificate,
+                                         String authType) {
+                    return true;
+                }
+            };
+            try {
+                sslSocketFactory = new SSLSocketFactory(blindTrust,
+                          SSLSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER);
+                schemeRegistry.register(new Scheme("https",
+                                              8443, sslSocketFactory));
+            } catch(GeneralSecurityException gsex) {
+                String exMsg = "Self-signed SSL cert config failed, " +
+                                                    gsex.getMessage();
+                log.debug(exMsg);
+                throw new RSecurityException(exMsg, 0);
+            }
+        }
 
         // Create a HttpClient with the ThreadSafeClientConnManager.
         // This connection manager must be used if more than one thread will
         // be using the HttpClient.
         ClientConnectionManager cm =
-	    new ThreadSafeClientConnManager(httpParams, schemeRegistry);
+    	    new ThreadSafeClientConnManager(httpParams, schemeRegistry);
 
         httpClient = new DefaultHttpClient(cm, httpParams);
 
@@ -554,6 +609,24 @@ public class RClientImpl implements RClient, RClientExecutor {
         }
 
         return rResult;
+    }
+
+    public InputStream download(URIBuilder builder)
+            throws RClientException {
+
+      try {
+        log.debug("download: uri builder=" + builder);
+        String uriPath = builder.build().toString();
+        HttpGet request = new HttpGet(uriPath);
+        HttpResponse response = httpClient.execute(request);
+        return response.getEntity().getContent();
+
+      } catch(Exception ex){
+        String exMsg = builder +
+                  " download failed, " + ex.getMessage();
+        throw new RClientException(exMsg, ex);
+      }
+
     }
 
     // Private method implementations.

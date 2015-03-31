@@ -63,14 +63,15 @@ public class RClientStandardExecutionModelCallsTest {
     public void setUp() {
         try {
 
-            url = System.getProperty("url.property");
+            String url = System.getProperty("connection.protocol") +
+                            System.getProperty("connection.endpoint");
             if (url == null) {
-                url = "localhost:" + DeployrUtil.DEFAULT_PORT;
+                fail("setUp: connection.[protocol|endpoint] null.");
             }
-
-            anonymousRClient = RClientFactory.createClient("http://" + url + "/deployr");
-
-            authenticatedRClient = RClientFactory.createClient("http://" + url + "/deployr");
+            boolean allowSelfSigned = 
+                Boolean.valueOf(System.getProperty("allow.SelfSignedSSLCert"));
+            anonymousRClient =RClientFactory.createClient(url, allowSelfSigned);
+            authenticatedRClient =RClientFactory.createClient(url, allowSelfSigned);
             RBasicAuthentication rAuthentication = new RBasicAuthentication("testuser", "changeme");
             rUser = authenticatedRClient.login(rAuthentication);
 
@@ -349,7 +350,7 @@ public class RClientStandardExecutionModelCallsTest {
 
         // Test.
         try {
-            scriptExecution = authenticatedRClient.executeExternal(repositoryFile.download().toString(),
+            scriptExecution = authenticatedRClient.executeExternal(repositoryFile.about().url.toString(),
                     executionOptions);
             console = scriptExecution.about().console;
             routputs = scriptExecution.about().workspaceObjects;

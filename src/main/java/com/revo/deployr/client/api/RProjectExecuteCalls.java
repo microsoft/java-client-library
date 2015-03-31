@@ -15,7 +15,7 @@ package com.revo.deployr.client.api;
 import com.revo.deployr.client.*;
 import com.revo.deployr.client.params.ProjectExecutionOptions;
 
-import java.net.URL;
+import java.io.InputStream;
 import java.util.List;
 
 /**
@@ -215,6 +215,6 @@ public interface RProjectExecuteCalls {
      * @throws RClientException   if RClient fails to complete call.
      * @throws RSecurityException if DeployR server security conditions not met on call.
      */
-    public URL downloadResults() throws RClientException, RSecurityException;
+    public InputStream downloadResults() throws RClientException, RSecurityException;
 
 }

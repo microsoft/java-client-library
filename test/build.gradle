@@ -23,7 +23,9 @@ dependencies {
 }
 
 test {
-    systemProperty "url.property", "localhost:7400"
+    systemProperty "connection.protocol", "http://"
+    systemProperty "connection.endpoint", "localhost:7400/deployr"
+    systemProperty "allow.SelfSignedSSLCert", "false"
 }
 
 task wrapper(type: Wrapper) {

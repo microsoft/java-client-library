@@ -23,6 +23,7 @@ import com.revo.deployr.client.params.RepoUploadOptions;
 import org.junit.*;
 
 import java.io.File;
+import java.io.InputStream;
 import java.io.FileInputStream;
 import java.net.URL;
 import java.util.List;
@@ -48,11 +49,14 @@ public class RUserDefaultRepositoryFileCallsTest {
     @Before
     public void setUp() {
         try {
-            String url = System.getProperty("url.property");
+            String url = System.getProperty("connection.protocol") +
+                            System.getProperty("connection.endpoint");
             if (url == null) {
-                url = "localhost:" + DeployrUtil.DEFAULT_PORT;
+                fail("setUp: connection.[protocol|endpoint] null.");
             }
-            rClient = RClientFactory.createClient("http://" + url + "/deployr");
+            boolean allowSelfSigned = 
+                Boolean.valueOf(System.getProperty("allow.SelfSignedSSLCert"));
+            rClient =RClientFactory.createClient(url, allowSelfSigned);
             RBasicAuthentication rAuthentication = new RBasicAuthentication("testuser", "changeme");
             String expResultName = "testuser";
             rUser = rClient.login(rAuthentication);
@@ -88,7 +92,7 @@ public class RUserDefaultRepositoryFileCallsTest {
         String expRepoFileDesc = "";
         RepoUploadOptions options = null;
         RRepositoryFile repoFile = null;
-        URL url = null;
+        InputStream downStream = null;
         String urlData = "";
 
         // Test error handling.
@@ -123,7 +127,7 @@ public class RUserDefaultRepositoryFileCallsTest {
 
         if (exception == null) {
             try {
-                url = repoFile.download();
+                downStream = repoFile.download();
             } catch (Exception ex) {
                 exception = ex;
                 exceptionMsg = "repoFile.download failed: ";
@@ -131,7 +135,7 @@ public class RUserDefaultRepositoryFileCallsTest {
         }
 
         if (exception == null) {
-            urlData = DeployrUtil.getDataFromURL(url);
+            urlData = DeployrUtil.getDataFromStream(downStream);
         }
 
         // Test cleanup.
@@ -148,7 +152,8 @@ public class RUserDefaultRepositoryFileCallsTest {
             // Test assertions.
             assertEquals(expRepoFileName, actualRepoFileName);
             assertEquals(expRepoFileDesc, actualRepoFileDesc);
-            assertEquals(DeployrUtil.encodeString(text), DeployrUtil.encodeString(urlData));
+            assertEquals(DeployrUtil.encodeString(text),
+                            DeployrUtil.encodeString(urlData));
         } else {
             fail(exceptionMsg + exception.getMessage());
         }
@@ -173,7 +178,7 @@ public class RUserDefaultRepositoryFileCallsTest {
         String expRepoFileDesc = "";
         RepoUploadOptions options = null;
         RRepositoryFile repoFile = null;
-        URL url = null;
+        InputStream downStream = null;
         String urlData = "";
         List<RRepositoryFile> listFiles = null;
         boolean repoFileFound = false;
@@ -210,7 +215,7 @@ public class RUserDefaultRepositoryFileCallsTest {
 
         if (exception == null) {
             try {
-                url = repoFile.download();
+                downStream = repoFile.download();
             } catch (Exception ex) {
                 exception = ex;
                 exceptionMsg = "repoFile.download failed: ";
@@ -234,7 +239,7 @@ public class RUserDefaultRepositoryFileCallsTest {
         }
 
         if (exception == null) {
-            urlData = DeployrUtil.getDataFromURL(url);
+            urlData = DeployrUtil.getDataFromStream(downStream);
         }
 
         // Test cleanup.
@@ -499,7 +504,7 @@ public class RUserDefaultRepositoryFileCallsTest {
         File file = new File("/etc/hosts");
         RepoUploadOptions options = null;
         RRepositoryFile repoFile = null;
-        URL url = null;
+        InputStream downStream = null;
         String urlData = "";
 
         // Test error handling.
@@ -534,7 +539,7 @@ public class RUserDefaultRepositoryFileCallsTest {
 
         if (exception == null) {
             try {
-                url = repoFile.download();
+                downStream = repoFile.download();
             } catch (Exception ex) {
                 exception = ex;
                 exceptionMsg = "repoFile.download failed: ";
@@ -542,7 +547,7 @@ public class RUserDefaultRepositoryFileCallsTest {
         }
 
         if (exception == null) {
-            urlData = DeployrUtil.getDataFromURL(url);
+            urlData = DeployrUtil.getDataFromStream(downStream);
         }
 
         // Test cleanup.
@@ -584,7 +589,7 @@ public class RUserDefaultRepositoryFileCallsTest {
         String expRepoFileDesc = "";
         RepoUploadOptions options = null;
         RRepositoryFile repoFile = null;
-        URL url = null;
+        InputStream downStream = null;
         String urlData = "";
 
         // Test error handling.
@@ -619,7 +624,7 @@ public class RUserDefaultRepositoryFileCallsTest {
 
         if (exception == null) {
             try {
-                url = repoFile.download();
+                downStream = repoFile.download();
             } catch (Exception ex) {
                 exception = ex;
                 exceptionMsg = "repoFile.download failed: ";
@@ -627,7 +632,7 @@ public class RUserDefaultRepositoryFileCallsTest {
         }
 
         if (exception == null) {
-            urlData = DeployrUtil.getDataFromURL(url);
+            urlData = DeployrUtil.getDataFromStream(downStream);
         }
 
         // Test cleanup.
@@ -669,7 +674,7 @@ public class RUserDefaultRepositoryFileCallsTest {
         String expRepoFileDesc = "";
         RepoUploadOptions options = null;
         RRepositoryFile repoFile = null;
-        URL url = null;
+        InputStream downStream = null;
         String urlData = "";
 
         // Test error handling.
@@ -704,7 +709,7 @@ public class RUserDefaultRepositoryFileCallsTest {
 
         if (exception == null) {
             try {
-                url = repoFile.download();
+                downStream = repoFile.download();
             } catch (Exception ex) {
                 exception = ex;
                 exceptionMsg = "repoFile.download failed: ";
@@ -712,7 +717,7 @@ public class RUserDefaultRepositoryFileCallsTest {
         }
 
         if (exception == null) {
-            urlData = DeployrUtil.getDataFromURL(url);
+            urlData = DeployrUtil.getDataFromStream(downStream);
         }
 
         // Test cleanup.
@@ -799,7 +804,7 @@ public class RUserDefaultRepositoryFileCallsTest {
 
         if (exception == null) {
             try {
-                repoURL = repoFile.download();
+                repoURL = repoFile.about().url;
             } catch (Exception ex) {
                 exception = ex;
                 exceptionMsg = "repoFile.download failed: ";
@@ -833,7 +838,7 @@ public class RUserDefaultRepositoryFileCallsTest {
 
         if (exception == null) {
             try {
-                repoTransURL = repoTransFile.download();
+                repoTransURL = repoTransFile.about().url;
             } catch (Exception ex) {
                 exception = ex;
                 exceptionMsg = "repoTransFile.download failed: ";
@@ -864,7 +869,8 @@ public class RUserDefaultRepositoryFileCallsTest {
             assertEquals(expRepoFileName, actualRepoFileName);
             assertEquals(expRepoFileDesc, actualRepoFileDesc);
             assertEquals(repoTransFileSize, repoFileSize);
-            assertEquals(DeployrUtil.encodeString(urlTransData), DeployrUtil.encodeString(urlData));
+            assertEquals(DeployrUtil.encodeString(urlTransData),
+                            DeployrUtil.encodeString(urlData));
         } else {
             fail(exceptionMsg + exception.getMessage());
         }

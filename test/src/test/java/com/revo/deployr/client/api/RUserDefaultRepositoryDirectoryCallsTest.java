@@ -49,11 +49,14 @@ public class RUserDefaultRepositoryDirectoryCallsTest {
     @Before
     public void setUp() {
         try {
-            String url = System.getProperty("url.property");
+            String url = System.getProperty("connection.protocol") +
+                            System.getProperty("connection.endpoint");
             if (url == null) {
-                url = "localhost:" + DeployrUtil.DEFAULT_PORT;
+                fail("setUp: connection.[protocol|endpoint] null.");
             }
-            rClient = RClientFactory.createClient("http://" + url + "/deployr");
+            boolean allowSelfSigned = 
+                Boolean.valueOf(System.getProperty("allow.SelfSignedSSLCert"));
+            rClient =RClientFactory.createClient(url, allowSelfSigned);
             RBasicAuthentication rAuthentication = new RBasicAuthentication("testuser", "changeme");
             String expResultName = "testuser";
             rUser = rClient.login(rAuthentication);
@@ -1780,87 +1783,4 @@ public class RUserDefaultRepositoryDirectoryCallsTest {
      * Test of uploadFile method, of class RUserRepositoryFileCalls.
      */
 
-/*
-    @Test
-    public void testUserRepositoryUploadFile() {
-
-        // Test variables.
-        String actualRepoFileName = "";
-        String actualRepoFileDesc = "";
-        String expRepoFileName = "";
-        String expRepoFileDesc = "";
-        File file = new File("/etc/hosts");
-        RepoUploadOptions options = null;
-        RRepositoryFile repoFile = null;
-        URL url = null;
-        String urlData = "";
-
-        // Test error handling.
-        Exception exception = null;
-        String exceptionMsg = "";
-        Exception cleanupException = null;
-        String cleanupExceptionMsg = "";
-
-        //Test.
-        expRepoFileName = DeployrUtil.getUniqueFileName("txt");
-        expRepoFileDesc = "hosts file";
-        options = new RepoUploadOptions();
-        options.descr = expRepoFileDesc;
-        options.filename = expRepoFileName;
-
-        try {
-            repoFile = rUser.uploadFile(new FileInputStream(file), options);
-        } catch (Exception ex) {
-            exception = ex;
-            exceptionMsg = "rUser.uploadFile failed: ";
-        }
-
-        if (exception == null) {
-            try {
-                actualRepoFileName = repoFile.about().filename;
-                actualRepoFileDesc = repoFile.about().descr;
-            } catch (Exception ex) {
-                exception = ex;
-                exceptionMsg = "repoFile.about failed: ";
-            }
-        }
-
-        if (exception == null) {
-            try {
-                url = repoFile.download();
-            } catch (Exception ex) {
-                exception = ex;
-                exceptionMsg = "repoFile.download failed: ";
-            }
-        }
-
-        if (exception == null) {
-            urlData = DeployrUtil.getDataFromURL(url);
-        }
-
-        // Test cleanup.
-        try {
-            if (repoFile != null) {
-                repoFile.delete();
-            }
-        } catch (Exception ex) {
-            cleanupException = ex;
-            cleanupExceptionMsg = "repoFile.delete failed: ";
-        }
-
-        if (exception == null) {
-            // Test assertions.
-            assertEquals(expRepoFileName, actualRepoFileName);
-            assertEquals(expRepoFileDesc, actualRepoFileDesc);
-            assertNotNull(urlData);
-        } else {
-            fail(exceptionMsg + exception.getMessage());
-        }
-
-        // Test cleanup errors.
-        if (cleanupException != null) {
-            fail(cleanupExceptionMsg + cleanupException.getMessage());
-        }
-    }
-*/
 }

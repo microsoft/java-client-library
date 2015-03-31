@@ -19,7 +19,11 @@ import java.net.URL;
  */
 public class RProjectResultDetails {
 
-    public RProjectResultDetails(String execution, String filename, String type, long size, URL url) {
+    public RProjectResultDetails(String execution,
+                                 String filename,
+                                 String type,
+                                 long size,
+                                 URL url) {
         this.execution = execution;
         this.filename = filename;
         this.type = type;

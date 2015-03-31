@@ -22,6 +22,7 @@ import org.junit.*;
 
 import java.io.DataInputStream;
 import java.io.File;
+import java.io.InputStream;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.net.URL;
@@ -52,11 +53,14 @@ public class RProjectTest {
     @Before
     public void setUp() {
         try {
-            String url = System.getProperty("url.property");
+            String url = System.getProperty("connection.protocol") +
+                            System.getProperty("connection.endpoint");
             if (url == null) {
-                url = "localhost:" + DeployrUtil.DEFAULT_PORT;
+                fail("setUp: connection.[protocol|endpoint] null.");
             }
-            rClient = RClientFactory.createClient("http://" + url + "/deployr");
+            boolean allowSelfSigned = 
+                Boolean.valueOf(System.getProperty("allow.SelfSignedSSLCert"));
+            rClient =RClientFactory.createClient(url, allowSelfSigned);
             RBasicAuthentication rAuthentication = new RBasicAuthentication("testuser", "changeme");
             rUser = rClient.login(rAuthentication);
             rProject = DeployrUtil.createPersistentProject(rUser, projectName, projectDesc);
@@ -667,10 +671,9 @@ public class RProjectTest {
         RProjectExecution projectExecution = null;
         List<RProjectExecution> listProjectExecution = null;
         List<RProjectExecution> listImportProjectExecution = null;
-        URL url = null;
+        InputStream exportStream = null;
         RProject importProject = null;
         File importFile = null;
-        URLConnection urlConnection = null;
         DataInputStream dis = null;
         FileOutputStream fos = null;
         String importProjectName = "";
@@ -700,7 +703,7 @@ public class RProjectTest {
 
         if (exception == null) {
             try {
-                url = rProject.export();
+                exportStream = rProject.export();
             } catch (Exception ex) {
                 exception = ex;
                 exceptionMsg = "rProject.export failed: ";
@@ -709,16 +712,7 @@ public class RProjectTest {
 
         if (exception == null) {
             try {
-                urlConnection = url.openConnection();
-            } catch (Exception ex) {
-                exception = ex;
-                exceptionMsg = "url.openConnection failed: ";
-            }
-        }
-
-        if (exception == null) {
-            try {
-                dis = new DataInputStream(urlConnection.getInputStream());
+                dis = new DataInputStream(exportStream);
             } catch (Exception ex) {
                 exception = ex;
                 exceptionMsg = "urlConnection.getInputStream failed: ";
