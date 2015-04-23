@@ -13,7 +13,9 @@
 package com.revo.deployr.client.factory;
 
 import com.revo.deployr.client.data.*;
+import com.revo.deployr.client.RDataException;
 import com.revo.deployr.client.data.impl.*;
+import java.io.InputStream;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -41,31 +43,38 @@ public class RDataFactory {
         return new RStringImpl(name, value);
     }
 
-    public static RBooleanVector createBooleanVector(String name, List<Boolean> value) {
+    public static RBooleanVector createBooleanVector(String name,
+                                            List<Boolean> value) {
         return new RBooleanVectorImpl(name, value);
     }
 
-    public static RNumericVector createNumericVector(String name, List<Double> value) {
+    public static RNumericVector createNumericVector(String name,
+                                            List<Double> value) {
         return new RNumericVectorImpl(name, value);
     }
 
-    public static RStringVector createStringVector(String name, List<String> value) {
+    public static RStringVector createStringVector(String name,
+                                            List<String> value) {
         return new RStringVectorImpl(name, value);
     }
 
-    public static RDateVector createDateVector(String name, List<Date> value, String format) {
+    public static RDateVector createDateVector(String name,
+                                List<Date> value, String format) {
         return new RDateVectorImpl(name, value, format);
     }
 
-    public static RBooleanMatrix createBooleanMatrix(String name, List<List<Boolean>> value) {
+    public static RBooleanMatrix createBooleanMatrix(String name,
+                                        List<List<Boolean>> value) {
         return new RBooleanMatrixImpl(name, value);
     }
 
-    public static RNumericMatrix createNumericMatrix(String name, List<List<Double>> value) {
+    public static RNumericMatrix createNumericMatrix(String name,
+                                        List<List<Double>> value) {
         return new RNumericMatrixImpl(name, value);
     }
 
-    public static RStringMatrix createStringMatrix(String name, List<List<String>> value) {
+    public static RStringMatrix createStringMatrix(String name,
+                                        List<List<String>> value) {
         return new RStringMatrixImpl(name, value);
     }
 
@@ -73,16 +82,19 @@ public class RDataFactory {
         return new RListImpl(name, value);
     }
 
-    public static RDataFrame createDataFrame(String name, List<RData> value) {
+    public static RDataFrame createDataFrame(String name,
+                                            List<RData> value) {
         return new RDataFrameImpl(name, value);
     }
 
-    public static RFactor createFactor(String name, List value, boolean ordered) {
+    public static RFactor createFactor(String name,
+                                    List value, boolean ordered) {
 
         return new RFactorImpl(name, value, ordered);
     }
 
-    public static RFactor createFactor(String name, List value, List levels, List labels, boolean ordered) {
+    public static RFactor createFactor(String name, List value,
+                        List levels, List labels, boolean ordered) {
         return new RFactorImpl(name, value, levels, labels, ordered);
     }
 
@@ -92,6 +104,56 @@ public class RDataFactory {
 
     public static RDate createDate(String name, Date value, String format) {
         return new RDateImpl(name, value, format);
+    }
+
+    public static RDataTable createDataTable(List<List> data) {
+        return new RDataTableImpl(data);
+    }
+
+    public static RDataTable createDataTable(RNumericVector vector)
+                                            throws RDataException {
+        return new RDataTableImpl(vector);
+    }
+
+    public static RDataTable createDataTable(RStringVector vector)
+                                            throws RDataException {
+        return new RDataTableImpl(vector);
+    }
+
+    public static RDataTable createDataTable(RBooleanVector vector)
+                                            throws RDataException {
+        return new RDataTableImpl(vector);
+    }
+
+    public static RDataTable createDataTable(RDateVector vector)
+                                            throws RDataException {
+        return new RDataTableImpl(vector);
+    }
+
+    public static RDataTable createDataTable(RNumericMatrix matrix)
+                                            throws RDataException {
+        return new RDataTableImpl(matrix);
+    }
+
+    public static RDataTable createDataTable(RStringMatrix matrix)
+                                            throws RDataException {
+        return new RDataTableImpl(matrix);
+    }
+
+    public static RDataTable createDataTable(RBooleanMatrix matrix)
+                                            throws RDataException {
+        return new RDataTableImpl(matrix);
+    }
+
+    public static RDataTable createDataTable(RDataFrame df)
+                                            throws RDataException {
+        return new RDataTableImpl(df);
+    }
+
+    public static RDataTable createDataTable(InputStream is,
+                      String delimiter,
+                      boolean hasHeader) throws RDataException {
+        return new RDataTableImpl(is, delimiter, hasHeader);
     }
 
 }

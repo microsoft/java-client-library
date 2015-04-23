@@ -21,4 +21,8 @@ public class RDataException extends Exception {
     public RDataException(String message) {
         super(message);
     }
+
+    public RDataException(String message, Exception cause) {
+        super(message, cause);
+    }
 }
