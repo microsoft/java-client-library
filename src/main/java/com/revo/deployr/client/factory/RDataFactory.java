@@ -110,44 +110,9 @@ public class RDataFactory {
         return new RDataTableImpl(data);
     }
 
-    public static RDataTable createDataTable(RNumericVector vector)
+    public static RDataTable createDataTable(RData rData)
                                             throws RDataException {
-        return new RDataTableImpl(vector);
-    }
-
-    public static RDataTable createDataTable(RStringVector vector)
-                                            throws RDataException {
-        return new RDataTableImpl(vector);
-    }
-
-    public static RDataTable createDataTable(RBooleanVector vector)
-                                            throws RDataException {
-        return new RDataTableImpl(vector);
-    }
-
-    public static RDataTable createDataTable(RDateVector vector)
-                                            throws RDataException {
-        return new RDataTableImpl(vector);
-    }
-
-    public static RDataTable createDataTable(RNumericMatrix matrix)
-                                            throws RDataException {
-        return new RDataTableImpl(matrix);
-    }
-
-    public static RDataTable createDataTable(RStringMatrix matrix)
-                                            throws RDataException {
-        return new RDataTableImpl(matrix);
-    }
-
-    public static RDataTable createDataTable(RBooleanMatrix matrix)
-                                            throws RDataException {
-        return new RDataTableImpl(matrix);
-    }
-
-    public static RDataTable createDataTable(RDataFrame df)
-                                            throws RDataException {
-        return new RDataTableImpl(df);
+        return new RDataTableImpl(rData);
     }
 
     public static RDataTable createDataTable(InputStream is,

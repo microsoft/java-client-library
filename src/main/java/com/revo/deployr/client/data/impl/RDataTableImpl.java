@@ -10,7 +10,6 @@ import java.util.*;
 public class RDataTableImpl
     extends AbstractTableModel implements RDataTable {
 
-    private int columnCount = 0;
 	private List<String> columnNames = new ArrayList<String>();
     private List<List> data = new ArrayList<List>();
 
@@ -18,98 +17,95 @@ public class RDataTableImpl
     	this.data = data;
     }
 
-	public RDataTableImpl(RNumericVector vector) throws RDataException {
+	public RDataTableImpl(RData rData) throws RDataException {
 
-        try {
-            data.add(vector.getValue());
-        } catch(Exception ex) {
-            throw new RDataException("Table initialization failed.", ex);
+        if(rData instanceof RNumericVector) {
+            try {
+                data.add(((RNumericVector)rData).getValue());
+            } catch(Exception ex) {
+                throw new RDataException("Table initialization failed.", ex);
+            }
+        } else
+        if(rData instanceof RStringVector) {
+            try {
+                data.add(((RStringVector)rData).getValue());
+            } catch(Exception ex) {
+                throw new RDataException("Table initialization failed.", ex);
+            }
+        } else
+        if(rData instanceof RBooleanVector) {
+            try {
+                data.add(((RBooleanVector)rData).getValue());
+            } catch(Exception ex) {
+                throw new RDataException("Table initialization failed.", ex);
+            }
+        } else
+        if(rData instanceof RDateVector) {
+            try {
+                data.add(((RDateVector)rData).getValue());
+            } catch(Exception ex) {
+                throw new RDataException("Table initialization failed.", ex);
+            }
+        } else
+        if(rData instanceof RNumericMatrix) {
+            try {
+                for(List colData : ((RNumericMatrix)rData).getValue()) {
+                    data.add(colData);
+                }
+            } catch(Exception ex) {
+                throw new RDataException("Table initialization failed.", ex);
+            }
+        } else
+        if(rData instanceof RStringMatrix) {
+            try {
+                for(List colData : ((RStringMatrix)rData).getValue()) {
+                    data.add(colData);
+                }
+            } catch(Exception ex) {
+                throw new RDataException("Table initialization failed.", ex);
+            }
+        } else
+        if(rData instanceof RBooleanMatrix) {
+            try {
+                for(List colData : ((RBooleanMatrix)rData).getValue()) {
+                    data.add(colData);
+                }
+            } catch(Exception ex) {
+                throw new RDataException("Table initialization failed.", ex);
+            }
+        } else
+        if(rData instanceof RDataFrame) {
+            try {
+
+                for(RData dfVal : ((RDataFrame)rData).getValue()) {
+
+                    if(dfVal instanceof RNumericVector) {
+                        data.add(
+                            ((RNumericVector) dfVal).getValue());
+                    } else
+                    if(dfVal instanceof RStringVector)  {
+                        data.add(
+                            ((RStringVector) dfVal).getValue());
+                    } else
+                    if(dfVal instanceof RBooleanVector) {
+                        data.add(
+                            ((RBooleanVector) dfVal).getValue());
+                    } else
+                    if(dfVal instanceof RDateVector)    {
+                        data.add(
+                            ((RDateVector) dfVal).getValue());
+                    }
+                }
+
+            } catch(Exception ex) {
+                throw new RDataException("Table initialization failed.", ex);
+            }
+        } else {
+            throw new RDataException("Table initialization, " +
+                                "unsupport RData type=" + rData);
         }
-	}
 
-	public RDataTableImpl(RStringVector vector) throws RDataException {
-        try {
-    		data.add(vector.getValue());
-    		columnCount = 1;
-        } catch(Exception ex) {
-            throw new RDataException("Table initialization failed.", ex);
-        }
-	}
-
-	public RDataTableImpl(RBooleanVector vector) throws RDataException {
-        try {
-    		data.add(vector.getValue());
-    		columnCount = 1;
-        } catch(Exception ex) {
-            throw new RDataException("Table initialization failed.", ex);
-        }
-	}
-
-	public RDataTableImpl(RDateVector vector) throws RDataException {
-        try {
-    		data.add(vector.getValue());
-    		columnCount = 1;
-        } catch(Exception ex) {
-            throw new RDataException("Table initialization failed.", ex);
-        }
-	}
-
-	public RDataTableImpl(RNumericMatrix matrix) throws RDataException {
-        try {
-    		data.add(matrix.getValue());
-    		columnCount = matrix.getValue().size();
-        } catch(Exception ex) {
-            throw new RDataException("Table initialization failed.", ex);
-        }
-	}
-
-	public RDataTableImpl(RStringMatrix matrix) throws RDataException {
-        try {
-    		data.add(matrix.getValue());
-    		columnCount = matrix.getValue().size();
-        } catch(Exception ex) {
-            throw new RDataException("Table initialization failed.", ex);
-        }
-	}
-
-	public RDataTableImpl(RBooleanMatrix matrix) throws RDataException {
-        try {
-    		data.add(matrix.getValue());
-    		columnCount = matrix.getValue().size();
-        } catch(Exception ex) {
-            throw new RDataException("Table initialization failed.", ex);
-        }
-	}
-
-	public RDataTableImpl(RDataFrame df) throws RDataException {
-
-        try {
-
-    		for(RData dfVal : df.getValue()) {
-
-    			if(dfVal instanceof RNumericVector)	{
-    				data.add(
-    					((RNumericVector) dfVal).getValue());
-    			} else
-    			if(dfVal instanceof RStringVector)	{
-    				data.add(
-    					((RStringVector) dfVal).getValue());
-    			} else
-    			if(dfVal instanceof RBooleanVector)	{
-    				data.add(
-    					((RBooleanVector) dfVal).getValue());
-    			} else
-    			if(dfVal instanceof RDateVector)	{
-    				data.add(
-    					((RDateVector) dfVal).getValue());
-    			}
-    		}
-    		columnCount = df.getValue().size();
-
-        } catch(Exception ex) {
-            throw new RDataException("Table initialization failed.", ex);
-        }
-	}
+    }
 
 	public RDataTableImpl(InputStream is,
 					  String delimiter,
@@ -132,14 +128,13 @@ public class RDataTableImpl
 
             while((rowData = reader.readLine()) != null) {
 
-
                 if(beyondHeader) {
 
                 	/*
                 	 * Extract data from data-row.
                 	 */
 
-                    String[] rowAsStrings = rowData.trim().split("\\s+");
+                    String[] rowAsStrings = rowData.trim().split(delimiter);
 
                     if(columnNames.size() == 0) {
 
@@ -162,24 +157,24 @@ public class RDataTableImpl
                     /*
                      * Build columnData row-by-row.
                      */
+                    int colIdx = 0;
                     for(String cellData : rowAsStrings) {
 
-                        for(int i=0; i < columnData.size(); i++) {
-                        	try {
-                        		if(cellData == null ||
-                        			cellData.trim().length() == 0) {
-                        			columnData.get(i).add(null);
-                        		} else {
-	                        		// Double data found.
-		                            columnData.get(i).add(
-		                            	Double.parseDouble(cellData));
-                        		}
-                        	} catch(Exception dex) {
-                        		// String data found.
-	                            columnData.get(i).add(cellData);
-	                            isNumericData = false;
-                        	}
-                        }
+                    	try {
+                    		if(cellData == null ||
+                    			cellData.trim().length() == 0) {
+                    			columnData.get(colIdx).add(null);
+                    		} else {
+                        		// Double data found.
+	                            columnData.get(colIdx).add(
+	                            	Double.parseDouble(cellData));
+                    		}
+                    	} catch(Exception dex) {
+                    		// String data found.
+                            columnData.get(colIdx).add(cellData);
+                            isNumericData = false;
+                    	}
+                        colIdx++;
                     }
 
                 } else {
@@ -188,7 +183,7 @@ public class RDataTableImpl
                 	 * Extract column names from header-row.
                 	 */
 
-                    String[] headerNames = rowData.trim().split("\\s+");
+                    String[] headerNames = rowData.trim().split(delimiter);
                     for(String headerName : headerNames)
                     	columnNames.add(headerName);
                     beyondHeader = true;
@@ -222,7 +217,7 @@ public class RDataTableImpl
      * Returns the number of columns in the model.
      */
     public int getColumnCount() {
-        return columnCount;
+        return data != null ? data.size() : 0;
     }
 
     /**
@@ -251,7 +246,10 @@ public class RDataTableImpl
      * Sets raw data on the instance of RDataTable.
      */
     public void setData(List<List> data) {
-    	this.data = data;
+        if(data == null)
+            data = new ArrayList<List>();
+        else
+        	this.data = data;
     }
 
     /**
@@ -268,33 +266,25 @@ public class RDataTableImpl
         			columnNames.add(Integer.toString(n));
         	}
 
-        	if(getValueAt(0,0) instanceof Double) {
-        		for(int i=0; i<data.size(); i++) {
-        			List colVal = data.get(i);
+            for(int i=0; i<data.size(); i++) {
+
+                List colVal = data.get(i);
+            	if(colVal.get(0) instanceof Double) {
     				RData colData = RDataFactory.createNumericVector(
     									columnNames.get(i), colVal);
         			dfVal.add(colData);
-        		}
-        	} else
-    	   	if(getValueAt(0,0) instanceof String) {
-        		for(int i=0; i<data.size(); i++) {
-        			List colVal = data.get(i);
+        		} else
+        	   	if(colVal.get(0) instanceof String) {
     				RData colData = RDataFactory.createStringVector(
     									columnNames.get(i), colVal);
         			dfVal.add(colData);
-        		}
-        	} else
-    	   	if(getValueAt(0,0) instanceof Boolean) {
-        		for(int i=0; i<data.size(); i++) {
-        			List colVal = data.get(i);
+        		} else
+        	   	if(colVal.get(0) instanceof Boolean) {
     				RData colData = RDataFactory.createBooleanVector(
     									columnNames.get(i), colVal);
         			dfVal.add(colData);
-        		}
-        	} else
-    	   	if(getValueAt(0,0) instanceof Date) {
-        		for(int i=0; i<data.size(); i++) {
-        			List colVal = data.get(i);
+        		} else
+        	   	if(colVal.get(0) instanceof Date) {
     				RData colData = RDataFactory.createDateVector(
     						columnNames.get(i), colVal, "yyyy-MM-dd");
         			dfVal.add(colData);
