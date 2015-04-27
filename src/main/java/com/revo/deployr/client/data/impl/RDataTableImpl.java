@@ -98,7 +98,8 @@ public class RDataTableImpl
                 }
 
             } catch(Exception ex) {
-                throw new RDataException("Table initialization failed.", ex);
+                throw new RDataException("Table initialization " +
+                                                    "failed.", ex);
             }
         } else {
             throw new RDataException("Table initialization, " +
@@ -110,6 +111,14 @@ public class RDataTableImpl
 	public RDataTableImpl(InputStream is,
 					  String delimiter,
 					  boolean hasHeader) throws RDataException {
+
+        this(is, delimiter, hasHeader, false); 
+    }
+
+    public RDataTableImpl(InputStream is,
+                      String delimiter,
+                      boolean hasHeader,
+                      boolean nullMissingData) throws RDataException {
 
 		try {
 
@@ -124,7 +133,6 @@ public class RDataTableImpl
                 new BufferedReader(new InputStreamReader(is));
 
             String rowData = null;
-            boolean isNumericData = true;
 
             while((rowData = reader.readLine()) != null) {
 
@@ -138,20 +146,67 @@ public class RDataTableImpl
 
                     if(columnNames.size() == 0) {
 
-                    	/*
-                    	 * If no column-headers found on stream.
-                    	 */
-                    	for(int i=0; i<rowAsStrings.length; i++) {
+                        /*
+                         * If no column-headers found on stream,
+                         * generate placeholders.
+                         */
+                        for(int i=0; i<rowAsStrings.length; i++) {
 
-                    		/*
-		                     * Based on number of columns founds, 
-		                     * initialize generated columnNames
-		                     * and the columnData lists.
-		                     */
-                    		columnNames.add(Integer.toString(i));
-		                    columnData.add(new ArrayList());
-                    	}
+                            /*
+                             * Based on number of data points found
+                             * on the first row, initialize generated
+                             * columnNames and the columnData lists.
+                             */
+                            columnNames.add(Integer.toString(i));
+                            columnData.add(new ArrayList());
+                        }
 
+                    }
+
+                    if(rowAsStrings.length != columnNames.size()) {
+
+                        if(nullMissingData) {
+
+                            if(rowAsStrings.length > columnNames.size()) {
+
+                                /*
+                                 * If a row is found to have more data
+                                 * points than expected (determined by the
+                                 * number of headers or first data row) then
+                                 * we have no way of knowing what data to drop
+                                 * so we abort by raising an RDataException.
+                                 */
+                                throw new RDataException("Delimited file " +
+                                    "data not consistent, can not be parsed.");
+
+                            } else
+                            if(rowAsStrings.length < columnNames.size()) {
+
+                                /*
+                                 * Each row of data being ingested from the
+                                 * data file should contain the same number
+                                 * of data entries in order to build a 
+                                 * symmetrical matrix or dataframe. If row
+                                 * data is missing and the "nullMissingData"
+                                 * parameter is enabled then we can try to
+                                 * inject null values for each missing data
+                                 * point.
+                                 */
+
+                                String[] paddedRow =
+                                    new String[columnNames.size()];
+                                for(int p=0; p<paddedRow.length; p++) {
+                                    if(p < rowAsStrings.length)
+                                        paddedRow[p] = rowAsStrings[p];
+                                    else
+                                        paddedRow[p] = null;
+                                }
+                                rowAsStrings = paddedRow;
+                            }
+                        } else {
+                           throw new RDataException("Delimited file data " +
+                                    "not consistent, can not be parsed."); 
+                        }
                     }
 
                     /*
@@ -161,18 +216,19 @@ public class RDataTableImpl
                     for(String cellData : rowAsStrings) {
 
                     	try {
+
                     		if(cellData == null ||
                     			cellData.trim().length() == 0) {
                     			columnData.get(colIdx).add(null);
                     		} else {
                         		// Double data found.
-	                            columnData.get(colIdx).add(
-	                            	Double.parseDouble(cellData));
+                                Double dbl = Double.parseDouble(cellData);
+	                            columnData.get(colIdx).add(dbl);
                     		}
-                    	} catch(Exception dex) {
+
+                    	} catch(Throwable dex) {
                     		// String data found.
                             columnData.get(colIdx).add(cellData);
-                            isNumericData = false;
                     	}
                         colIdx++;
                     }
@@ -201,8 +257,10 @@ public class RDataTableImpl
             this.data = columnData;
             this.columnNames = columnNames;
 
-		} catch(Exception bex) {
-			throw new RDataException("Table initialization failed.", bex);
+		} catch(RDataException dex) {
+            throw dex;
+        } catch(Exception ex) {
+			throw new RDataException("Table initialization failed.", ex);
 		}
 	}
 

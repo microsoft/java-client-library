@@ -121,4 +121,11 @@ public class RDataFactory {
         return new RDataTableImpl(is, delimiter, hasHeader);
     }
 
+    public static RDataTable createDataTable(InputStream is,
+                      String delimiter,
+                      boolean hasHeader,
+                      boolean nullMissingData) throws RDataException {
+        return new RDataTableImpl(is, delimiter, hasHeader, nullMissingData);
+    }
+
 }

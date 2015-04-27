@@ -16,6 +16,7 @@ import com.revo.deployr.DeployrUtil;
 import com.revo.deployr.client.RClient;
 import com.revo.deployr.client.RProject;
 import com.revo.deployr.client.RUser;
+import com.revo.deployr.client.RDataException;
 import com.revo.deployr.client.auth.basic.RBasicAuthentication;
 import com.revo.deployr.client.data.*;
 import org.junit.*;
@@ -474,6 +475,125 @@ public class RDataTableTest {
             assertTrue(table.asDataFrame("test") instanceof RDataFrame);
             assertEquals(5, table.getRowCount());
             assertEquals(4, table.getColumnCount());
+        } else {
+            fail(exceptionMsg + exception.getMessage());
+        }
+    }
+
+    /**
+     * Test of RDataFactory.createDataTable.
+     */
+    @Test
+    public void testDataFactoryCreateDataTableNullMissingData() throws Exception {
+
+        // Test variables.
+        RDataTable table = null;
+        String delimiter = ",";
+        boolean hasHeader = false;
+        boolean nullMissingData = true;
+
+        // Test error handling.
+        Exception exception = null;
+        String exceptionMsg = "";
+
+        // Test.
+        try {
+            InputStream is =
+                new FileInputStream(new File("assets/missingData.csv"));
+            table =
+                RDataFactory.createDataTable(is, delimiter,
+                                hasHeader, nullMissingData);
+        } catch (Exception ex) {
+            exception = ex;
+            exceptionMsg = "RDataFactory.createDataTable failed: ";
+        }
+
+        if (exception == null) {
+            // Test asserts.
+            assertTrue(table.asMatrix("test") instanceof RNumericMatrix);
+            assertTrue(table.asDataFrame("test") instanceof RDataFrame);
+            assertEquals(5, table.getRowCount());
+            assertEquals(4, table.getColumnCount());
+        } else {
+            fail(exceptionMsg + exception.getMessage());
+        }
+    }
+
+    /**
+     * Test of RDataFactory.createDataTable.
+     */
+    @Test
+    public void testDataFactoryCreateDataTableFailMissingData() throws Exception {
+
+        // Test variables.
+        RDataTable table = null;
+        String delimiter = ",";
+        boolean hasHeader = false;
+        boolean nullMissingData = false;
+        Exception expectedException = null;
+
+        // Test error handling.
+        Exception exception = null;
+        String exceptionMsg = "";
+
+        // Test.
+        try {
+            InputStream is =
+                new FileInputStream(new File("assets/missingData.csv"));
+            table =
+                RDataFactory.createDataTable(is, delimiter,
+                                hasHeader, nullMissingData);
+
+        } catch(RDataException dex) {
+            expectedException = dex;
+        } catch (Exception ex) {
+            exception = ex;
+            exceptionMsg = "RDataFactory.createDataTable failed: ";
+        }
+
+        if (exception == null) {
+            // Test asserts.
+            assertTrue(expectedException instanceof RDataException);
+        } else {
+            fail(exceptionMsg + exception.getMessage());
+        }
+    }
+
+    /**
+     * Test of RDataFactory.createDataTable.
+     */
+    @Test
+    public void testDataFactoryCreateDataTableFailNonSymData() throws Exception {
+
+        // Test variables.
+        RDataTable table = null;
+        String delimiter = ",";
+        boolean hasHeader = false;
+        boolean nullMissingData = true;
+        Exception expectedException = null;
+
+        // Test error handling.
+        Exception exception = null;
+        String exceptionMsg = "";
+
+        // Test.
+        try {
+            InputStream is =
+                new FileInputStream(new File("assets/nonSymData.csv"));
+            table =
+                RDataFactory.createDataTable(is, delimiter,
+                                hasHeader, nullMissingData);
+
+        } catch(RDataException dex) {
+            expectedException = dex;
+        } catch (Exception ex) {
+            exception = ex;
+            exceptionMsg = "RDataFactory.createDataTable failed: ";
+        }
+
+        if (exception == null) {
+            // Test asserts.
+            assertTrue(expectedException instanceof RDataException);
         } else {
             fail(exceptionMsg + exception.getMessage());
         }
