@@ -106,21 +106,69 @@ public class RDataFactory {
         return new RDateImpl(name, value, format);
     }
 
+    /**
+     * Create an RDataTable using the data provided on the
+     * call to intialize the table data.
+     */
     public static RDataTable createDataTable(List<List> data) {
         return new RDataTableImpl(data);
     }
 
+    /**
+     * Create an RDataTable using the data found within the RData
+     * instance  provided on the call to intialize the table data.
+     * <p/>
+     * The following RData concrete types are all accepted on this
+     * call:
+     * <p><ul>
+     * <li>RDataFrame
+     * <li>RNumericMatrix
+     * <li>RStringMatrix
+     * <li>RBooleanMatrix
+     * <li>RNumericVector
+     * <li>RStringVector
+     * <li>RBooleanVector
+     * <li>RDateVector
+     * <ul>
+     * <p>
+     * All other RData types are rejected with an RDataException.
+     * <p>
+     */
     public static RDataTable createDataTable(RData rData)
                                             throws RDataException {
         return new RDataTableImpl(rData);
     }
 
+    /**
+     * Create an RDataTable using the data found in the file 
+     * represented by the InputStream parameter.
+     * <p/>
+     * Set a value for the delimiter paramter that matches the
+     * data delimiter in the file being ingested.
+     * <p/>
+     * Enable the hasHeader parameter value if the first line in the
+     * file holds header values, as distinct to data values.
+     */
     public static RDataTable createDataTable(InputStream is,
                       String delimiter,
                       boolean hasHeader) throws RDataException {
         return new RDataTableImpl(is, delimiter, hasHeader);
     }
 
+    /**
+     * Create an RDataTable using the data found in the file 
+     * represented by the InputStream parameter.
+     * <p/>
+     * Set a value for the delimiter paramter that matches the
+     * data delimiter in the file being ingested.
+     * <p/>
+     * Enable the hasHeader parameter value if the first line in the
+     * file holds header values, as distinct to data values.
+     * <p/>
+     * Enable the nullMissingData parameter value if you want the
+     * RDataTable to inject null values into the table data where
+     * asymmetrical data is found in the file.
+     */
     public static RDataTable createDataTable(InputStream is,
                       String delimiter,
                       boolean hasHeader,
