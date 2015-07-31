@@ -47,6 +47,7 @@ public abstract class StandardExecutionModelCall extends AbstractCall {
             httpParams.put("enableConsoleEvents", Boolean.toString(options.enableConsoleEvents));
             httpParams.put("echooff", Boolean.toString(options.echooff));
             httpParams.put("consoleoff", Boolean.toString(options.consoleoff));
+            httpParams.put("artifactsoff", Boolean.toString(options.artifactsoff));
             httpParams.put("encodeDataFramePrimitiveAsVector", Boolean.toString(options.encodeDataFramePrimitiveAsVector));
 
             if (options.preloadWorkspace != null) {
