@@ -66,7 +66,7 @@ public class RUserProjectCallsTest {
             boolean allowSelfSigned = 
                 Boolean.valueOf(System.getProperty("allow.SelfSignedSSLCert"));
             rClient =RClientFactory.createClient(url, allowSelfSigned);
-            rAuthentication = new RBasicAuthentication("testuser", "changeme");
+            rAuthentication = new RBasicAuthentication("testuser", "Secret11");
             rUser = rClient.login(rAuthentication);
         } catch (Exception ex) {
             if (rClient != null) {

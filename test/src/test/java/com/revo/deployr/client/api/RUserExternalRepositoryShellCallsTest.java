@@ -52,7 +52,7 @@ public class RUserExternalRepositoryShellCallsTest {
             boolean allowSelfSigned = 
                 Boolean.valueOf(System.getProperty("allow.SelfSignedSSLCert"));
             rClient =RClientFactory.createClient(url, allowSelfSigned);
-            RBasicAuthentication rAuthentication = new RBasicAuthentication("testuser", "changeme");
+            RBasicAuthentication rAuthentication = new RBasicAuthentication("testuser", "Secret11");
             String expResultName = "testuser";
             rUser = rClient.login(rAuthentication);
             assertEquals(expResultName, rUser.about().username);

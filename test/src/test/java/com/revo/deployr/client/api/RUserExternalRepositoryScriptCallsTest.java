@@ -51,7 +51,7 @@ public class RUserExternalRepositoryScriptCallsTest {
             boolean allowSelfSigned = 
                 Boolean.valueOf(System.getProperty("allow.SelfSignedSSLCert"));
             rClient =RClientFactory.createClient(url, allowSelfSigned);
-            RBasicAuthentication rAuthentication = new RBasicAuthentication("testuser", "changeme");
+            RBasicAuthentication rAuthentication = new RBasicAuthentication("testuser", "Secret11");
             String expResultName = "testuser";
             rUser = rClient.login(rAuthentication);
             assertEquals(expResultName, rUser.about().username);
@@ -153,7 +153,7 @@ public class RUserExternalRepositoryScriptCallsTest {
 
         if (exception == null) {
             RBasicAuthentication rAuthentication =
-                new RBasicAuthentication("admin", "changeme");
+                new RBasicAuthentication("admin", "Secret11");
             for (int i = 0; i < 5; i++) {
                 try {
                     Thread.sleep(1000);

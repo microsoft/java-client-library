@@ -6,7 +6,7 @@ targetCompatibility = "1.6"
 
 applicationDefaultJvmArgs = ["-Dendpoint=http://localhost:7400/deployr",
                              "-Dusername=testuser",
-                             "-Dpassword=changeme"]
+                             "-Dpassword=Secret11"]
 
 repositories {
     mavenCentral()

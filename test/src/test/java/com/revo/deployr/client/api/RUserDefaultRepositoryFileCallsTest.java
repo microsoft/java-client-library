@@ -57,7 +57,7 @@ public class RUserDefaultRepositoryFileCallsTest {
             boolean allowSelfSigned = 
                 Boolean.valueOf(System.getProperty("allow.SelfSignedSSLCert"));
             rClient =RClientFactory.createClient(url, allowSelfSigned);
-            RBasicAuthentication rAuthentication = new RBasicAuthentication("testuser", "changeme");
+            RBasicAuthentication rAuthentication = new RBasicAuthentication("testuser", "Secret11");
             String expResultName = "testuser";
             rUser = rClient.login(rAuthentication);
             assertNotNull(rUser);
@@ -440,7 +440,7 @@ public class RUserDefaultRepositoryFileCallsTest {
 
         // sign-in as admin.  Try 5 times
         if (exception == null) {
-            rAuthentication = new RBasicAuthentication("admin", "changeme");
+            rAuthentication = new RBasicAuthentication("admin", "Secret11");
             for (int i = 0; i < 5; i++) {
                 try {
                     Thread.sleep(1000);

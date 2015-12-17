@@ -84,7 +84,7 @@ public class RProjectTempClose {
         String exceptionMsg = "";
 
         // Test.
-        pAuthentication = new RBasicAuthentication("testuser", "changeme");
+        pAuthentication = new RBasicAuthentication("testuser", "Secret11");
         try {
             rUser = rClient.login(pAuthentication);
         } catch (Exception ex) {
