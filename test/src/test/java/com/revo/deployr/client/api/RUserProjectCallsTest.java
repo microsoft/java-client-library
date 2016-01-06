@@ -56,7 +56,7 @@ public class RUserProjectCallsTest {
     }
 
     @Before
-    public void setUp() {
+    public void setUp() {                
         try {
             String url = System.getProperty("connection.protocol") +
                             System.getProperty("connection.endpoint");
@@ -66,7 +66,7 @@ public class RUserProjectCallsTest {
             boolean allowSelfSigned = 
                 Boolean.valueOf(System.getProperty("allow.SelfSignedSSLCert"));
             rClient =RClientFactory.createClient(url, allowSelfSigned);
-            rAuthentication = new RBasicAuthentication("testuser", "changeme");
+            rAuthentication = new RBasicAuthentication("testuser", System.getProperty("password.testuser"));
             rUser = rClient.login(rAuthentication);
         } catch (Exception ex) {
             if (rClient != null) {

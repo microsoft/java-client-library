@@ -8,7 +8,7 @@ mainClassName = 'com.revo.deployr.example.SimpleConsole'
 
 applicationDefaultJvmArgs = ["-Dendpoint=http://localhost:8000/deployr",
                              "-Dusername=testuser",
-                             "-Dpassword=changeme"]
+                             "-Dpassword=ADD_TESTUSER_PASSWORD"]
 
 repositories {
     mavenCentral()
