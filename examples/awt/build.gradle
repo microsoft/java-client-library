@@ -6,7 +6,7 @@ targetCompatibility = "1.6"
 
 mainClassName = 'com.revo.deployr.example.SimpleConsole'
 
-applicationDefaultJvmArgs = ["-Dendpoint=http://localhost:7400/deployr",
+applicationDefaultJvmArgs = ["-Dendpoint=http://localhost:8000/deployr",
                              "-Dusername=testuser",
                              "-Dpassword=changeme"]
 
@@ -30,7 +30,7 @@ dependencies {
 
 jar {
     baseName = 'deployr-example'
-    version = '7.4.0'
+    version = '8.0.0'
 }
 
 task wrapper(type: Wrapper) {
