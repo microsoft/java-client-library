@@ -21,7 +21,7 @@ import com.revo.deployr.client.factory.RClientFactory;
 import com.revo.deployr.client.params.RepoUploadOptions;
 import org.apache.log4j.Logger;
 
-import java.net.URL;
+import java.io.InputStream;
 import java.util.List;
 
 public class AuthRepositoryManagement {
@@ -82,7 +82,8 @@ public class AuthRepositoryManagement {
              * Download working directory file content using 
              * standard Java URL.
              */
-            URL fileURL = rRepositoryFile.download();
+            InputStream downStream = rRepositoryFile.download();
+            downStream.close();
 
             /*
              * Retrieve a list of files in the authenticated user's

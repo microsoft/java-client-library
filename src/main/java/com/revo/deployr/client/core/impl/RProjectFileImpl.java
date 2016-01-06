@@ -33,11 +33,12 @@ import com.revo.deployr.client.params.RepoUploadOptions;
 import com.revo.deployr.client.core.REndpoints;
 import com.revo.deployr.client.util.REntityUtil;
 
+import org.apache.http.client.utils.URIBuilder;
+
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Map;
-import java.net.URL;
-import java.net.MalformedURLException;
+import java.io.InputStream;
 
 import org.apache.commons.logging.Log; 
 import org.apache.commons.logging.LogFactory; 
@@ -95,7 +96,7 @@ public class RProjectFileImpl implements RProjectFile {
 
 	Map repoFileMap = rResult.getRepoFile();
 	log.debug("uploadFile: rResult.getRepoFile=" + repoFileMap);
-	RRepositoryFileDetails details = REntityUtil.getRepositoryFileDetails(repoFileMap);
+	RRepositoryFileDetails details = REntityUtil.getRepositoryFileDetails(repoFileMap, liveContext);
 
 	RRepositoryFile repoFile = new RRepositoryFileImpl(details, liveContext);
 
@@ -121,19 +122,21 @@ public class RProjectFileImpl implements RProjectFile {
 	log.debug("delete: projectFile, success=" + success + " error=" + error + " errorCode=" + errorCode);
     }
 
-    public URL download()
-	throws RClientException, RSecurityException {
+    public InputStream download()
+		throws RClientException, RSecurityException {
 
-	String urlPath = this.liveContext.serverurl + REndpoints.RPROJECTDIRECTORYDOWNLOAD;
-	String urlQuery = urlPath + "/" + this.project.id + "/" + this.about.filename + ";jsessionid=" + this.liveContext.httpcookie;
-	log.debug("download: url=" + urlQuery);
-	URL downloadURL = null;
-	try {
-	    downloadURL = new URL(urlQuery);
-	} catch(MalformedURLException mex) {
-	    throw new RClientException("Download directory file url malformed, ex=" + mex.getMessage());
-	}
-	return downloadURL;
+		try {
+
+	        String urlBase = liveContext.serverurl +
+	        			REndpoints.RPROJECTDIRECTORYDOWNLOAD;
+	        String urlPath = urlBase + ";jsessionid=" + liveContext.httpcookie;
+	        URIBuilder builder = new URIBuilder(urlPath);
+	        builder.addParameter("project", this.project.id);
+	        builder.addParameter("filename", this.about.filename);
+			return liveContext.executor.download(builder);
+        } catch(Exception dex) {
+            throw new RClientException("Download failed: "  + dex.getMessage());
+        }
     }
 
 }

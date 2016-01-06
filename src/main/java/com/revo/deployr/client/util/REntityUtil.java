@@ -75,7 +75,8 @@ public class REntityUtil {
         return projectDetails;
     }
 
-    public static RRepositoryFileDetails getRepositoryFileDetails(Map repoFile) {
+    public static RRepositoryFileDetails getRepositoryFileDetails(Map repoFile,
+                                                RLiveContext liveContext) {
 
         String filename = (String) repoFile.get("filename");
         String directory = (String) repoFile.get("directory");
@@ -85,6 +86,7 @@ public class REntityUtil {
         String descr = (String) repoFile.get("descr");
         String type = (String) repoFile.get("type");
         String urlString = (String) repoFile.get("url");
+        urlString = urlString + ";jsessionid=" + liveContext.httpcookie;
 
         String tags = (String) repoFile.get("tags");
         RRepositoryFile.Category category = null;
@@ -151,7 +153,7 @@ public class REntityUtil {
         if (files != null) {
 
             for (Map repoFileMap : files) {
-                RRepositoryFileDetails details = REntityUtil.getRepositoryFileDetails(repoFileMap);
+                RRepositoryFileDetails details = REntityUtil.getRepositoryFileDetails(repoFileMap, liveContext);
                 RRepositoryFile repoFile = new RRepositoryFileImpl(details, liveContext);
                 repoList.add(repoFile);
             }
@@ -250,7 +252,8 @@ public class REntityUtil {
         if (results != null) {
 
             for (Map resultMap : results) {
-                RProjectResultDetails details = REntityUtil.getProjectResultDetails(resultMap);
+                RProjectResultDetails details =
+                    REntityUtil.getProjectResultDetails(resultMap);
                 RProjectResult projectResult =
                         new RProjectResultImpl(project, details, liveContext);
                 resultList.add(projectResult);
@@ -264,7 +267,8 @@ public class REntityUtil {
         if (artifacts != null) {
 
             for (Map artifactMap : artifacts) {
-                RProjectFileDetails details = REntityUtil.getProjectFileDetails(artifactMap);
+                RProjectFileDetails details =
+                    REntityUtil.getProjectFileDetails(artifactMap);
                 RProjectFile projectFile =
                         new RProjectFileImpl(project, details, liveContext);
                 artifactList.add(projectFile);
@@ -276,7 +280,7 @@ public class REntityUtil {
         if (repofiles != null) {
 
             for (Map repoFileMap : repofiles) {
-                RRepositoryFileDetails details = REntityUtil.getRepositoryFileDetails(repoFileMap);
+                RRepositoryFileDetails details = REntityUtil.getRepositoryFileDetails(repoFileMap, liveContext);
                 RRepositoryFile repoFile = new RRepositoryFileImpl(details, liveContext);
                 repoList.add(repoFile);
             }

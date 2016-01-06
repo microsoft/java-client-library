@@ -13,6 +13,7 @@
 package com.revo.deployr.client;
 
 import com.revo.deployr.client.about.RProjectResultDetails;
+import java.io.InputStream;
 
 /**
  * Represents a DeployR project execution result.
@@ -34,5 +35,12 @@ public interface RProjectResult {
      */
     public void delete() throws RClientException, RSecurityException;
 
+    /**
+     * Download execution result.
+     *
+     * @throws RClientException   if RClient fails to complete call.
+     * @throws RSecurityException if DeployR server security conditions not met on call.
+     */
+    public InputStream download() throws RClientException, RSecurityException;
 
 }

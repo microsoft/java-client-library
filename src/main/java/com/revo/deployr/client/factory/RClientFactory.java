@@ -57,4 +57,43 @@ public class RClientFactory {
         return new RClientImpl(deployrUrl, concurrentCallLimit);
     }
 
+    /**
+     * Create connection at the specified DeployR URL.
+     *
+     * @param deployrUrl          url address of DeployR Server
+     * @param allowSelfSignedSSLCert when enabled, HTTPS connections using self-signed SSL certs are permitted
+     * @return {@link com.revo.deployr.client.RClient}
+     */
+    public static RClient createClient(String deployrUrl,
+                                       boolean allowSelfSignedSSLCert)
+            throws RClientException, RSecurityException {
+
+        log.debug("RClientFactory: createClient, deployrUrl=" + deployrUrl +
+            ", allowSelfSignedSSLCert=" + allowSelfSignedSSLCert);
+        return new RClientImpl(deployrUrl,
+                               200,
+                               allowSelfSignedSSLCert);
+    }
+
+    /**
+     * Create connection at the specified DeployR URL.
+     *
+     * @param deployrUrl          url address of DeployR Server
+     * @param concurrentCallLimit beyond which DeployR API calls are queued for execution
+     * @param allowSelfSignedSSLCert when enabled, HTTPS connections using self-signed SSL certs are permitted
+     * @return {@link com.revo.deployr.client.RClient}
+     */
+    public static RClient createClient(String deployrUrl,
+                                       int concurrentCallLimit,
+                                       boolean allowSelfSignedSSLCert)
+            throws RClientException, RSecurityException {
+
+        log.debug("RClientFactory: createClient, deployrUrl=" + deployrUrl +
+            ", concurrentCallLimit=" + concurrentCallLimit +
+            ", allowSelfSignedSSLCert=" + allowSelfSignedSSLCert);
+        return new RClientImpl(deployrUrl,
+                               concurrentCallLimit,
+                               allowSelfSignedSSLCert);
+    }
+
 }

@@ -308,20 +308,21 @@ public class RProjectImpl implements RProject {
         log.debug("delete: success=" + success + " error=" + error + " errorCode=" + errorCode);
     }
 
-    public URL export()
+    public InputStream export()
         throws RClientException, RSecurityException {
 
-        String urlPath = this.liveContext.serverurl + REndpoints.RPROJECTEXPORT;
-        urlPath = urlPath + "/" + this.about.id + ";jsessionid=" + this.liveContext.httpcookie;
-        log.debug("export: url=" + urlPath);
-        URL exportURL = null;
         try {
-            URIBuilder builder = new URIBuilder(urlPath);
-            exportURL = builder.build().toURL();
-        } catch(Exception uex) {
-            throw new RClientException("Export url: ex=" + uex.getMessage());
+          String urlBase = this.liveContext.serverurl +
+                                  REndpoints.RPROJECTEXPORT;
+          String urlPath = urlBase + "/" + this.about.id +
+              ";jsessionid=" + this.liveContext.httpcookie;
+          URIBuilder builder = new URIBuilder(urlPath);
+          builder.addParameter("project", this.about.id);
+          return liveContext.executor.download(builder);
+        } catch(Exception ex) {
+            throw new RClientException("Export failed: " +
+                                         ex.getMessage());
         }
-        return exportURL;
     }
 
     /*
@@ -679,20 +680,21 @@ public class RProjectImpl implements RProject {
         log.debug("deleteResults: success=" + success + " error=" + error + " errorCode=" + errorCode);
     }
 
-    public URL downloadResults()
+    public InputStream downloadResults()
         throws RClientException, RSecurityException {
 
-        String urlPath = this.liveContext.serverurl + REndpoints.RPROJECTEXECUTERESULTDOWNLOAD;
-        urlPath = urlPath + "/" + this.about.id + ";jsessionid=" + this.liveContext.httpcookie;
-        log.debug("downloadResults: url=" + urlPath);
-        URL downloadURL = null;
-        try {
-            URIBuilder builder = new URIBuilder(urlPath);
-            downloadURL = builder.build().toURL();
-        } catch(Exception uex) {
-            throw new RClientException("Download project execution results url: ex=" + uex.getMessage());
-        }
-        return downloadURL;
+      try {
+
+        String urlPath = liveContext.serverurl +
+                  REndpoints.RPROJECTEXECUTERESULTDOWNLOAD;
+        urlPath = urlPath + ";jsessionid=" + liveContext.httpcookie;
+        URIBuilder builder = new URIBuilder(urlPath);
+        builder.addParameter("project", this.about.id);
+        return liveContext.executor.download(builder);
+      } catch(Exception ex) {
+          throw new RClientException("Download failed: " +
+                                          ex.getMessage());
+      }
     }
 
 
@@ -839,7 +841,7 @@ public class RProjectImpl implements RProject {
 
         Map repoFileMap = rResult.getRepoFile();
         log.debug("storeObject: rResult.getRepoFile=" + repoFileMap);
-        RRepositoryFileDetails details = REntityUtil.getRepositoryFileDetails(repoFileMap);
+        RRepositoryFileDetails details = REntityUtil.getRepositoryFileDetails(repoFileMap, liveContext);
 
         RRepositoryFile repoFile = new RRepositoryFileImpl(details, liveContext);
 
@@ -1000,50 +1002,42 @@ public class RProjectImpl implements RProject {
         return projectFile;
     }
 
-    public URL downloadFiles()
+    public InputStream downloadFiles()
         throws RClientException, RSecurityException {
-
-        String urlPath = this.liveContext.serverurl + REndpoints.RPROJECTDIRECTORYDOWNLOAD;
-        urlPath = urlPath + "/" + this.about.id + ";jsessionid=" + this.liveContext.httpcookie;
-        log.debug("downloadFiles: url=" + urlPath);
-        URL downloadURL = null;
-        try {
-            URIBuilder builder = new URIBuilder(urlPath);
-            downloadURL = builder.build().toURL();
-        } catch(Exception uex) {
-            throw new RClientException("Download directory archive url: ex=" + uex.getMessage());
-        }
-        return downloadURL;
+          return downloadFiles(null);
     }
 
-    public URL downloadFiles(List<String> files)
+    public InputStream downloadFiles(List<String> files)
         throws RClientException, RSecurityException {
 
-        String urlPath = this.liveContext.serverurl + REndpoints.RPROJECTDIRECTORYDOWNLOAD;
-
-        String fileNames = null;
-        if(files != null) {
-            for(String fileName : files) {
-            if(fileNames != null) {
-                fileNames = fileNames + "," + fileName;
-            } else {
-                fileNames = fileName;
-            }
-            }
-        }
-
-        urlPath = urlPath + "/" + this.about.id + "/" + fileNames + ";jsessionid=" + this.liveContext.httpcookie;
-        log.debug("downloadFiles: url=" + urlPath);
-        URL downloadURL = null;
         try {
-            URIBuilder builder = new URIBuilder(urlPath);
-            downloadURL = builder.build().toURL();
-        } catch(Exception uex) {
-            throw new RClientException("Download directory files url: ex=" + uex.getMessage());
-        }
-        return downloadURL;
-    }
 
+          String fileNames = null;
+          if(files != null) {
+              for(String fileName : files) {
+                if(fileNames != null) {
+                    fileNames = fileNames + "," + fileName;
+                } else {
+                    fileNames = fileName;
+                }
+              }
+          }
+
+          String urlPath = liveContext.serverurl +
+                    REndpoints.RPROJECTDIRECTORYDOWNLOAD;
+          urlPath = urlPath + ";jsessionid=" + liveContext.httpcookie;
+
+          URIBuilder builder = new URIBuilder(urlPath);
+          builder.addParameter("project", this.about.id);
+          if(fileNames != null) {
+            builder.addParameter("filename", fileNames);
+          }
+          return liveContext.executor.download(builder);
+        } catch(Exception ex) {
+            throw new RClientException("Download failed: " +
+                                            ex.getMessage());
+        }
+    }
 
     /*
      * RProjectPackageCalls Interfaces.

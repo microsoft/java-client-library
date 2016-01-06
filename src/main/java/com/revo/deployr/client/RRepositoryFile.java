@@ -15,6 +15,7 @@ package com.revo.deployr.client;
 import com.revo.deployr.client.about.RRepositoryFileDetails;
 
 import java.net.URL;
+import java.io.InputStream;
 import java.util.List;
 
 /**
@@ -95,7 +96,7 @@ public interface RRepositoryFile {
      * @throws RSecurityException if DeployR server security conditions not met on call.
      * @see RRepositoryFileDetails
      */
-    public URL download() throws RClientException, RSecurityException;
+    public InputStream download() throws RClientException, RSecurityException;
 
     /**
      * Delete managed repository file.

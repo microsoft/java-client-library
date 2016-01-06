@@ -16,6 +16,7 @@ import com.revo.deployr.client.about.RProjectFileDetails;
 import com.revo.deployr.client.params.RepoUploadOptions;
 
 import java.net.URL;
+import java.io.InputStream;
 
 /**
  * Represents a DeployR project directory file.
@@ -65,6 +66,6 @@ public interface RProjectFile {
      * @throws RSecurityException if DeployR server security conditions not met on call.
      * @see RProjectFileDetails
      */
-    public URL download() throws RClientException, RSecurityException;
+    public InputStream download() throws RClientException, RSecurityException;
 
 }

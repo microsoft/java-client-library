@@ -13,7 +13,9 @@
 package com.revo.deployr.client.factory;
 
 import com.revo.deployr.client.data.*;
+import com.revo.deployr.client.RDataException;
 import com.revo.deployr.client.data.impl.*;
+import java.io.InputStream;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -41,31 +43,38 @@ public class RDataFactory {
         return new RStringImpl(name, value);
     }
 
-    public static RBooleanVector createBooleanVector(String name, List<Boolean> value) {
+    public static RBooleanVector createBooleanVector(String name,
+                                            List<Boolean> value) {
         return new RBooleanVectorImpl(name, value);
     }
 
-    public static RNumericVector createNumericVector(String name, List<Double> value) {
+    public static RNumericVector createNumericVector(String name,
+                                            List<Double> value) {
         return new RNumericVectorImpl(name, value);
     }
 
-    public static RStringVector createStringVector(String name, List<String> value) {
+    public static RStringVector createStringVector(String name,
+                                            List<String> value) {
         return new RStringVectorImpl(name, value);
     }
 
-    public static RDateVector createDateVector(String name, List<Date> value, String format) {
+    public static RDateVector createDateVector(String name,
+                                List<Date> value, String format) {
         return new RDateVectorImpl(name, value, format);
     }
 
-    public static RBooleanMatrix createBooleanMatrix(String name, List<List<Boolean>> value) {
+    public static RBooleanMatrix createBooleanMatrix(String name,
+                                        List<List<Boolean>> value) {
         return new RBooleanMatrixImpl(name, value);
     }
 
-    public static RNumericMatrix createNumericMatrix(String name, List<List<Double>> value) {
+    public static RNumericMatrix createNumericMatrix(String name,
+                                        List<List<Double>> value) {
         return new RNumericMatrixImpl(name, value);
     }
 
-    public static RStringMatrix createStringMatrix(String name, List<List<String>> value) {
+    public static RStringMatrix createStringMatrix(String name,
+                                        List<List<String>> value) {
         return new RStringMatrixImpl(name, value);
     }
 
@@ -73,16 +82,19 @@ public class RDataFactory {
         return new RListImpl(name, value);
     }
 
-    public static RDataFrame createDataFrame(String name, List<RData> value) {
+    public static RDataFrame createDataFrame(String name,
+                                            List<RData> value) {
         return new RDataFrameImpl(name, value);
     }
 
-    public static RFactor createFactor(String name, List value, boolean ordered) {
+    public static RFactor createFactor(String name,
+                                    List value, boolean ordered) {
 
         return new RFactorImpl(name, value, ordered);
     }
 
-    public static RFactor createFactor(String name, List value, List levels, List labels, boolean ordered) {
+    public static RFactor createFactor(String name, List value,
+                        List levels, List labels, boolean ordered) {
         return new RFactorImpl(name, value, levels, labels, ordered);
     }
 
@@ -92,6 +104,76 @@ public class RDataFactory {
 
     public static RDate createDate(String name, Date value, String format) {
         return new RDateImpl(name, value, format);
+    }
+
+    /**
+     * Create an RDataTable using the data provided on the
+     * call to intialize the table data.
+     */
+    public static RDataTable createDataTable(List<List> data) {
+        return new RDataTableImpl(data);
+    }
+
+    /**
+     * Create an RDataTable using the data found within the RData
+     * instance  provided on the call to intialize the table data.
+     * <p/>
+     * The following RData concrete types are all accepted on this
+     * call:
+     * <p><ul>
+     * <li>RDataFrame
+     * <li>RNumericMatrix
+     * <li>RStringMatrix
+     * <li>RBooleanMatrix
+     * <li>RNumericVector
+     * <li>RStringVector
+     * <li>RBooleanVector
+     * <li>RDateVector
+     * <ul>
+     * <p>
+     * All other RData types are rejected with an RDataException.
+     * <p>
+     */
+    public static RDataTable createDataTable(RData rData)
+                                            throws RDataException {
+        return new RDataTableImpl(rData);
+    }
+
+    /**
+     * Create an RDataTable using the data found in the file 
+     * represented by the InputStream parameter.
+     * <p/>
+     * Set a value for the delimiter paramter that matches the
+     * data delimiter in the file being ingested.
+     * <p/>
+     * Enable the hasHeader parameter value if the first line in the
+     * file holds header values, as distinct to data values.
+     */
+    public static RDataTable createDataTable(InputStream is,
+                      String delimiter,
+                      boolean hasHeader) throws RDataException {
+        return new RDataTableImpl(is, delimiter, hasHeader);
+    }
+
+    /**
+     * Create an RDataTable using the data found in the file 
+     * represented by the InputStream parameter.
+     * <p/>
+     * Set a value for the delimiter paramter that matches the
+     * data delimiter in the file being ingested.
+     * <p/>
+     * Enable the hasHeader parameter value if the first line in the
+     * file holds header values, as distinct to data values.
+     * <p/>
+     * Enable the nullMissingData parameter value if you want the
+     * RDataTable to inject null values into the table data where
+     * asymmetrical data is found in the file.
+     */
+    public static RDataTable createDataTable(InputStream is,
+                      String delimiter,
+                      boolean hasHeader,
+                      boolean nullMissingData) throws RDataException {
+        return new RDataTableImpl(is, delimiter, hasHeader, nullMissingData);
     }
 
 }

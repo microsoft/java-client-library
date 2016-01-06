@@ -34,6 +34,7 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Map;
 import java.net.*;
+import java.io.InputStream;
 import org.apache.http.client.utils.URIBuilder;
 
 import org.apache.commons.logging.Log; 
@@ -74,7 +75,7 @@ public class RRepositoryFileImpl implements RRepositoryFile {
 
         for(Map repoFileMap : repoFiles) {
 
-            RRepositoryFileDetails details = REntityUtil.getRepositoryFileDetails(repoFileMap);
+            RRepositoryFileDetails details = REntityUtil.getRepositoryFileDetails(repoFileMap, liveContext);
             RRepositoryFile file = new RRepositoryFileImpl(details, liveContext);
             versionList.add(file);	
         }
@@ -100,7 +101,7 @@ public class RRepositoryFileImpl implements RRepositoryFile {
 
         Map repoFileMap = rResult.getRepoFile();
         log.debug("grant: rResult.getRepoFile=" + repoFileMap);
-        RRepositoryFileDetails details = REntityUtil.getRepositoryFileDetails(repoFileMap);
+        RRepositoryFileDetails details = REntityUtil.getRepositoryFileDetails(repoFileMap, liveContext);
 
         RRepositoryFile repoFile = new RRepositoryFileImpl(details, liveContext);
 
@@ -121,7 +122,7 @@ public class RRepositoryFileImpl implements RRepositoryFile {
 
         Map repoFileMap = rResult.getRepoFile();
         log.debug("revert: rResult.getRepoFile=" + repoFileMap);
-        RRepositoryFileDetails details = REntityUtil.getRepositoryFileDetails(repoFileMap);
+        RRepositoryFileDetails details = REntityUtil.getRepositoryFileDetails(repoFileMap, liveContext);
 
         RRepositoryFile repoFile = new RRepositoryFileImpl(details, liveContext);
 
@@ -147,7 +148,7 @@ public class RRepositoryFileImpl implements RRepositoryFile {
 
         Map repoFileMap = rResult.getRepoFile();
         log.debug("update: rResult.getRepoFile=" + repoFileMap);
-        RRepositoryFileDetails details = REntityUtil.getRepositoryFileDetails(repoFileMap);
+        RRepositoryFileDetails details = REntityUtil.getRepositoryFileDetails(repoFileMap, liveContext);
 
         RRepositoryFile repoFile = new RRepositoryFileImpl(details, liveContext);
 
@@ -188,26 +189,24 @@ public class RRepositoryFileImpl implements RRepositoryFile {
         return diffURL;
     }
 
-    public URL download()
+    public InputStream download()
                     throws RClientException, RSecurityException {
 
-        URL downloadURL = null;
         try {
 
-            String urlPath = liveContext.serverurl + REndpoints.RREPOSITORYFILEDOWNLOAD;
-            urlPath = urlPath + ";jsessionid=" + liveContext.httpcookie;
-
+            String urlBase = liveContext.serverurl +
+                        REndpoints.RREPOSITORYFILEDOWNLOAD;
+            String urlPath = urlBase + ";jsessionid=" + liveContext.httpcookie;
             URIBuilder builder = new URIBuilder(urlPath);
             builder.addParameter("filename", this.about.filename);
             builder.addParameter("directory", this.about.directory);
             builder.addParameter("author", this.about.author);
             builder.addParameter("version", this.about.version);
-
-            downloadURL = builder.build().toURL();
-        } catch(Exception uex) {
-            throw new RClientException("Download url: " + downloadURL + ", ex=" + uex.getMessage());
+            return liveContext.executor.download(builder);
+        } catch(Exception ex) {
+            throw new RClientException("Download failed: " +
+                                                ex.getMessage());
         }
-        return downloadURL;
     }
 
     public void delete()

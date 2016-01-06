@@ -22,7 +22,7 @@ dependencies {
 
 jar {
     baseName = 'jDeployR'
-    version = '7.4.0'
+    version = '7.4.8'
 }
 
 javadoc {

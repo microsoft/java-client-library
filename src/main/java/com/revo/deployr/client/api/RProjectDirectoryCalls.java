@@ -73,7 +73,7 @@ public interface RProjectDirectoryCalls {
      * @throws RClientException   if RClient fails to complete call.
      * @throws RSecurityException if DeployR server security conditions not met on call.
      */
-    public URL downloadFiles() throws RClientException, RSecurityException;
+    public InputStream downloadFiles() throws RClientException, RSecurityException;
 
     /**
      * Download files from project directory.
@@ -81,6 +81,6 @@ public interface RProjectDirectoryCalls {
      * @throws RClientException   if RClient fails to complete call.
      * @throws RSecurityException if DeployR server security conditions not met on call.
      */
-    public URL downloadFiles(List<String> files) throws RClientException, RSecurityException;
+    public InputStream downloadFiles(List<String> files) throws RClientException, RSecurityException;
 
 }

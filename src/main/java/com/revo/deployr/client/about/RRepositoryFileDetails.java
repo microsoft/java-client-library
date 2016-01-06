@@ -50,6 +50,7 @@ public class RRepositoryFileDetails {
         this.category = category;
         this.md5 = md5;
         this.lastModified = lastModified;
+        this.url = url;
     }
 
     /**
@@ -150,5 +151,11 @@ public class RRepositoryFileDetails {
      * Repository file last modified date.
      */
     public final Date lastModified;
+
+    /**
+     * Repository file url.
+     */
+    public final URL url;
+
 
 }

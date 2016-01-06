@@ -64,11 +64,14 @@ public class RUserJobStandardExecutionModelCallsTest {
     public void setUp() {
         try {
 
-            url = System.getProperty("url.property");
+            String url = System.getProperty("connection.protocol") +
+                            System.getProperty("connection.endpoint");
             if (url == null) {
-                url = "localhost:" + DeployrUtil.DEFAULT_PORT;
+                fail("setUp: connection.[protocol|endpoint] null.");
             }
-            rClient = RClientFactory.createClient("http://" + url + "/deployr");
+            boolean allowSelfSigned = 
+                Boolean.valueOf(System.getProperty("allow.SelfSignedSSLCert"));
+            rClient =RClientFactory.createClient(url, allowSelfSigned);
             RBasicAuthentication rAuthentication = new RBasicAuthentication("testuser", "changeme");
 
             rUser = rClient.login(rAuthentication);
@@ -403,7 +406,7 @@ public class RUserJobStandardExecutionModelCallsTest {
 
             repositoryFile = DeployrUtil.createTemporaryRScript(rUser, true);
             rJob = rUser.submitJobExternal(jobName, jobDescr,
-                    repositoryFile.download().toString(),
+                    repositoryFile.about().url.toString(),
                     jobExecutionOptions);
 
             // wait for job to complete
@@ -548,7 +551,7 @@ public class RUserJobStandardExecutionModelCallsTest {
 
             repositoryFile = DeployrUtil.createTemporaryRScript(rUser, true);
             rJob = rUser.submitJobExternal(jobName, jobDescr,
-                    repositoryFile.download().toString(),
+                    repositoryFile.about().url.toString(),
                     jobExecutionOptions);
 
             // wait for job to complete

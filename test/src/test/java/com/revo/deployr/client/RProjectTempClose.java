@@ -40,11 +40,14 @@ public class RProjectTempClose {
     @Before
     public void setUp() {
         try {
-            String url = System.getProperty("url.property");
+            String url = System.getProperty("connection.protocol") +
+                            System.getProperty("connection.endpoint");
             if (url == null) {
-                url = "localhost:" + DeployrUtil.DEFAULT_PORT;
+                fail("setUp: connection.[protocol|endpoint] null.");
             }
-            rClient = RClientFactory.createClient("http://" + url + "/deployr");
+            boolean allowSelfSigned = 
+                Boolean.valueOf(System.getProperty("allow.SelfSignedSSLCert"));
+            rClient =RClientFactory.createClient(url, allowSelfSigned);
         } catch (Exception ex) {
             if (rClient != null) {
                 rClient.release();

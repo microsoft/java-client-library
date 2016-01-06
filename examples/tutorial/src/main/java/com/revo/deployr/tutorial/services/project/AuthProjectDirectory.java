@@ -22,7 +22,7 @@ import com.revo.deployr.client.factory.RClientFactory;
 import com.revo.deployr.client.params.DirectoryUploadOptions;
 import org.apache.log4j.Logger;
 
-import java.net.URL;
+import java.io.InputStream;
 import java.util.List;
 
 public class AuthProjectDirectory {
@@ -95,9 +95,15 @@ public class AuthProjectDirectory {
 
             /*
              * Download working directory file content using 
-             * standard Java URL.
+             * standard Java InputStream.
              */
-            URL fileURL = rProjectFile.download();
+            InputStream fileStream = null;
+            try {
+                fileStream = rProjectFile.download();
+            } finally {
+                if(fileStream != null)
+                    fileStream.close();
+            }
 
             /*
              * Retrieve a list of files in the R session's

@@ -22,11 +22,13 @@ import com.revo.deployr.client.about.RProjectResultDetails;
 
 import com.revo.deployr.client.call.RCall;
 import com.revo.deployr.client.call.project.ProjectExecuteResultDeleteCall;
+import com.revo.deployr.client.core.REndpoints;
 
 import com.revo.deployr.client.RClientException;
 import com.revo.deployr.client.RSecurityException;
 
-import java.net.URL;
+import java.io.InputStream;
+import org.apache.http.client.utils.URIBuilder;
 
 import org.apache.commons.logging.Log; 
 import org.apache.commons.logging.LogFactory; 
@@ -42,27 +44,48 @@ public class RProjectResultImpl implements RProjectResult {
     RProjectResultDetails about;
     RLiveContext liveContext;
 
-    public RProjectResultImpl(RProjectDetails project, RProjectResultDetails about, RLiveContext liveContext) {
-	this.project = project;
-	this.about = about;
-	this.liveContext = liveContext;
+    public RProjectResultImpl(RProjectDetails project,
+    						  RProjectResultDetails about,
+    						  RLiveContext liveContext) {
+		this.project = project;
+		this.about = about;
+		this.liveContext = liveContext;
     }
 
     public RProjectResultDetails about() {
-	return this.about;
+		return this.about;
+    }
+
+    public InputStream download()
+		throws RClientException, RSecurityException {
+
+		try {
+	        String urlBase = this.liveContext.serverurl +
+	                REndpoints.RPROJECTEXECUTERESULTDOWNLOAD;
+	        String urlPath = urlBase + ";jsessionid=" + liveContext.httpcookie;
+	        URIBuilder builder = new URIBuilder(urlPath);
+	        builder.addParameter("project", this.project.id);
+	        builder.addParameter("filename", this.about.filename);
+	        return liveContext.executor.download(builder);
+		} catch(Exception ex) {
+            throw new RClientException("Download failed: " +
+            								ex.getMessage());
+        }
     }
 
     public void delete()
-	throws RClientException, RSecurityException {
+		throws RClientException, RSecurityException {
 
-	RCall rCall = new ProjectExecuteResultDeleteCall(this.project.id, this.about.execution, this.about.filename);
-	RCoreResult rResult = liveContext.executor.processCall(rCall);
+		RCall rCall = new ProjectExecuteResultDeleteCall(this.project.id,
+							this.about.execution, this.about.filename);
+		RCoreResult rResult = liveContext.executor.processCall(rCall);
 
-	boolean success = rResult.isSuccess();
-	String error = rResult.getError();
-	int errorCode = rResult.getErrorCode();
+		boolean success = rResult.isSuccess();
+		String error = rResult.getError();
+		int errorCode = rResult.getErrorCode();
 
-	log.debug("delete: success=" + success + " error=" + error + " errorCode=" + errorCode);
+		log.debug("delete: success=" + success + " error=" +
+									error + " errorCode=" + errorCode);
     }
 
 }

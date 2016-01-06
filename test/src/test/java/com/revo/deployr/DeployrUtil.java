@@ -29,7 +29,7 @@ import java.util.logging.Logger;
 public class DeployrUtil {
 
     public static final String SAMPLE_CODE = "demo(graphics); png('sampleArtifact.png'); plot(rnorm(10));";
-    public static final String DEFAULT_PORT = "7300";
+    public static final String DEFAULT_PORT = "7400";
     // Prefix used to denote file or object created for the
     // purpose of later loading from repository on preloadfile*
     // or on preloadobject* parameters.
@@ -76,6 +76,23 @@ public class DeployrUtil {
     public static String getDataFromURL(URL url) {
         try {
             InputStream is = url.openConnection().getInputStream();
+            BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+            StringBuffer buff = new StringBuffer("");
+            String line;
+            while ((line = reader.readLine()) != null) {
+                buff.append(line);
+            }
+            reader.close();
+            is.close();
+            return buff.toString();
+        } catch (IOException ex) {
+            Logger.getLogger(DeployrUtil.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+
+    public static String getDataFromStream(InputStream is) {
+        try {
             BufferedReader reader = new BufferedReader(new InputStreamReader(is));
             StringBuffer buff = new StringBuffer("");
             String line;
