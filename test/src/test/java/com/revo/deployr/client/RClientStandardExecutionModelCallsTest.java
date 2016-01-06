@@ -72,7 +72,7 @@ public class RClientStandardExecutionModelCallsTest {
                 Boolean.valueOf(System.getProperty("allow.SelfSignedSSLCert"));
             anonymousRClient =RClientFactory.createClient(url, allowSelfSigned);
             authenticatedRClient =RClientFactory.createClient(url, allowSelfSigned);
-            RBasicAuthentication rAuthentication = new RBasicAuthentication("testuser", "changeme");
+            RBasicAuthentication rAuthentication = new RBasicAuthentication("testuser", System.getProperty("password.testuser"));
             rUser = authenticatedRClient.login(rAuthentication);
 
             // Test prep.

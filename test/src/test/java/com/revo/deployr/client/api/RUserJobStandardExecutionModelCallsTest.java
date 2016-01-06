@@ -72,7 +72,7 @@ public class RUserJobStandardExecutionModelCallsTest {
             boolean allowSelfSigned = 
                 Boolean.valueOf(System.getProperty("allow.SelfSignedSSLCert"));
             rClient =RClientFactory.createClient(url, allowSelfSigned);
-            RBasicAuthentication rAuthentication = new RBasicAuthentication("testuser", "changeme");
+            RBasicAuthentication rAuthentication = new RBasicAuthentication("testuser", System.getProperty("password.testuser"));
 
             rUser = rClient.login(rAuthentication);
 

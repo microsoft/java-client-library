@@ -82,7 +82,7 @@ public class RClientTest {
         String cleanupExceptionMsg = "";
 
         // Test.
-        pAuthentication = new RBasicAuthentication(userName, "changeme");
+        pAuthentication = new RBasicAuthentication(userName, System.getProperty("password.testuser"));
         try {
             rUser = rClient.login(pAuthentication);
         } catch (Exception ex) {
@@ -140,7 +140,7 @@ public class RClientTest {
     public void testRClientLoginRAuthenticationDisableAutosave() throws Exception {
 
         // Test variables.
-        RBasicAuthentication pAuthentication = new RBasicAuthentication("testuser", "changeme");
+        RBasicAuthentication pAuthentication = new RBasicAuthentication("testuser", System.getProperty("password.testuser"));
         boolean disableAutosave = true;
         String code = "x<-5";
         RUser rUser = null;
@@ -240,7 +240,7 @@ public class RClientTest {
     public void testLogout() {
 
         // Test variables.
-        RBasicAuthentication pAuthentication = new RBasicAuthentication("testuser", "changeme");
+        RBasicAuthentication pAuthentication = new RBasicAuthentication("testuser", System.getProperty("password.testuser"));
         String userName = "testuser";
         RUser rUser = null;
 

@@ -4,9 +4,9 @@ apply plugin: 'application'
 sourceCompatibility = "1.6"
 targetCompatibility = "1.6"
 
-applicationDefaultJvmArgs = ["-Dendpoint=http://localhost:7400/deployr",
+applicationDefaultJvmArgs = ["-Dendpoint=http://localhost:8000/deployr",
                              "-Dusername=testuser",
-                             "-Dpassword=changeme"]
+                             "-Dpassword=ADD_TESTUSER_PASSWORD"]
 
 repositories {
     mavenCentral()
@@ -28,7 +28,7 @@ dependencies {
 
 jar {
     baseName = 'client-tutorial'
-    version = '7.4.0'
+    version = '8.0.0'
 }
 
 task execute(type: JavaExec) {
