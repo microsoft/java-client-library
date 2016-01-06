@@ -12,9 +12,9 @@ DeployR services within Java client applications.
 Links
 -----
 
-  * [Download](http://deployr.revolutionanalytics.com/docanddown/#clientlib)
+  * [Download](https://github.com/deployr/java-client-library/releases)
   * [Quick Start Tutorial](http://deployr.revolutionanalytics.com/documents/dev/clientlib)
-  * [Client Library API JavaDoc](http://deployr.revolutionanalytics.com/documents/dev/client-javadoc)
+  * [Client Library API JavaDoc](http://deployr.github.io/java-client-library/)
   * [DeployR API Reference Guide](http://deployr.revolutionanalytics.com/documents/dev/api-doc/guide)
   * [Library Dependencies](#dependencies)
   * [Example Code](#examples)
@@ -95,7 +95,7 @@ The DeployR Java client library also ships with a set of unit tests. See
 License
 =======
 
-Copyright (C) 2010-2014 by Revolution Analytics Inc.
+Copyright (C) 2010-2016, Microsoft Corporation
 
 This program is licensed to you under the terms of Version 2.0 of the
 Apache License. This program is distributed WITHOUT
