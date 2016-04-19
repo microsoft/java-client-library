@@ -88,8 +88,10 @@ public class RUserDefaultRepositoryFileCallsTest {
         String text = "this is a line of text";
         String actualRepoFileName = "";
         String actualRepoFileDesc = "";
+        String actualRepoFileType = "";
         String expRepoFileName = "";
         String expRepoFileDesc = "";
+        String expRepoFileType;
         RepoUploadOptions options = null;
         RRepositoryFile repoFile = null;
         InputStream downStream = null;
@@ -104,6 +106,7 @@ public class RUserDefaultRepositoryFileCallsTest {
         // Test.
         expRepoFileName = DeployrUtil.getUniqueFileName("txt");
         expRepoFileDesc = "Repository File About";
+        expRepoFileType = "text/plain";
         options = new RepoUploadOptions();
         options.descr = expRepoFileDesc;
         options.filename = expRepoFileName;
@@ -119,6 +122,7 @@ public class RUserDefaultRepositoryFileCallsTest {
             try {
                 actualRepoFileName = repoFile.about().filename;
                 actualRepoFileDesc = repoFile.about().descr;
+                actualRepoFileType = repoFile.about().type;
             } catch (Exception ex) {
                 exception = ex;
                 exceptionMsg = "repoFile.about failed: ";
@@ -152,6 +156,7 @@ public class RUserDefaultRepositoryFileCallsTest {
             // Test assertions.
             assertEquals(expRepoFileName, actualRepoFileName);
             assertEquals(expRepoFileDesc, actualRepoFileDesc);
+            assertEquals(expRepoFileType, actualRepoFileType);
             assertEquals(DeployrUtil.encodeString(text),
                             DeployrUtil.encodeString(urlData));
         } else {
