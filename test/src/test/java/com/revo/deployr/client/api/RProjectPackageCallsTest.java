@@ -140,7 +140,7 @@ public class RProjectPackageCallsTest {
     public void testAttachPackageAsString() {
 
         // Test variables.
-        String packageName = "ada";
+        String packageName = "deployrUtils";
         String repo = "http://cran.us.r-project.org";
         String expStatus = "success";
         String actualStatus = "";
@@ -192,7 +192,7 @@ public class RProjectPackageCallsTest {
         String actualStatus = "";
         String repo = "http://cran.us.r-project.org";
         String expResult = "success";
-        String packageName = "ada";
+        String packageName = "deployrUtils";
 
         // Test error handling.
         Exception exception = null;
@@ -234,7 +234,7 @@ public class RProjectPackageCallsTest {
     public void testDetachPackageString() {
 
         // Test variables.
-        String packageName = "ada";
+        String packageName = "deployrUtils";
         String repo = "http://cran.us.r-project.org";
         String expStatus = "success";
         String attachDetailStatus = "";
@@ -301,7 +301,7 @@ public class RProjectPackageCallsTest {
     public void testDetachPackageList() {
 
         // Test variables.
-        String packageName = "ada";
+        String packageName = "deployrUtils";
         String repo = "http://cran.us.r-project.org";
         List<String> packageNames = null;
         String expStatus = "success";
