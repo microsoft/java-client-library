@@ -22,9 +22,12 @@ import com.revo.deployr.client.factory.RClientFactory;
 import com.revo.deployr.client.params.RepoUploadOptions;
 import org.junit.*;
 
+import java.io.BufferedWriter;
 import java.io.File;
-import java.io.InputStream;
 import java.io.FileInputStream;
+import java.io.FileWriter;
+import java.io.InputStream;
+import java.io.IOException;
 import java.net.URL;
 import java.util.List;
 
@@ -581,6 +584,98 @@ public class RUserDefaultRepositoryFileCallsTest {
     }
 
     /**
+     * Test of uploadFile method with a large file, of class RUserRepositoryFileCalls.
+     */
+    @Test
+    public void testUserRepositoryUploadLargeFile() throws IOException {
+
+        // Test variables.
+        String actualRepoFileName = "";
+        String actualRepoFileDesc = "";
+        String expRepoFileName = "";
+        String expRepoFileDesc = "";
+
+        File file = GetRandomFile(10 * 1024 * 1024 + 5);
+        long expectedLength = file.length();
+        RepoUploadOptions options = null;
+        RRepositoryFile repoFile = null;
+        InputStream downStream = null;
+        String urlData = "";
+
+        // Test error handling.
+        Exception exception = null;
+        String exceptionMsg = "";
+        Exception cleanupException = null;
+        String cleanupExceptionMsg = "";
+
+        //Test.
+        expRepoFileName = DeployrUtil.getUniqueFileName("txt");
+        expRepoFileDesc = "some large file";
+        options = new RepoUploadOptions();
+        options.descr = expRepoFileDesc;
+        options.filename = expRepoFileName;
+
+        try {
+            repoFile = rUser.uploadFile(new FileInputStream(file), options);
+        } catch (Exception ex) {
+            exception = ex;
+            exceptionMsg = "rUser.uploadFile failed: ";
+        }
+
+        if (exception == null) {
+            try {
+                actualRepoFileName = repoFile.about().filename;
+                actualRepoFileDesc = repoFile.about().descr;
+            } catch (Exception ex) {
+                exception = ex;
+                exceptionMsg = "repoFile.about failed: ";
+            }
+        }
+
+        if (exception == null) {
+            try {
+                downStream = repoFile.download();
+            } catch (Exception ex) {
+                exception = ex;
+                exceptionMsg = "repoFile.download failed: ";
+            }
+        }
+
+        if (exception == null) {
+            urlData = DeployrUtil.getDataFromStream(downStream);
+        }
+
+        // Test cleanup.
+        try {
+            if(file != null) {
+                file.delete();
+            }
+
+            if (repoFile != null) {
+                repoFile.delete();
+            }
+        } catch (Exception ex) {
+            cleanupException = ex;
+            cleanupExceptionMsg = "repoFile.delete failed: ";
+        }
+
+        if (exception == null) {
+            // Test assertions.
+            assertEquals(expRepoFileName, actualRepoFileName);
+            assertEquals(expRepoFileDesc, actualRepoFileDesc);
+            assertNotNull(urlData);
+            assertEquals(expectedLength, urlData.length());
+        } else {
+            fail(exceptionMsg + exception.getMessage());
+        }
+
+        // Test cleanup errors.
+        if (cleanupException != null) {
+            fail(cleanupExceptionMsg + cleanupException.getMessage());
+        }
+    }
+
+    /**
      * Test of writeFile method, of class RUserRepositoryFileCalls.
      */
     @Test
@@ -884,5 +979,20 @@ public class RUserDefaultRepositoryFileCallsTest {
         if (cleanupException != null) {
             fail(cleanupExceptionMsg + cleanupException.getMessage());
         }
+    }
+    
+    private File GetRandomFile(int length) throws IOException {
+        int remainingLength = length;
+
+        File file = File.createTempFile("test", ".tmp");
+        BufferedWriter bw = new BufferedWriter(new FileWriter(file));
+
+        while(remainingLength > 0) {
+            bw.write("A");
+            remainingLength--;
+        }
+
+        bw.close();
+        return file;
     }
 }
