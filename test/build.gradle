@@ -12,9 +12,9 @@ dependencies {
     compile "commons-codec:commons-codec:1.9"
     compile "commons-lang:commons-lang:2.6"
     compile "commons-logging:commons-logging:1.2"
-    compile "org.apache.httpcomponents:httpcore:4.3.2"
-    compile "org.apache.httpcomponents:httpmime:4.3.5"
-    compile "org.apache.httpcomponents:httpclient:4.3.5"
+    compile "org.apache.httpcomponents:httpcore:4.4.4"
+    compile "org.apache.httpcomponents:httpmime:4.5.2"
+    compile "org.apache.httpcomponents:httpclient:4.5.2"
     compile 'com.fasterxml.jackson.core:jackson-databind:2.2.3'
     compile 'com.fasterxml.jackson.core:jackson-core:2.2.3'
     compile 'com.fasterxml.jackson.core:jackson-annotations:2.2.3'
@@ -24,10 +24,11 @@ dependencies {
 
 test {
     systemProperty "connection.protocol", "http://"
-    systemProperty "connection.endpoint", "localhost:8000/deployr"
+    systemProperty "connection.endpoint", "localhost:8050/deployr"
     systemProperty "allow.SelfSignedSSLCert", "false"
+
     systemProperty "password.testuser", "ADD_TESTUSER_PASSWORD"
-    systemProperty "password.admin", "ADD_ADMIN_PASSWORD"    
+    systemProperty "password.admin", "ADD_ADMIN_PASSWORD"     
 }
 
 task wrapper(type: Wrapper) {
