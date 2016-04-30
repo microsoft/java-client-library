@@ -17,10 +17,23 @@ import com.revo.deployr.client.data.RData;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.http.Header;
+
 /**
  * Represents the result of a completed DeployR API call.
  */
 public interface RCoreResult {
+
+    /**
+     * Returns the HTTP Response Headers from the DeployR API call that 
+     * generated this result.
+     * <p/>
+     * <br/><br/>
+     * Available: always.
+     *
+     * @returns response headers.
+     */
+    public Header[] getHeaders();
 
     /**
      * Returns the call result status of the DeployR API call.
@@ -43,14 +56,14 @@ public interface RCoreResult {
     public String getCall();
 
     /**
-     * Returns the HTTP session cookie associated with the DeployR API call.
+     * Returns a unique id for the request.
      * <p/>
      * <br/><br/>
-     * Available: on LoginCall.
+     * Available: always.
      *
      * @returns String
      */
-    public String getCookie();
+    public String getUid();    
 
     /**
      * Returns identity information on currently logged-in user making the DeployR API call.

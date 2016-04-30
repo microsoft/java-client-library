@@ -51,10 +51,9 @@ public abstract class AbstractCall implements RCall, RCoreResponse {
     protected HttpClient httpClient;
     protected String serverUrl;
     protected Future future;
-    protected HttpUriRequest httpUriRequest;
-
-
+    protected HttpUriRequest httpUriRequest;    
     protected Map<String, String> httpParams = new HashMap();
+    protected Map<String, String> httpHeaders = new HashMap();
 
     /**
      * Method, internal use only.
@@ -118,6 +117,12 @@ public abstract class AbstractCall implements RCall, RCoreResponse {
         return future.isDone();
     }
 
+    public void addHeader(String name, String value) {
+        if (value != null) {
+            httpHeaders.put(name, value);
+        }
+    }
+
     /*
      * Protected implementation making HTTP Request.
      */
@@ -164,17 +169,18 @@ public abstract class AbstractCall implements RCall, RCoreResponse {
         RCoreResultImpl pResult = null;
 
         try {
+            // set any custom headers on the request            
+            for (Map.Entry<String, String> entry : httpHeaders.entrySet()) {
+                httpUriRequest.addHeader(entry.getKey(), entry.getValue());
+            }             
 
             HttpResponse response = httpClient.execute(this.httpUriRequest);
             StatusLine statusLine = response.getStatusLine();
 
             HttpEntity responseEntity = response.getEntity();
             String markup = EntityUtils.toString(responseEntity);
-
-            pResult = new RCoreResultImpl();
-
-            pResult.parseMarkup(markup, API, statusLine.getStatusCode(), statusLine.getReasonPhrase());
-
+            pResult = new RCoreResultImpl(response.getAllHeaders());            
+            pResult.parseMarkup(markup, API, statusLine.getStatusCode(), statusLine.getReasonPhrase());           
         } catch (UnsupportedEncodingException ueex) {
             log.warn("AbstractCall: makeRequest unsupported encoding exception=" + ueex);
         } catch (IOException ioex) {
