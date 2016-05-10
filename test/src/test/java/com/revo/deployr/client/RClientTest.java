@@ -134,6 +134,86 @@ public class RClientTest {
     }
 
     /**
+     * Test for `X-XSRF-TOKEN` response header. This token is generated and 
+     * returned  during `/r/user/login`. This test also tests for the proper 
+     * `X-XSRF-TOKEN` request header in an authenticated `/r/user/logout` call.
+     * This is somewhat implied.
+     */
+    @Test
+    public void testRClientLoginRAuthenticationCSRF() {
+
+        // Test variables.
+        String userName = "testuser";
+        RUser rUser = null;
+        RBasicAuthentication pAuthentication = null;
+        RProject rProject = null;
+
+        // Test error handling.
+        Exception exception = null;
+        String exceptionMsg = "";
+        Exception cleanupException = null;
+        String cleanupExceptionMsg = "";
+
+        // Test.
+        pAuthentication = new RBasicAuthentication(userName, System.getProperty("password.testuser"));
+        try {
+            rUser = rClient.login(pAuthentication);
+        } catch (Exception ex) {
+            exception = ex;
+            exceptionMsg = "rClient.login failed: ";
+        }
+
+        if (rUser != null) {
+            try {                
+                rClient.logout(rUser);
+            } catch (Exception ex) {
+                cleanupException = ex;
+                cleanupExceptionMsg = "rClient.logout failed: ";
+            }
+        }
+
+        // Test asserts.
+        if (exception == null) {
+            assertNotNull(rUser.about().csrf);
+        } else {
+            fail(exceptionMsg + exception.getMessage());
+        }
+
+        // Test cleanup errors.
+        if (cleanupException != null) {
+            fail(cleanupExceptionMsg + cleanupException.getMessage());
+        }
+    }
+
+    /**
+     * Test for `X-XSRF-TOKEN` header behavior during authenticated calls. This 
+     * token is generated and returned during `/r/user/login`. The logout API
+     * `/r/user/logout` is an authenticated call hence should be rejected with a 
+     * HTTP 403 error.     
+     */
+    @Test
+    public void testRClientLoginRAuthenticationCSRFFailure() {
+        // Test variables.
+        int errorCode = -1;
+
+        // 
+        // Test: 
+        // - /r/user/lgout (should fail by desing with HTTP 403)
+        //
+        try {
+            rClient.logout(null); // not authenticated
+        } catch (RSecurityException ex) {
+            errorCode = ex.errorCode;
+        } catch (Exception ex) { 
+            /* noop */ 
+            errorCode = -1;
+        }
+
+        // we should fail with a HTTP 403        
+        assertEquals(RSecurityException.AUTHORIZATION, errorCode);
+    }
+
+    /**
      * Test of login method, of class RClient.
      */
     @Test

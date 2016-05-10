@@ -30,7 +30,7 @@ import java.util.Map;
 
 public class REntityUtil {
 
-    public static RUserDetails getUserDetails(Map<String, String> identity, Map<String, Integer> limits) {
+    public static RUserDetails getUserDetails(Map<String, String> identity, Map<String, Integer> limits, String csrf) {
 
         String username = (String) identity.get("username");
         String displayname = (String) identity.get("displayname");
@@ -42,7 +42,7 @@ public class REntityUtil {
         RUserLimitDetails limitDetails =
                 new RUserLimitDetails(maxConcurrent, maxIdle, maxFile);
 
-        RUserDetails userDetails = new RUserDetails(username, displayname, cookie, limitDetails);
+        RUserDetails userDetails = new RUserDetails(username, displayname, cookie, csrf, limitDetails);
 
         return userDetails;
     }

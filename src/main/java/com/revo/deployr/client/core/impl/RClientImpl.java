@@ -106,7 +106,7 @@ public class RClientImpl implements RClient, RClientExecutor {
     private ExecutorService eService;
     private String serverurl;
     private String httpcookie;
-    private String xsrf;
+    private String csrf;
     private SSLSocketFactory sslSocketFactory;
     private RLiveContext liveContext;
 
@@ -236,11 +236,11 @@ public class RClientImpl implements RClient, RClientExecutor {
         //         
         for (Header header : rResult.getHeaders()) {
           if (header.getName().equals(XSRF_HEADER)) {
-            this.xsrf = header.getValue();
+            this.csrf = header.getValue();
           }
         }
 
-        RUserDetails userDetails = REntityUtil.getUserDetails(identity, limits);
+        RUserDetails userDetails = REntityUtil.getUserDetails(identity, limits, csrf);
         
         liveContext = new RLiveContext(this, serverurl, httpcookie);
 
@@ -656,7 +656,7 @@ public class RClientImpl implements RClient, RClientExecutor {
     public RCoreResponse execute(RCall call) {
 
         AbstractCall abstractCall = (AbstractCall) call;
-        abstractCall.addHeader(XSRF_HEADER, xsrf);
+        abstractCall.addHeader(XSRF_HEADER, csrf);
 
         // Provide httpClient and DeployR server url context to RCall.
         abstractCall.setClient(httpClient, serverurl);
