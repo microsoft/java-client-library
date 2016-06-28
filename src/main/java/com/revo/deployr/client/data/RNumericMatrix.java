@@ -22,7 +22,7 @@ public interface RNumericMatrix extends RData {
     /**
      * Gets the List-of-List of Double values for this RData.
      *
-     * @return List<List<Double>> value
+     * @return List&lt;List&lt;Double&gt;&gt; value
      * @see RData
      */
     public List<List<Double>> getValue();

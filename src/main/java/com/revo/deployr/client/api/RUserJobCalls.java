@@ -28,7 +28,7 @@ public interface RUserJobCalls {
     /**
      * List jobs.
      *
-     * @return List<RJob>
+     * @return List&lt;RJob&gt;
      * @throws RClientException   if RClient fails to complete call.
      * @throws RSecurityException if DeployR server security conditions not met on call.
      */
@@ -72,7 +72,7 @@ public interface RUserJobCalls {
      * Submit a single repository-managed script or a chain of
      * repository-managed scripts (found in the root directory)
      * to execute as a job.
-     * <p/>
+     * <p>
      * To submit a chain of repository-managed scripts on this call provide a comma-separated
      * list of values on the scriptName, scriptAuthor and optionally scriptVersion parameters.
      * Chained execution executes each of the scripts identified on the call in a sequential
@@ -96,7 +96,7 @@ public interface RUserJobCalls {
     /**
      * Submit a single repository-managed script or a chain of
      * repository-managed scripts to execute as a job.
-     * <p/>
+     * <p>
      * To submit a chain of repository-managed scripts on this call provide a comma-separated
      * list of values on the scriptName, scriptAuthor and optionally scriptVersion parameters.
      * Chained execution executes each of the scripts identified on the call in a sequential
@@ -121,7 +121,7 @@ public interface RUserJobCalls {
     /**
      * Submit a single repository-managed script or a chain of repository-managed scripts
      * to execute as a job.
-     * <p/>
+     * <p>
      * To submit a chain of repository-managed scripts on this call provide a comma-separated
      * list of values on the scriptName, scriptAuthor and optionally scriptVersion parameters.
      * Chained execution executes each of the scripts identified on the call in a sequential
@@ -142,7 +142,7 @@ public interface RUserJobCalls {
     /**
      * Submit a single repository-managed script or a chain of repository-managed scripts
      * to execute as a job.
-     * <p/>
+     * <p>
      * To submit a chain of repository-managed scripts on this call provide a comma-separated
      * list of values on the scriptName, scriptAuthor and optionally scriptVersion parameters.
      * Chained execution executes each of the scripts identified on the call in a sequential
@@ -164,10 +164,10 @@ public interface RUserJobCalls {
     /**
      * Submit a single script found on a URL/path or a chain of scripts found on a set of URLs/paths
      * on the current project.
-     * <p/>
+     * <p>
      * To submit a chain of repository-managed scripts on this call provide a comma-separated
      * list of values on the externalSource parameter.
-     * <p/>
+     * <p>
      * POWER_USER privileges are required for this call.
      *
      * @return RJob

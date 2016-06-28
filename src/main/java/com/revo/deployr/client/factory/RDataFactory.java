@@ -117,7 +117,7 @@ public class RDataFactory {
     /**
      * Create an RDataTable using the data found within the RData
      * instance  provided on the call to intialize the table data.
-     * <p/>
+     * <p>
      * The following RData concrete types are all accepted on this
      * call:
      * <p><ul>
@@ -129,10 +129,9 @@ public class RDataFactory {
      * <li>RStringVector
      * <li>RBooleanVector
      * <li>RDateVector
-     * <ul>
+     * </ul>
      * <p>
      * All other RData types are rejected with an RDataException.
-     * <p>
      */
     public static RDataTable createDataTable(RData rData)
                                             throws RDataException {
@@ -142,10 +141,10 @@ public class RDataFactory {
     /**
      * Create an RDataTable using the data found in the file 
      * represented by the InputStream parameter.
-     * <p/>
+     * <p>
      * Set a value for the delimiter paramter that matches the
      * data delimiter in the file being ingested.
-     * <p/>
+     * <p>
      * Enable the hasHeader parameter value if the first line in the
      * file holds header values, as distinct to data values.
      */
@@ -158,13 +157,13 @@ public class RDataFactory {
     /**
      * Create an RDataTable using the data found in the file 
      * represented by the InputStream parameter.
-     * <p/>
+     * <p>
      * Set a value for the delimiter paramter that matches the
      * data delimiter in the file being ingested.
-     * <p/>
+     * <p>
      * Enable the hasHeader parameter value if the first line in the
      * file holds header values, as distinct to data values.
-     * <p/>
+     * <p>
      * Enable the nullMissingData parameter value if you want the
      * RDataTable to inject null values into the table data where
      * asymmetrical data is found in the file.

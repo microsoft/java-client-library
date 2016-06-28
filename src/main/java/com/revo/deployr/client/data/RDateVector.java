@@ -23,7 +23,7 @@ public interface RDateVector extends RData {
     /**
      * Gets the List of Date values for this RData.
      *
-     * @return List<Date> value
+     * @return List&lt;Date&gt; value
      * @see RData
      */
     public List<Date> getValue();

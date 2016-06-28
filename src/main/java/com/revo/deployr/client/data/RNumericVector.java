@@ -22,7 +22,7 @@ public interface RNumericVector extends RData {
     /**
      * Gets the List of Double values for this RData.
      *
-     * @return List<Double> value
+     * @return List&lt;Double&gt; value
      * @see RData
      */
     public List<Double> getValue();

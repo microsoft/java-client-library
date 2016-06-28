@@ -28,7 +28,7 @@ public class RClientFactory {
 
     /**
      * Create connection at the specified DeployR URL.
-     * <p/>
+     * <p>
      * Concurrent call limit defaults to 200.
      *
      * @param deployrUrl url address of DeployR Server
@@ -42,7 +42,7 @@ public class RClientFactory {
 
     /**
      * Create connection at the specified DeployR URL.
-     * <p/>
+     * <p>
      * Concurrent call limit defaults to 200.
      *
      * @param deployrUrl          url address of DeployR Server

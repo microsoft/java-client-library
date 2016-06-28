@@ -135,7 +135,7 @@ public interface RUserRepositoryDirectoryCalls {
     /**
      * Copies one or more repository-managed files from a source
      * user directory to a destination user directory.
-     * <p/>
+     * <p>
      * If the files parameter is null, all files in the source
      * directory will be copied to the destination directory.
      *
@@ -150,7 +150,7 @@ public interface RUserRepositoryDirectoryCalls {
     /**
      * Moves one or more repository-managed files from a source
      * user directory to a destination user directory.
-     * <p/>
+     * <p>
      * If the files parameter is null, all files in the source
      * directory will be moved to the destination directory.
      *
@@ -166,7 +166,7 @@ public interface RUserRepositoryDirectoryCalls {
      * Uploads a set of files in a single zip archive into an existing
      * repository-managed user directory. The files are extracted from
      * the zip archive and placed file-by-file into the directory.
-     * <p/>
+     * <p>
      * The options.filename property is ignored on this call and
      * can be left blank.
      *

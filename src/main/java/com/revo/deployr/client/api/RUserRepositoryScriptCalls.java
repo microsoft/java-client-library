@@ -26,7 +26,7 @@ public interface RUserRepositoryScriptCalls {
     /**
      * List scripts in user' default repository.
      *
-     * @return List<RRepositoryFile>
+     * @return List&lt;RRepositoryFile&gt;
      * @throws RClientException   if RClient fails to complete call.
      * @throws RSecurityException if DeployR server security conditions not met on call.
      */
@@ -64,7 +64,7 @@ public interface RUserRepositoryScriptCalls {
     /**
      * List scripts in user' external repository.
      *
-     * @return List<RRepositoryFile>
+     * @return List&lt;RRepositoryFile&gt;
      * @throws RClientException   if RClient fails to complete call.
      * @throws RSecurityException if DeployR server security conditions not met on call.
      */

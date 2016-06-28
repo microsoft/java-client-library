@@ -28,7 +28,7 @@ dependencies {
 
 jar {
     baseName = 'client-tutorial'
-    version = '8.0.1'
+    version = '8.0.5'
 }
 
 task execute(type: JavaExec) {
