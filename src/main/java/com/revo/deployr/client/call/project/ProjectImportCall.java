@@ -36,6 +36,7 @@ import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.Callable;
 
 /**
@@ -83,12 +84,17 @@ public class ProjectImportCall extends AbstractCall
 
             httpPost.setEntity(entity);
 
+            // set any custom headers on the request            
+            for (Map.Entry<String, String> entry : httpHeaders.entrySet()) {
+                httpPost.addHeader(entry.getKey(), entry.getValue());
+            }             
+
             HttpResponse response = httpClient.execute(httpPost);
             StatusLine statusLine = response.getStatusLine();
             HttpEntity responseEntity = response.getEntity();
             String markup = EntityUtils.toString(responseEntity);
-
-            pResult = new RCoreResultImpl();
+            
+            pResult = new RCoreResultImpl(response.getAllHeaders());            
             pResult.parseMarkup(markup, API, statusLine.getStatusCode(), statusLine.getReasonPhrase());
 
         } catch (UnsupportedEncodingException ueex) {

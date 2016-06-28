@@ -23,8 +23,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-
-// import org.codehaus.jackson.map.ObjectMapper;
+import org.apache.http.Header;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.apache.commons.logging.Log; 
@@ -34,9 +33,10 @@ public class RCoreResultImpl implements RCoreResult {
 
     private Log log = LogFactory.getLog(RCoreResult.class);
 
+    private Header[] headers;
     private boolean success; 
     private String call;
-    private String httpcookie;
+    private String uid;    
     private Map<String, String> identity;
     private Map<String, Integer> limits;
     private Map project;
@@ -46,7 +46,6 @@ public class RCoreResultImpl implements RCoreResult {
     private List<Map> repoScripts;
     private Map repoDirectory;
     private List<Map> repoDirectories;
-    private List<String> repoShellConsoleOutput;
     private Map job;
     private List<Map> jobs;
 
@@ -68,6 +67,14 @@ public class RCoreResultImpl implements RCoreResult {
     private String error;
     private int errorCode;
 
+    public RCoreResultImpl(Header[] headers) {
+        this.headers = headers;
+    }
+
+    public Header[] getHeaders() {
+        return headers;
+    }
+
     public boolean isSuccess() {
 	return success;
     } 
@@ -76,9 +83,9 @@ public class RCoreResultImpl implements RCoreResult {
 	return call;
     }
 
-    public String getCookie() {
-	return httpcookie;
-    }
+    public String getUid() {
+    return uid;
+    }    
 
     public Map<String, String> getIdentity() {
 	return identity;
@@ -115,10 +122,6 @@ public class RCoreResultImpl implements RCoreResult {
 
     public List<Map> getRepoScripts() {
 	return repoScripts;
-    }
-
-    public List<String> getRepoShellConsoleOutput() {
-        return repoShellConsoleOutput;
     }
 
     public Map getJob() {
@@ -219,17 +222,17 @@ public class RCoreResultImpl implements RCoreResult {
                 Map responseMap = (Map) deployrMap.get("response");
                 log.debug("RCoreResult: responseMap=" + responseMap);
 
-                // Properties: success, call, httpcookie, session, error, hisotry.
+                // Properties: success, call, uid, session, error, hisotry.
                 success = (Boolean) responseMap.get("success");
                 call = (String) responseMap.get("call");
-                httpcookie = (String) responseMap.get("httpcookie");
-                error = (String) responseMap.get("error");
+                uid = (String) responseMap.get("uid");
+                error = (String) responseMap.get("error");                
             if(responseMap.get("errorCode") != null) {
                     errorCode = (Integer) responseMap.get("errorCode");
             }
 
                 log.debug("RCoreResult: success=" + success + " call=" + call);
-                log.debug("RCoreResult: httpcookie=" + httpcookie);
+                log.debug("RCoreResult: uid=" + uid);
                 log.debug("RCoreResult: error=" + error + " errorCode=" + errorCode);
 
                 // Property: User Identity.
@@ -341,11 +344,6 @@ public class RCoreResultImpl implements RCoreResult {
                             repoDirectories.addAll(systemDirectories);
                     }
                     log.debug("RCoreResult: repoDirectories=" + repoDirectories);
-
-                    Map shellMap = (Map) repository.get("shell");
-                    if(shellMap != null) {
-                        repoShellConsoleOutput = (List<String>) shellMap.get("console");
-                    }
             }
 
             // Property: Job.

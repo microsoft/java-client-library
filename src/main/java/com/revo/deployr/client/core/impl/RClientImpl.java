@@ -23,7 +23,6 @@ import com.revo.deployr.client.call.user.AboutCall;
 import com.revo.deployr.client.call.user.AutosaveCall;
 import com.revo.deployr.client.call.project.ProjectCreateCall;
 import com.revo.deployr.client.call.repository.RepositoryScriptExecuteCall;
-import com.revo.deployr.client.call.repository.RepositoryShellExecuteCall;
 import com.revo.deployr.client.call.repository.RepositoryScriptInterruptCall;
 import com.revo.deployr.client.RClientException;
 import com.revo.deployr.client.RDataException;
@@ -52,8 +51,10 @@ import com.revo.deployr.client.about.RProjectExecutionDetails;
 
 import com.revo.deployr.client.util.REntityUtil;
 
+import org.apache.http.Header;
 import org.apache.http.HttpVersion;
 import org.apache.http.client.HttpClient;
+import org.apache.http.client.CookieStore;
 import org.apache.http.params.HttpParams;
 import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpConnectionParams;
@@ -70,6 +71,7 @@ import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager;
 import org.apache.http.client.params.CookiePolicy;
 import org.apache.http.client.params.ClientPNames;
 import org.apache.http.client.utils.URIBuilder;
+import org.apache.http.cookie.Cookie;
 import javax.net.ssl.SSLContext;
 import org.apache.http.conn.ssl.*;
 import org.apache.http.config.*;
@@ -97,11 +99,13 @@ import org.apache.commons.logging.LogFactory;
 public class RClientImpl implements RClient, RClientExecutor {
 
     private Log log = LogFactory.getLog(RClientImpl.class);
+    private final static String XSRF_HEADER = "X-XSRF-TOKEN";
 
-    private HttpClient httpClient;
+    private DefaultHttpClient httpClient;
     private ExecutorService eService;
     private String serverurl;
     private String httpcookie;
+    private String csrf;
     private SSLSocketFactory sslSocketFactory;
     private RLiveContext liveContext;
 
@@ -217,11 +221,28 @@ public class RClientImpl implements RClient, RClientExecutor {
         Map<String, String> identity = rResult.getIdentity();
         Map<String, Integer> limits = rResult.getLimits();
 
-        this.httpcookie = rResult.getCookie();
+        //
+        // Store cookie from response header, we no longer return this value in
+        // the DeployR response markup as of `8.0.5`
+        //
+        CookieStore cookieStore = httpClient.getCookieStore();
+        Cookie cookie = cookieStore.getCookies().get(0);
+        this.httpcookie = (cookie != null ? cookie.getValue() : null);
 
-        RUserDetails userDetails = REntityUtil.getUserDetails(identity, limits);
+        //
+        // - Store `X-XSRF-TOKEN` from `/r/uer/login` for future authenticated 
+        //   requests
+        //         
+        for (Header header : rResult.getHeaders()) {
+          if (header.getName().equals(XSRF_HEADER)) {
+            this.csrf = header.getValue();
+          }
+        }
 
+        RUserDetails userDetails = REntityUtil.getUserDetails(identity, limits, csrf);
+        
         liveContext = new RLiveContext(this, serverurl, httpcookie);
+
         return new RUserImpl(userDetails, liveContext);
     }
 
@@ -440,35 +461,6 @@ public class RClientImpl implements RClient, RClientExecutor {
         return renderURL;
     }
 
-    public List<String> executeShell(String shellName,
-                                     String shellDirectory,
-                                     String shellAuthor,
-                                     String shellVersion,
-                                     String shellArgs)
-            throws RClientException,
-            RSecurityException,
-            RDataException {
-
-        RCall rCall = new RepositoryShellExecuteCall(shellName,
-                                                     shellDirectory,
-                                                     shellAuthor,
-                                                     shellVersion,
-                                                     shellArgs);
-        RCoreResult rResult = processCall(rCall);
-
-        List<String> repoShellConsoleOutput =
-            rResult.getRepoShellConsoleOutput();
-
-        String error = rResult.getError();
-        int errorCode = rResult.getErrorCode();
-        boolean success = rResult.isSuccess();
-
-        log.debug("executeShell: success=" + success +
-                " error=" + error + " errorCode=" + errorCode);
-
-        return repoShellConsoleOutput;
-    }
-
     public void interruptScript() throws RClientException, RSecurityException {
 
         RCall rCall = new RepositoryScriptInterruptCall();
@@ -634,6 +626,8 @@ public class RClientImpl implements RClient, RClientExecutor {
     public RCoreResponse execute(RCall call) {
 
         AbstractCall abstractCall = (AbstractCall) call;
+        abstractCall.addHeader(XSRF_HEADER, csrf);
+
         // Provide httpClient and DeployR server url context to RCall.
         abstractCall.setClient(httpClient, serverurl);
         Callable callable = (Callable) call;

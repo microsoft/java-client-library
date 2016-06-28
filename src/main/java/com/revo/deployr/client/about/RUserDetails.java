@@ -18,11 +18,16 @@ package com.revo.deployr.client.about;
 
 public class RUserDetails {
 
-    public RUserDetails(String username, String displayname, String cookie, RUserLimitDetails limits) {
+    public RUserDetails(String username, 
+        String displayname, 
+        String cookie, 
+        String csrf, 
+        RUserLimitDetails limits) {
 
         this.username = username;
         this.displayname = displayname;
         this.cookie = cookie;
+        this.csrf = csrf;
         this.limits = limits;
     }
 
@@ -45,4 +50,9 @@ public class RUserDetails {
      * About limits for currently authenticated user.
      */
     public final RUserLimitDetails limits;
+
+    /**
+     * The `X_CSRF_TOKEN` value.
+     */
+    public final String csrf;
 }

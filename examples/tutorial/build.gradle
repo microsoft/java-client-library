@@ -4,7 +4,7 @@ apply plugin: 'application'
 sourceCompatibility = "1.6"
 targetCompatibility = "1.6"
 
-applicationDefaultJvmArgs = ["-Dendpoint=http://localhost:8000/deployr",
+applicationDefaultJvmArgs = ["-Dendpoint=http://localhost:8050/deployr",
                              "-Dusername=testuser",
                              "-Dpassword=ADD_TESTUSER_PASSWORD"]
 
@@ -17,9 +17,9 @@ dependencies {
     compile "commons-codec:commons-codec:1.9"
     compile "commons-lang:commons-lang:2.6"
     compile "commons-logging:commons-logging:1.2"
-    compile "org.apache.httpcomponents:httpcore:4.3.2"
-    compile "org.apache.httpcomponents:httpmime:4.3.5"
-    compile "org.apache.httpcomponents:httpclient:4.3.5"
+    compile "org.apache.httpcomponents:httpcore:4.4.4"
+    compile "org.apache.httpcomponents:httpmime:4.5.2"
+    compile "org.apache.httpcomponents:httpclient:4.5.2"
     compile 'com.fasterxml.jackson.core:jackson-databind:2.2.3'
     compile 'com.fasterxml.jackson.core:jackson-core:2.2.3'
     compile 'com.fasterxml.jackson.core:jackson-annotations:2.2.3'
@@ -28,7 +28,7 @@ dependencies {
 
 jar {
     baseName = 'client-tutorial'
-    version = '8.0.0'
+    version = '8.0.5'
 }
 
 task execute(type: JavaExec) {

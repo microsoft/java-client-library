@@ -30,7 +30,7 @@ public class RRepositoryFileDetails {
                                   String restricted, boolean shared, boolean published,
                                   List<String> authors, String inputs, String outputs,
                                   String tags, RRepositoryFile.Category category,
-                                  String md5, Date lastModified) {
+                                  String sha256, Date lastModified) {
         this.filename = filename;
         this.directory = directory;
         this.author = author;
@@ -48,7 +48,8 @@ public class RRepositoryFileDetails {
         this.outputs = outputs;
         this.tags = tags;
         this.category = category;
-        this.md5 = md5;
+        this.sha256 = sha256;
+        this.md5 = this.sha256; // @deprecated - as of 8.0.5 server, use sha256
         this.lastModified = lastModified;
         this.url = url;
     }
@@ -143,7 +144,13 @@ public class RRepositoryFileDetails {
     public final RRepositoryFile.Category category;
 
     /**
+     * Repository file 256 checksum.
+     */
+    public final String sha256;
+
+    /**
      * Repository file md5 checksum.
+     * @deprecated  As of release 8.0.5 server, replaced by {@link #sha256}
      */
     public final String md5;
 
@@ -156,6 +163,4 @@ public class RRepositoryFileDetails {
      * Repository file url.
      */
     public final URL url;
-
-
 }

@@ -30,7 +30,7 @@ import java.util.Map;
 
 public class REntityUtil {
 
-    public static RUserDetails getUserDetails(Map<String, String> identity, Map<String, Integer> limits) {
+    public static RUserDetails getUserDetails(Map<String, String> identity, Map<String, Integer> limits, String csrf) {
 
         String username = (String) identity.get("username");
         String displayname = (String) identity.get("displayname");
@@ -42,7 +42,7 @@ public class REntityUtil {
         RUserLimitDetails limitDetails =
                 new RUserLimitDetails(maxConcurrent, maxIdle, maxFile);
 
-        RUserDetails userDetails = new RUserDetails(username, displayname, cookie, limitDetails);
+        RUserDetails userDetails = new RUserDetails(username, displayname, cookie, csrf, limitDetails);
 
         return userDetails;
     }
@@ -94,7 +94,7 @@ public class REntityUtil {
         if(categoryName != null) {
             category = RRepositoryFile.Category.fromString(categoryName);
         }
-        String md5 = (String) repoFile.get("md5");
+        String sha256 = (String) repoFile.get("sha256");
         Long lastModified = (Long) repoFile.get("lastModified");
         Date lastModifiedDate = null;
         try {
@@ -134,7 +134,7 @@ public class REntityUtil {
                 new RRepositoryFileDetails(filename, directory, author, version, latestby,
                         descr, type, size, url, access,
                         restricted, shared, published, authors, inputs, outputs,
-                        tags, category, md5, lastModifiedDate);
+                        tags, category, sha256, lastModifiedDate);
 
         return fileDetails;
     }
