@@ -28,8 +28,9 @@ public class RClientFactory {
 
     /**
      * Create connection at the specified DeployR URL.
-     * <p/>
+     * <p>
      * Concurrent call limit defaults to 200.
+     * </p>
      *
      * @param deployrUrl url address of DeployR Server
      * @return {@link com.revo.deployr.client.RClient}
@@ -42,8 +43,9 @@ public class RClientFactory {
 
     /**
      * Create connection at the specified DeployR URL.
-     * <p/>
+     * <p>
      * Concurrent call limit defaults to 200.
+     * </p>
      *
      * @param deployrUrl          url address of DeployR Server
      * @param concurrentCallLimit beyond which DeployR API calls are queued for execution

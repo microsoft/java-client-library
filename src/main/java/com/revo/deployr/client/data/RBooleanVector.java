@@ -22,7 +22,7 @@ public interface RBooleanVector extends RData {
     /**
      * Gets the List of Boolean values for this RData.
      *
-     * @return List<Boolean> value
+     * @return List&lt;Boolean&lt; value
      * @see RData
      */
     public List<Boolean> getValue();

@@ -64,7 +64,7 @@ public interface RUserProjectCalls {
     /**
      * Create a pool of temporary projects.
      *
-     * @return List<RProject>
+     * @return List&lt;RProject&gt;
      * @throws RClientException   if RClient fails to complete call.
      * @throws RSecurityException if DeployR server security conditions not met on call.
      */

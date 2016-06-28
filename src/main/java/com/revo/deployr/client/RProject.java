@@ -113,10 +113,10 @@ public interface RProject extends
 
     /**
      * Recycle R session on project.
-     * <p/>
+     * <p>
      * Recycles the R session associated with the project by deleting all
      * R objects from the workspace and all files from the working directory.
-     * <p/>
+     * <p>
      * Recommended for temporary and blackbox projects. Recycle persistent projects
      * with caution as this operation can not be reversed.
      *
@@ -130,16 +130,16 @@ public interface RProject extends
 
     /**
      * Recycle R session on project.
-     * <p/>
+     * <p>
      * Recycles the R session associated with the project by deleting all
      * R objects from the workspace and all files from the working directory.
-     * <p/>
+     * <p>
      * Workspace objects and/or directory files can be preserved on a recycle
      * by enabling the respective parameter.
-     * <p/>
+     * <p>
      * Recycling a project is a convenient and efficient alternative to
      * starting over by closing an existing project and then creating a new project.
-     * <p/>
+     * <p>
      * Recommended for temporary and blackbox projects. Recycle persistent projects
      * with caution as this operation can not be reversed.
      *

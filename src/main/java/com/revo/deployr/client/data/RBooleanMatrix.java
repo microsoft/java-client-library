@@ -22,7 +22,7 @@ public interface RBooleanMatrix extends RData {
     /**
      * Gets the List-of-List of Boolean values for this RData.
      *
-     * @return List<List<Boolean>> value
+     * @return List&lt;List&lt;Boolean&gt;&gt; value
      * @see RData
      */
     public List<List<Boolean>> getValue();

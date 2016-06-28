@@ -94,9 +94,10 @@ public class RJobDetails {
     /**
      * Code execution time (millis) for job. Measures the time taken to
      * execute the R code for the job.
-     * <p/>
+     * <p>
      * Can be used in conjunction with timeStart and timeTotal to profile
      * job runtime characteristics.
+     * </p>
      */
     public final long timeCode;
 
@@ -104,9 +105,10 @@ public class RJobDetails {
      * Total time (millis) for job. Measures the time taken to prepare
      * R workspace and directory for job, execute code for the job and then
      * persist job artifacts as a persistent project.
-     * <p/>
+     * <p>
      * Can be used in conjunction with timeStart and timeCode to profile
      * job runtime characteristics.
+     * </p>
      */
     public final long timeTotal;
 

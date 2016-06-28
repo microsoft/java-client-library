@@ -38,7 +38,7 @@ public interface RRepositoryDirectory {
 
     /**
      * Update access-controls on files found in repository-managed user directory.
-     * <p/>
+     * <p>
      * If the files parameter is null, all files in the directory are updated.
      *
      * @throws RClientException   if RClient fails to complete call.
@@ -79,7 +79,7 @@ public interface RRepositoryDirectory {
 
     /**
      * Download zip archive of files found in repository-managed user directory.
-     * <p/>
+     * <p>
      * If the files parameter is null, all files in the directory are downloaded.
      *
      * @throws RClientException   if RClient fails to complete call.
