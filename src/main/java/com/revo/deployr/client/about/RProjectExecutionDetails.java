@@ -62,9 +62,10 @@ public class RProjectExecutionDetails {
     /**
      * Code execution time (millis) for execution. Measures the time taken to
      * execute the R code for execution.
-     * <p/>
+     * <p>
      * Can be used in conjunction with timeStart and timeTotal to profile
      * execution runtime characteristics.
+     * </p>
      */
     public final long timeCode;
 
@@ -72,9 +73,10 @@ public class RProjectExecutionDetails {
      * Total time (millis) for execution. Measures the time taken to prepare
      * R workspace and directory for execution, execute R code and then
      * persist execution artifacts to on project.
-     * <p/>
+     * <p>
      * Can be used in conjunction with timeStart and timeCode to profile
      * execution runtime characteristics.
+     * </p>
      */
     public final long timeTotal;
 

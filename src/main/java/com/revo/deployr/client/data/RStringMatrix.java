@@ -22,7 +22,7 @@ public interface RStringMatrix extends RData {
     /**
      * Gets the List-of-List of String values for this RData.
      *
-     * @return List<List<String>> value
+     * @return List&lt;List&lt;String&gt;&gt; value
      * @see RData
      */
     public List<List<String>> getValue();

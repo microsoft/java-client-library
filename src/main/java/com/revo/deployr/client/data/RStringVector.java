@@ -22,7 +22,7 @@ public interface RStringVector extends RData {
     /**
      * Gets the List of String values for this RData.
      *
-     * @return List<String> value
+     * @return List&lt;String&gt; value
      * @see RData
      */
     public List<String> getValue();

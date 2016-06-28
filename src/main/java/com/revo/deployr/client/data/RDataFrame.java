@@ -22,7 +22,7 @@ public interface RDataFrame extends RData {
     /**
      * Gets the List-of-RData value for this RData.
      *
-     * @return List<RData> value
+     * @return List&lt;RData&gt; value
      * @see RData
      */
     public List<RData> getValue();

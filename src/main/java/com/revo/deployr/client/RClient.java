@@ -60,7 +60,7 @@ public interface RClient {
     /**
      * Execute a single repository-managed script or a chain of
      * repository-managed scripts on an anonymous project.
-     * <p/>
+     * <p>
      * To execute a chain of repository-managed scripts on this call provide a comma-separated
      * list of values on the scriptName, scriptAuthor and optionally scriptVersion parameters.
      * Chained execution executes each of the scripts identified on the call in a sequential
@@ -86,7 +86,7 @@ public interface RClient {
     /**
      * Execute a single repository-managed script or a chain of
      * repository-managed scripts on an anonymous project.
-     * <p/>
+     * <p>
      * To execute a chain of repository-managed scripts on this call provide a comma-separated
      * list of values on the scriptName, scriptAuthor and optionally scriptVersion parameters.
      * Chained execution executes each of the scripts identified on the call in a sequential
@@ -112,7 +112,7 @@ public interface RClient {
     /**
      * Execute a single repository-managed script or a chain of repository-managed scripts
      * on an anonymous project.
-     * <p/>
+     * <p>
      * To execute a chain of repository-managed scripts on this call provide a comma-separated
      * list of values on the scriptName, scriptAuthor and optionally scriptVersion parameters.
      * Chained execution executes each of the scripts identified on the call in a sequential
@@ -134,7 +134,7 @@ public interface RClient {
     /**
      * Execute a single repository-managed script or a chain of repository-managed scripts
      * on an anonymous project.
-     * <p/>
+     * <p>
      * To execute a chain of repository-managed scripts on this call provide a comma-separated
      * list of values on the scriptName, scriptAuthor and optionally scriptVersion parameters.
      * Chained execution executes each of the scripts identified on the call in a sequential
@@ -157,12 +157,12 @@ public interface RClient {
     /**
      * Execute a single script found on a URL/path or a chain of scripts found on a set of URLs/paths
      * on an anonymous project.
-     * <p/>
+     * <p>
      * To execute a chain of repository-managed scripts on this call provide a comma-separated
      * list of values on the externalSource parameter.
      * Chained execution executes each of the scripts identified on the call in a sequential
      * fashion on the R session, with execution occuring in the order specified on the parameter list.
-     * <p/>
+     * <p>
      * POWER_USER privileges are required for this call.
      *
      * @throws RClientException   if RClient fails to complete call.
@@ -179,14 +179,14 @@ public interface RClient {
     /**
      * Execute a single repository-managed script or a chain of repository-managed scripts
      * on an anonymous project and render the outputs to a HTML page.
-     * <p/>
+     * <p>
      * To execute a chain of repository-managed scripts on this call provide a comma-separated
      * list of values on the scriptName, scriptAuthor and optionally scriptVersion parameters.
      * Chained execution executes each of the scripts identified on the call in a sequential
      * fashion on the R session, with execution occuring in the order specified on the parameter list.
      *
      * @throws RClientException   if RClient fails to complete call.
-     * @throws RSecurityException if DeployR server security conditions not met on call.
+     * @throws RDataException if DeployR server security conditions not met on call.
      * @see RScriptExecution
      */
     public URL renderScript(String scriptName,
@@ -205,7 +205,7 @@ public interface RClient {
      * can be executed on this call. All attempts to execute shell scripts
      * not created by an ADMIN user will be rejected. Access to shell
      * scripts is also governed by standard repository access controls.
-     * <p/>
+     * <p>
      * @throws RClientException   if RClient fails to complete call.
      * @throws RSecurityException if DeployR server security conditions not met on call.
      */
