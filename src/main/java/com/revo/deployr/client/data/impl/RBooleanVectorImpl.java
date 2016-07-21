@@ -19,7 +19,7 @@ import java.util.List;
 public class RBooleanVectorImpl implements RBooleanVector {
 
     private String name;
-    private List value;
+    private List<Boolean> value;
     private String type = "vector";
     private String rclass = "logical";
 

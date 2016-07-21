@@ -23,5 +23,5 @@ public interface RNumeric extends RData {
      * @return double value
      * @see RData
      */
-    public double getValue();
+    public Double getValue();
 }

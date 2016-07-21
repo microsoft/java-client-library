@@ -17,11 +17,11 @@ import com.revo.deployr.client.data.RNumeric;
 public class RNumericImpl implements RNumeric {
 
     private String name;
-    private double value;
+    private Double value;
     private String type = "primitive";
     private String rclass = "numeric";
 
-    public RNumericImpl(String name, double value) {
+    public RNumericImpl(String name, Double value) {
         this.name = name;
         this.value = value;
     }
@@ -38,7 +38,7 @@ public class RNumericImpl implements RNumeric {
         return rclass;
     }
 
-    public double getValue() {
+    public Double getValue() {
         return value;
     }
 }

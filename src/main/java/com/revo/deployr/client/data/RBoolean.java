@@ -23,5 +23,5 @@ public interface RBoolean extends RData {
      * @return boolean value
      * @see RData
      */
-    public boolean getValue();
+    public Boolean getValue();
 }
