@@ -20,7 +20,7 @@ import java.util.List;
 public class RDateVectorImpl implements RDateVector {
 
     private String name;
-    private List value;
+    private List<Date> value;
     private String type = "vector";
     private String rclass = "Date";
     private String format = "yyyy-MM-dd";

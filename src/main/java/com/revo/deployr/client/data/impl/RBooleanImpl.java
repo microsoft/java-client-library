@@ -17,11 +17,11 @@ import com.revo.deployr.client.data.RBoolean;
 public class RBooleanImpl implements RBoolean {
 
     private String name;
-    private boolean value;
+    private Boolean value;
     private String type = "primitive";
     private String rclass = "logical";
 
-    public RBooleanImpl(String name, boolean value) {
+    public RBooleanImpl(String name, Boolean value) {
         this.name = name;
         this.value = value;
     }
@@ -38,7 +38,7 @@ public class RBooleanImpl implements RBoolean {
         return rclass;
     }
 
-    public boolean getValue() {
+    public Boolean getValue() {
         return value;
     }
 }

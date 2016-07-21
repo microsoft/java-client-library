@@ -174,25 +174,35 @@ public class RDataUtil {
         String rclass = (String) json.get("rclass");
 
         log.debug("buildPrimitiveFromJSON: name=" + name + " type=" + type + " rclass=" + rclass + " json=" + json);
-
+    
         if (json.containsKey("value")) {
 
             Object value = json.get("value");
 
             log.debug("buildPrimitiveFromJSON: name=" + name + " has value=" + value);
 
-            if (value instanceof Integer) {
-                rData = new RNumericImpl(name, ((Integer) value).doubleValue());
-            } else if (value instanceof Double) {
-                rData = new RNumericImpl(name, (Double) value);
-            } else if (value instanceof String) {
-                rData = new RStringImpl(name, (String) value);
-            } else if (value instanceof Boolean) {
-                rData = new RBooleanImpl(name, (Boolean) value);
-            } else {
-                // Indeterminate type, skip here to treat as RDataNA.
+            if("character".equalsIgnoreCase(rclass)){
+            	rData = new RStringImpl(name,  value == null ? null : (String) value);            	
+            }else if("numeric".equalsIgnoreCase(rclass)){
+            	rData = new RNumericImpl(name, value == null ? null : (Double) value);
+            }else if("logical".equalsIgnoreCase(rclass)){
+            	rData = new RBooleanImpl(name, value == null ? null :(Boolean) value);
             }
 
+            if(rData == null){
+
+            	if (value instanceof Integer) {
+            		rData = new RNumericImpl(name, ((Integer) value).doubleValue());
+            	} else if (value instanceof Double) {
+            		rData = new RNumericImpl(name, (Double) value);
+            	} else if (value instanceof String) {
+            		rData = new RStringImpl(name, (String) value);
+            	} else if (value instanceof Boolean) {
+            		rData = new RBooleanImpl(name, (Boolean) value);
+            	} else {
+            		// Indeterminate type, skip here to treat as RDataNA.
+            	}
+            }
         } else {
 
             rData = new RDataImpl(name, type, rclass);
@@ -216,7 +226,7 @@ public class RDataUtil {
         String format = (String) json.get("format");
 
         log.debug("buildVectorFromJSON: name=" + name + " type=" + type + " rclass=" + rclass + " format=" + format + " json=" + json);
-
+        
         if (format != null) {
 
             if (json.containsKey("value")) {
@@ -242,6 +252,8 @@ public class RDataUtil {
                             ex.printStackTrace();
                             dates.add(null);
                         }
+                    }else{
+                    	dates.add(null);
                     }
                 }
 
@@ -254,28 +266,39 @@ public class RDataUtil {
 
             log.debug("buildVectorFromJSON: name=" + name + " has value=" + value);
 
-            Iterator iter = value.iterator();
-
-            // Loop to determine the "type" of context in the JSON vector.
-            while (iter.hasNext()) {
-
-                Object found = iter.next();
-
-                if (found instanceof Integer) {
-                    rData = new RNumericVectorImpl(name, value);
-                } else if (found instanceof Double) {
-                    rData = new RNumericVectorImpl(name, value);
-                } else if (found instanceof String) {
-                    rData = new RStringVectorImpl(name, value);
-                } else if (found instanceof Boolean) {
-                    rData = new RBooleanVectorImpl(name, value);
-                } else {
-                    // Indeterminate type, skip here allowing other value in vector to determine type.
-                }
-
-                if (rData != null)
-                    break;
+            if("character".equalsIgnoreCase(rclass)){
+            	rData = new RStringVectorImpl(name, value);
+            }else if("numeric".equalsIgnoreCase(rclass)){
+            	rData = new RNumericVectorImpl(name, value);
+            }else if("logical".equalsIgnoreCase(rclass)){
+            	rData = new RBooleanVectorImpl(name, value);
             }
+            
+            if(rData == null){
+            	Iterator iter = value.iterator();
+
+            	// Loop to determine the "type" of context in the JSON vector.
+            	while (iter.hasNext()) {
+
+            		Object found = iter.next();
+
+            		if (found instanceof Integer) {
+            			rData = new RNumericVectorImpl(name, value);
+            		} else if (found instanceof Double) {
+            			rData = new RNumericVectorImpl(name, value);
+            		} else if (found instanceof String) {
+            			rData = new RStringVectorImpl(name, value);
+            		} else if (found instanceof Boolean) {
+            			rData = new RBooleanVectorImpl(name, value);
+            		} else {
+            			// Indeterminate type, skip here allowing other value in vector to determine type.
+            		}
+
+            		if (rData != null)
+            			break;
+            	}
+            }
+            
 
         } else {
 
@@ -459,15 +482,20 @@ public class RDataUtil {
             String value = (String) json.get("value");
             String format = (String) json.get("format");
 
-            SimpleDateFormat sdf = new SimpleDateFormat(format);
+            if(value != null){
+            	SimpleDateFormat sdf = new SimpleDateFormat(format);
 
-            try {
-                Date date = sdf.parse(value);
-                rData = new RDateImpl(name, date, format, rclass);
-            } catch (ParseException pex) {
-                rData = new RDataImpl(name, type, rclass);
-                log.warn("buildDateFromJSON: bad date results in NA, RDataImpl=" + rData);
+            	try {
+            		Date date = sdf.parse(value);
+            		rData = new RDateImpl(name, date, format, rclass);
+            	} catch (ParseException pex) {
+            		rData = new RDataImpl(name, type, rclass);
+            		log.warn("buildDateFromJSON: bad date results in NA, RDataImpl=" + rData);
+            	}
+            }else{
+            	rData = new RDateImpl(name, null, format, rclass);
             }
+            
 
         } else {
 
