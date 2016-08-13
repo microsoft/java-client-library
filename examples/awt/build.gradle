@@ -30,7 +30,7 @@ dependencies {
 
 jar {
     baseName = 'deployr-example'
-    version = '8.0.0'
+    version = '8.0.6'
 }
 
 task wrapper(type: Wrapper) {
