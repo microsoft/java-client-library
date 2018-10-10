@@ -84,7 +84,7 @@ Examples
 ========
 
 The DeployR Java client library ships with a number of sample applications
-provided to demonstrate some of the key featues introduced by the
+provided to demonstrate some of the key features introduced by the
 [Quick Start Tutorial](http://deployr.revolutionanalytics.com/documents/dev/clientlib)
 for the Java client library. See
 [here](examples/tutorial) for details.
