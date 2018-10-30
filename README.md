@@ -3,7 +3,7 @@ Java Client Library for DeployR
 
 The [DeployR API](https://github.com/deployr/server) exposes a wide range of
 R analytics services to client application developers. These services are
-exposed using standards based JSON/XML and are delivered by the DeployR 
+exposed using standards-based JSON/XML and are delivered by the DeployR 
 server as Web services over HTTP(S).
 
 The DeployR Java client library is provided to simplify the integration of
@@ -28,7 +28,7 @@ Declarative JAR Dependencies: Maven Central Repository Artifacts
 ----------------------------------------------------------------
 
 Artifacts for each official release (since 7.3.0) of the DeployR Java client
-library are published to the Maven Central repository.
+library is published to the Maven Central repository.
 
 [ArtifactId](http://search.maven.org/#search|ga|1|a%3A%22jDeployR%22): `jDeployR`
 
@@ -72,7 +72,7 @@ script:
 gradlew build
 ```
 
-To build the DeployR Java client library on a Windows based OS, run the following
+To build the DeployR Java client library on a Windows-based OS, run the following
 batch file:
 
 ```
@@ -84,7 +84,7 @@ Examples
 ========
 
 The DeployR Java client library ships with a number of sample applications
-provided to demonstrate some of the key featues introduced by the
+provided to demonstrate some of the key features introduced by the
 [Quick Start Tutorial](http://deployr.revolutionanalytics.com/documents/dev/clientlib)
 for the Java client library. See
 [here](examples/tutorial) for details.
